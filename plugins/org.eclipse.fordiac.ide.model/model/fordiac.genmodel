@@ -79,6 +79,11 @@
         <genParameters ecoreParameter="lib.ecore#//Attribute/validateName/diagnostics"/>
         <genParameters ecoreParameter="lib.ecore#//Attribute/validateName/context"/>
       </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//Attribute/validateAttributeDeclaration"
+          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.AttributeAnnotations.validateAttributeDeclaration(this, diagnostics, context);">
+        <genParameters ecoreParameter="lib.ecore#//Attribute/validateAttributeDeclaration/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//Attribute/validateAttributeDeclaration/context"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//AttributeDeclaration">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//AttributeDeclaration/type"/>
@@ -290,6 +295,10 @@
         <genParameters ecoreParameter="lib.ecore#//Connection/validateVarInOutConnectionsFormsNoLoop/diagnostics"/>
         <genParameters ecoreParameter="lib.ecore#//Connection/validateVarInOutConnectionsFormsNoLoop/context"/>
       </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//Connection/setNegated" body="org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionAnnotations.setNegated(this, negated);">
+        <genParameters ecoreParameter="lib.ecore#//Connection/setNegated/negated"/>
+      </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//Connection/isNegated" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionAnnotations.isNegated(this);"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//ConnectionRoutingData">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//ConnectionRoutingData/dx1"/>
@@ -981,15 +990,14 @@
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//EnumeratedType">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference data.ecore#//EnumeratedType/enumeratedValue"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference data.ecore#//EnumeratedType/enumeratedValues"/>
       <genOperations ecoreOperation="data.ecore#//EnumeratedType/isAssignableFrom"
           body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
         <genParameters ecoreParameter="data.ecore#//EnumeratedType/isAssignableFrom/other"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//EnumeratedValue">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute data.ecore#//EnumeratedValue/comment"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute data.ecore#//EnumeratedValue/name"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference data.ecore#//EnumeratedValue/type"/>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//StructuredType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference data.ecore#//StructuredType/memberVariables"/>

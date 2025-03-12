@@ -28,6 +28,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public interface IWatch extends IVariable, IDeploymentDebugElement {
 
+	enum Source {
+		BREAKPOINT, LAUNCH;
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -88,6 +92,41 @@ public interface IWatch extends IVariable, IDeploymentDebugElement {
 	 * @return true if alive, false otherwise
 	 */
 	boolean isAlive();
+
+	/**
+	 * Check if the watch is in an error state
+	 *
+	 * @return true on error, false otherwise
+	 */
+	boolean hasError();
+
+	/**
+	 * Check if the watch is pinned
+	 *
+	 * @return true if pinned, false otherwise
+	 */
+	boolean isPinned();
+
+	/**
+	 * Set if the watch is pinned
+	 *
+	 * @param pinned if the watch is pinned
+	 */
+	void setPinned(boolean pinned);
+
+	/**
+	 * Get the source of the watch
+	 *
+	 * @return The source
+	 */
+	Source getSource();
+
+	/**
+	 * Set the source of the watch
+	 *
+	 * @param source The source
+	 */
+	void setSource(Source source);
 
 	/**
 	 * Create a new watch for an element

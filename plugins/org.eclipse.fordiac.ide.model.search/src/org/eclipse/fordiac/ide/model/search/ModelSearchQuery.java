@@ -18,6 +18,7 @@ package org.eclipse.fordiac.ide.model.search;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
@@ -30,8 +31,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.model.data.ArrayType;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
-import org.eclipse.fordiac.ide.model.eval.EvaluatorPrepareException;
-import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
@@ -51,9 +50,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Method;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.STFunctionBody;
+import org.eclipse.fordiac.ide.model.libraryElement.STMethod;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
-import org.eclipse.fordiac.ide.model.libraryElement.TextMethod;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.ModelQuerySpec.SearchScope;
@@ -61,6 +61,7 @@ import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.search.ui.ISearchQuery;
 import org.eclipse.search.ui.NewSearchUI;
+import org.eclipse.search.ui.text.Match;
 import org.eclipse.search2.internal.ui.SearchView;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
@@ -264,7 +265,7 @@ public class ModelSearchQuery implements ISearchQuery {
 		}
 
 		if (elem instanceof final FBType type && type.getInterfaceList() != null) {
-			searchInterface(type.getInterfaceList(), monitor);
+			searchTypeInterface(type.getInterfaceList(), monitor);
 		}
 		return matchEObject(elem, monitor);
 	}
@@ -281,11 +282,44 @@ public class ModelSearchQuery implements ISearchQuery {
 		}
 	}
 
+	private void searchTypeInterface(final InterfaceList interfaceList, final IProgressMonitor monitor) {
+		// @formatter:off
+		Stream.of(
+	            interfaceList.getInputs(),
+	            interfaceList.getOutputVars().stream(),
+	            interfaceList.getEventOutputs().stream(),
+	            interfaceList.getPlugs().stream()
+	    )
+	    .flatMap(Function.identity())
+	    .filter(modelElement ->
+	            (modelQuerySpec.checkInterfaceValues() && searchInterfaceValue(modelElement))
+	            || matchEObject(modelElement, monitor)
+	    )
+	    .forEach(searchResult::addResult);
+		// @formatter:on
+	}
+
+	private boolean searchInterfaceValue(final INamedElement modelElement) {
+		if (modelElement instanceof final VarDeclaration varDecl) {
+			final var value = varDecl.getValue();
+			return value != null && !value.getValue().isEmpty()
+					&& value.getValue().contains(modelQuerySpec.searchString());
+		}
+		return false;
+	}
+
 	private void searchInterface(final InterfaceList interfaceList, final IProgressMonitor monitor) {
-		Stream.concat(Stream.concat(interfaceList.getInputs(), interfaceList.getOutputVars().stream()),
-				Stream.concat(interfaceList.getEventOutputs().stream(), interfaceList.getPlugs().stream()))
-				.filter((final INamedElement modelElement) -> this.matchEObject(modelElement, monitor))
-				.forEach(searchResult::addResult);
+		// @formatter:off
+		Stream.of(
+	            interfaceList.getInputs(),
+	            interfaceList.getOutputVars().stream(),
+	            interfaceList.getEventOutputs().stream(),
+	            interfaceList.getPlugs().stream()
+	    )
+	    .flatMap(Function.identity())
+		.filter((final INamedElement modelElement) -> this.matchEObject(modelElement, monitor))
+		.forEach(searchResult::addResult);
+		// @formatter:on
 	}
 
 	private boolean matchEObject(final INamedElement modelElement, final IProgressMonitor monitor) {
@@ -294,6 +328,10 @@ public class ModelSearchQuery implements ISearchQuery {
 			final String name = modelElement.getName();
 			final boolean matchInstanceName = name != null && compareStrings(name);
 			if (matchInstanceName) {
+				if (modelElement instanceof Algorithm || modelElement instanceof Method
+						|| modelElement instanceof FunctionFBType) {
+					addMatchesForSTOccurance(modelElement);
+				}
 				return true;
 			}
 		}
@@ -305,8 +343,10 @@ public class ModelSearchQuery implements ISearchQuery {
 			}
 		}
 		if (modelQuerySpec.checkType()) {
-			if (modelElement instanceof FunctionFBType) {
-				return matchInST(modelElement);
+			if (modelElement instanceof Algorithm || modelElement instanceof Method
+					|| modelElement instanceof FunctionFBType) {
+				addMatchesForSTOccurance(modelElement);
+				return searchResult.getMatchCount(modelElement) > 0;
 			}
 			if (modelElement instanceof final TypedConfigureableObject config) {
 				return compareStrings(config.getTypeName())
@@ -321,39 +361,31 @@ public class ModelSearchQuery implements ISearchQuery {
 						|| (varDecl.getType() != null && varDecl.getType().getTypeEntry() != null
 								&& compareStrings(varDecl.getType().getTypeEntry().getFullTypeName()));
 			}
-			if ((modelElement instanceof Algorithm || modelElement instanceof Method) && matchInST(modelElement)) {
-				return true;
-			}
 		}
 		return false;
 	}
 
-	private boolean matchInST(final INamedElement modelElement) {
-		final String text = getImplText(modelElement);
-		if (text == null || pattern.preScanST(text)) {
-			try {
-				for (final String fqn : VariableOperations.getAllDependencies(modelElement)) {
-					if (compareStrings(fqn)) {
-						return true;
-					}
-				}
-			} catch (final EvaluatorPrepareException e) {
-				isIncompleteResult = true;
-			}
-		}
-		return false;
-	}
-
-	private static String getImplText(final INamedElement modelElement) {
-		if (modelElement instanceof final TextAlgorithm textAlg) {
-			return textAlg.getText();
+	private void addMatchesForSTOccurance(final INamedElement modelElement) {
+		ISearchSupport searchSupport = null;
+		if (modelElement instanceof final FunctionFBType function
+				&& function.getBody() instanceof final STFunctionBody functionBody) {
+			searchSupport = ISearchFactory.Registry.INSTANCE.getFactory(STFunctionBody.class)
+					.createSearchSupport(functionBody);
+		} else if (modelElement instanceof STAlgorithm) {
+			searchSupport = ISearchFactory.Registry.INSTANCE.getFactory(STAlgorithm.class)
+					.createSearchSupport(modelElement);
+		} else if (modelElement instanceof STMethod) {
+			searchSupport = ISearchFactory.Registry.INSTANCE.getFactory(STMethod.class)
+					.createSearchSupport(modelElement);
 		}
 
-		if (modelElement instanceof final TextMethod textMethod) {
-			return textMethod.getText();
+		if (searchSupport != null) {
+			final IModelMatcher matcher = new STMatcher(this::compareStrings);
+			searchSupport.search(matcher).filter(TextMatch.class::isInstance).map(TextMatch.class::cast)
+					.map(match -> new Match(modelElement, Match.UNIT_LINE, match.getOffset(), match.getLine() + 1))
+					.forEach(match -> searchResult.addMatch(match));
+			isIncompleteResult |= searchSupport.isIncompleteResult();
 		}
-
-		return null;
 	}
 
 	private boolean compareStrings(final String toTest) {

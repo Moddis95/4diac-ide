@@ -56,6 +56,7 @@ public final class LibraryElementTags {
 
 	public static final String CONNECTION_ELEMENT = "Connection"; //$NON-NLS-1$
 	public static final String ELEMENT_VISIBLE = "Visible"; //$NON-NLS-1$
+	public static final String CONNECTION_NEGATED = "Connection Negated"; //$NON-NLS-1$
 	public static final String VAR_CONFIG = "VarConfig"; //$NON-NLS-1$
 	public static final String DESTINATION_ATTRIBUTE = "Destination"; //$NON-NLS-1$
 	public static final String SOURCE_ATTRIBUTE = "Source"; //$NON-NLS-1$
@@ -188,6 +189,8 @@ public final class LibraryElementTags {
 	public static final String VARIABLE_SEPARATOR = ","; //$NON-NLS-1$
 
 	public static final String STRUCTURED_TYPE_ELEMENT = "StructuredType"; //$NON-NLS-1$
+	public static final String ENUMERATED_TYPE_ELEMENT = "EnumeratedType"; //$NON-NLS-1$
+	public static final String ENUMERATED_VALUE_ELEMENT = "EnumeratedValue"; //$NON-NLS-1$
 	public static final String ASN1_TAG = "ASN1Tag"; //$NON-NLS-1$
 
 	public static final String GLOBAL_CONSTANTS_ELEMENT = "GlobalConstants"; //$NON-NLS-1$

@@ -206,7 +206,7 @@
 	</extension>
 	<extension point="org.eclipse.ui.handlers">
 		<handler
-			class="org.eclipse.fordiac.ide.globalconstantseditor.ui.GlobalConstantsExecutableExtensionFactory:org.eclipse.xtext.ui.editor.findrefs.FindReferencesHandler"
+			class="org.eclipse.fordiac.ide.globalconstantseditor.ui.GlobalConstantsExecutableExtensionFactory:org.eclipse.fordiac.ide.globalconstantseditor.ui.handlers.GlobalConstantsFindReferencesHandler"
 			commandId="org.eclipse.xtext.ui.editor.FindReferences">
 			<activeWhen>
 				<reference
@@ -573,7 +573,26 @@
  <extension
        point="org.eclipse.xtext.ui.resourceRelocationStrategy">
     <strategy
-          class="org.eclipse.fordiac.ide.globalconstantseditor.ui.GlobalConstantsExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreResourceRelocationStrategy">
+          class="org.eclipse.fordiac.ide.globalconstantseditor.ui.GlobalConstantsExecutableExtensionFactory:org.eclipse.fordiac.ide.globalconstantseditor.ui.refactoring.GlobalConstantsResourceRelocationStrategy">
     </strategy>
+ </extension>
+ <extension
+       point="org.eclipse.ltk.core.refactoring.renameParticipants">
+    <renameParticipant
+          class="org.eclipse.fordiac.ide.globalconstantseditor.ui.refactoring.GlobalConstantsRenameTypeRefactoringParticipant"
+          id="org.eclipse.fordiac.ide.globalconstantseditor.ui.renameGlobalConstantsParticipant"
+          name="Rename Global Constants">
+       <enablement>
+          <adapt
+                type="org.eclipse.xtext.ui.refactoring.ui.IRenameElementContext">
+             <with
+                   variable="processorIdentifier">
+                <equals
+                      value="org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants.renameProcessor2">
+                </equals>
+             </with>
+          </adapt>
+       </enablement>
+    </renameParticipant>
  </extension>
 </plugin>

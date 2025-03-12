@@ -43,12 +43,18 @@ public class DeleteNodeOperation extends AbstractChangeHierarchyOperation {
 		return Status.OK_STATUS;
 	}
 
-	private int getParentIndex() {
-		final EList<? extends Node> parentContainer = getParentContainer();
-		if (parentContainer != null) {
-			return parentContainer.indexOf(node);
+	@Override
+	public IStatus undo(final IProgressMonitor monitor, final IAdaptable info) throws ExecutionException {
+		// for adding we can not use getParentContainer as the root node has levels and
+		// not nodes
+		if (parent instanceof final RootLevel root) {
+			root.getLevels().add(index, (Level) node);
 		}
-		return -1;
+		if (parent instanceof final Level level) {
+			level.getChildren().add(index, node);
+		}
+		saveHierarchy(parent, monitor);
+		return Status.OK_STATUS;
 	}
 
 	@Override
@@ -58,24 +64,19 @@ public class DeleteNodeOperation extends AbstractChangeHierarchyOperation {
 		return Status.OK_STATUS;
 	}
 
+	private int getParentIndex() {
+		final EList<? extends Node> parentContainer = getParentContainer();
+		if (parentContainer != null) {
+			return parentContainer.indexOf(node);
+		}
+		return -1;
+	}
+
 	private void removeFromParent() {
 		final EList<? extends Node> parentContainer = getParentContainer();
 		if (parentContainer != null && index != -1) {
 			parentContainer.remove(index);
 		}
-	}
-
-	@Override
-	public IStatus undo(final IProgressMonitor monitor, final IAdaptable info) throws ExecutionException {
-		// for adding we can not use getParentContainer as the root node has levels and not nodes
-		if (parent instanceof final RootLevel root) {
-			root.getLevels().add(index, (Level) node);
-		}
-		if (parent instanceof final Level level) {
-			level.getChildren().add(index, node);
-		}
-		saveHierarchy(parent, monitor);
-		return Status.OK_STATUS;
 	}
 
 	private EList<? extends Node> getParentContainer() {

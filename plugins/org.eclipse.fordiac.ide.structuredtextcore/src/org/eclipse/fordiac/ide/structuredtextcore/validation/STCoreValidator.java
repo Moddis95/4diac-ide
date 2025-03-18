@@ -118,6 +118,7 @@ import org.eclipse.xtext.diagnostics.Severity;
 import org.eclipse.xtext.nodemodel.INode;
 import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
 import org.eclipse.xtext.validation.Check;
+import org.eclipse.xtext.validation.IssueSeverities;
 import org.eclipse.xtext.validation.ValidationMessageAcceptor;
 
 import com.google.inject.Inject;
@@ -193,6 +194,9 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	public static final String UNUSED_IMPORT = ISSUE_CODE_PREFIX + "unusedImport"; //$NON-NLS-1$
 	public static final String DUPLICATE_ATTRIBUTE = ISSUE_CODE_PREFIX + "duplicateAttribute"; //$NON-NLS-1$
 	public static final String PACKAGE_NAME_MISMATCH = ISSUE_CODE_PREFIX + "packageNameMismatch"; //$NON-NLS-1$
+	public static final String UNUSED_VARIABLE = ISSUE_CODE_PREFIX + "unusedVariable"; //$NON-NLS-1$
+	public static final String UNREAD_VARIABLE = ISSUE_CODE_PREFIX + "unreadVariable"; //$NON-NLS-1$
+	public static final String UNWRITTEN_VARIABLE = ISSUE_CODE_PREFIX + "unwrittenVariable"; //$NON-NLS-1$
 
 	private static final Pattern CONVERSION_FUNCTION_PATTERN = Pattern.compile("[a-zA-Z]+_TO_[a-zA-Z]+"); //$NON-NLS-1$
 	private static final Pattern IDENTIFIER_CONSECUTIVE_UNDERSCORES_PATTERN = Pattern.compile("_{2,}[^_]"); //$NON-NLS-1$
@@ -1150,6 +1154,27 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 			break;
 		default:
 			break;
+		}
+	}
+
+	public static void addIssue(final ValidationMessageAcceptor acceptor, final IssueSeverities severities,
+			final String message, final EObject source, final EStructuralFeature feature, final int index,
+			final String issueCode, final String... issueData) {
+		final Severity severity = severities.getSeverity(issueCode);
+		if (severity != null) {
+			switch (severity) {
+			case WARNING:
+				acceptor.acceptWarning(message, source, feature, index, issueCode, issueData);
+				break;
+			case INFO:
+				acceptor.acceptInfo(message, source, feature, index, issueCode, issueData);
+				break;
+			case ERROR:
+				acceptor.acceptError(message, source, feature, index, issueCode, issueData);
+				break;
+			default:
+				break;
+			}
 		}
 	}
 }

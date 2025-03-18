@@ -24,6 +24,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreControlFlowValidator;
 import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreImportValidator;
 import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreTypeUsageCollector;
+import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreVariableUsageValidator;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.Messages;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.resource.STFunctionResource;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction;
@@ -62,9 +63,20 @@ public class STFunctionValidator extends AbstractSTFunctionValidator {
 
 	@Check
 	public void checkControlFlow(final STFunction function) {
-		final STCoreControlFlowValidator controlFlowValidator = new STCoreControlFlowValidator(this);
+		final STCoreControlFlowValidator controlFlowValidator = new STCoreControlFlowValidator(this,
+				getIssueSeverities(getContext(), function));
 		controlFlowValidator.validateVariableBlocks(function.getVarDeclarations());
 		controlFlowValidator.validateStatements(function.getCode());
+	}
+
+	@Check
+	public void checkUnusedVariables(final STFunction function) {
+		final STCoreVariableUsageValidator variableUsageValidator = new STCoreVariableUsageValidator(this,
+				getIssueSeverities(getContext(), function));
+		variableUsageValidator.addVariableBlocks(function.getVarDeclarations());
+		variableUsageValidator.addReturnVariable(function);
+		variableUsageValidator.addReferences(function);
+		variableUsageValidator.validateUnused();
 	}
 
 	@Check

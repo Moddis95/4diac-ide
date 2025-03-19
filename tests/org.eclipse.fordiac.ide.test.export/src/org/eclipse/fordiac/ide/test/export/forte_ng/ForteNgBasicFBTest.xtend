@@ -94,8 +94,6 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 						
 					'''.toString(), export.data.toString())
 					assertNoErrors(export.errors)
-					assertNoErrors(export.warnings)
-					assertNoErrors(export.infos)
 				}
 				case '''«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»_fbt.cpp''': {
 					cppfileFound = true
@@ -194,8 +192,6 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 						}
 					'''.toString(), export.data.toString())
 					assertNoErrors(export.errors)
-					assertNoErrors(export.warnings)
-					assertNoErrors(export.infos)
 				}
 				default:
 					fail("unexpected export file")

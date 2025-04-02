@@ -28,15 +28,17 @@ import org.eclipse.fordiac.ide.contracts.model.helpers.ContractUtils;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 public class DefineFbInterfaceConstraintHandler extends AbstractHandler {
 
-	public static final int DEFAULT_TIME = 10;
-	private static final int DEFAULT_OFFSET = 0;
+	public static final String DEFAULT_TIME = "10"; //$NON-NLS-1$
+	private static final String DEFAULT_OFFSET = "0"; //$NON-NLS-1$
 	private static final int CANCEL = -1;
 
 	@Override
@@ -54,80 +56,58 @@ public class DefineFbInterfaceConstraintHandler extends AbstractHandler {
 			}
 		}
 
-		// check if exactly 1 input pin and optionally up to 2 output pins
-		if (iPins.size() != 1 || oPins.size() > 2) {
-			MessageDialog.openError(HandlerUtil.getActiveShell(event),
-					Messages.DefineFbInterfaceConstraintHandler_Title,
-					Messages.DefineFbInterfaceConstraintHandler_Info);
+		// error when no pins selected
+		final Shell shell = HandlerUtil.getActiveShell(event);
+		if (iPins.size() == 0 && oPins.size() == 0) {
+			MessageDialog.openError(shell, Messages.NoPinSelectedErrorDialog_Title,
+					Messages.NoPinSelectedErrorDialog_Info);
 			return Status.CANCEL_STATUS;
 		}
-		// create new contract rule based on selected pins
-		final Event iPin = iPins.get(0);
-		final Shell shell = HandlerUtil.getActiveShell(event);
 
-		if (oPins.size() == 2) {
-			makeThreePinReaction(shell, iPin, oPins);
-		} else if (oPins.size() == 1) {
-			final DefineFBDecisionTwoPinDialog dialog = new DefineFBDecisionTwoPinDialog(shell);
-			dialog.open();
+		// create suggested contract templates based on selected pins
+		final List<String> names = new ArrayList<>();
+		final List<String> templates = new ArrayList<>();
+		final List<Event> pins = iPins.size() == 0 ? oPins : iPins;
 
-			if (dialog.isReaction()) {
-				makeTwoPinReaction(shell, iPin, oPins.get(0));
-			} else if (dialog.isGuarantee()) {
-				makeTwoPinGuarantee(shell, iPin, oPins.get(0));
-			}
-		} else {
-			makeOnePinConstraint(shell, iPin);
+		if (iPins.size() == 1 && oPins.size() == 1) {
+			names.add(Messages.ContractRuleCausalReaction);
+			templates.add(ContractUtils.createCausalReaction(iPins.get(0), oPins.get(0), DEFAULT_TIME));
+
+			names.add(Messages.ContractRuleCausalAge);
+			templates.add(ContractUtils.createCausalAge(iPins.get(0), oPins.get(0), DEFAULT_TIME));
+		} else if (iPins.size() == 0 || oPins.size() == 0) {
+			names.add(Messages.ContractRuleSingleEvent);
+			templates.add(ContractUtils.createSingleEvent(pins, DEFAULT_TIME));
+
+			names.add(Messages.ContractRuleRepetition);
+			templates.add(ContractUtils.createRepetition(pins, DEFAULT_TIME, DEFAULT_OFFSET));
 		}
+		if (iPins.size() >= 1 && oPins.size() >= 1) {
+			names.add(Messages.ContractRuleReaction);
+			templates.add(ContractUtils.createReaction(iPins, oPins, DEFAULT_TIME));
 
-		return Status.OK_STATUS;
-	}
+			names.add(Messages.ContractRuleAge);
+			templates.add(ContractUtils.createAge(iPins, oPins, DEFAULT_TIME));
+		}
+		// add an empty suggestion in case that the others don't fit well
+		names.add(Messages.ContractRuleEmpty);
+		templates.add("// TODO"); //$NON-NLS-1$
 
-	private static void makeThreePinReaction(final Shell shell, final Event iPin, final List<Event> oPins) {
-		final String suggestion = ContractUtils.createGuaranteeTwoEvents(iPin.getName(), oPins.get(0).getName(),
-				oPins.get(1).getName(), String.valueOf(DEFAULT_TIME));
-		openDialog(shell, iPin, suggestion);
-	}
-
-	private static void makeTwoPinReaction(final Shell shell, final Event iPin, final Event oPin) {
-		final String suggestion = ContractUtils.createReactionString(iPin.getName(), oPin.getName(),
-				String.valueOf(DEFAULT_TIME));
-		openDialog(shell, iPin, suggestion);
-	}
-
-	private static void makeTwoPinGuarantee(final Shell shell, final Event iPin, final Event oPin) {
-		final String suggestion = ContractUtils.createGuaranteeString(iPin.getName(), oPin.getName(),
-				String.valueOf(DEFAULT_TIME));
-		openDialog(shell, iPin, suggestion);
-	}
-
-	private static void makeOnePinConstraint(final Shell shell, final Event iPin) {
-		final StringBuilder suggestion = new StringBuilder();
-		suggestion.append(ContractUtils.createAssumptionString(iPin.getName(), String.valueOf(DEFAULT_TIME)));
-		suggestion.append(" "); //$NON-NLS-1$
-		suggestion.append(ContractUtils.createOffsetString(String.valueOf(DEFAULT_OFFSET)));
-
-		openDialog(shell, iPin, suggestion.toString());
-	}
-
-	private static void openDialog(final Shell shell, final Event pin, final String suggestion) {
-		final ContractElementDialog dialog = new ContractElementDialog(shell, suggestion);
-
+		final DefineContractDecisionDialog dialog = new DefineContractDecisionDialog(shell, names, templates);
 		if (dialog.open() != CANCEL) {
-			final String rule = dialog.getContractRule();
-			final FBNetworkElement element = pin.getFBNetworkElement();
-			final UpdateContractCommand uccmd = new UpdateContractCommand(element, rule);
-
-			if (uccmd.canExecute()) {
-				uccmd.execute();
-			}
+			final FBNetworkElement fbElem = pins.get(0).getFBNetworkElement();
+			final IEditorPart editor = HandlerUtil.getActiveEditor(event);
+			final CommandStack cmdStack = editor.getAdapter(CommandStack.class);
+			cmdStack.execute(new PrepareContractCommand(fbElem, iPins, oPins, dialog.getTemplate()));
+			return Status.OK_STATUS;
 		}
+		return Status.CANCEL_STATUS;
 	}
 
 	private static List<Event> getSelectedPins(final ExecutionEvent event) {
 		final ArrayList<Event> pins = new ArrayList<>();
 		final IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getCurrentSelection(event);
-		for (final Object selected : selection.toList()) {
+		for (final Object selected : selection) {
 			Object obj = selected;
 			if (selected instanceof final EditPart selectedEP) {
 				obj = selectedEP.getModel();

@@ -56,6 +56,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
+import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
@@ -71,7 +72,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
 public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart implements IContainerEditPart {
+
 	private final ExpandedInterfacePositionMap positionMap = new ExpandedInterfacePositionMap(this);
+	private InstanceContract instanceContract;
 
 	@Override
 	public Adapter createContentAdapter() {
@@ -209,6 +212,13 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 	@Override
 	protected List<Object> getModelChildren() {
 		final List<Object> children = super.getModelChildren();
+		if (getModel().isUnfolded() && getModel().getAttribute(InstanceContract.CONTRACT_ATTRIBUTE_NAME) != null) {
+			if (children.size() > 1) { // always add contract as second element (after name)
+				children.add(1, getInstanceContract());
+			} else {
+				children.add(getInstanceContract());
+			}
+		}
 		if (getModel().isUnfolded()) {
 			children.add(getModel().getSubAppNetwork());
 		}
@@ -219,9 +229,18 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 		// nothing to do here
 	}
 
+	public InstanceContract getInstanceContract() {
+		if (instanceContract == null) {
+			instanceContract = new InstanceContract(getModel());
+		}
+		return instanceContract;
+	}
+
 	@Override
 	protected IFigure createFigureForModel() {
-		return new SubAppForFbNetworkFigure(getModel(), this);
+		final var prefCache = ((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache();
+		return new SubAppForFbNetworkFigure(getModel(), this, prefCache.getMinInterfaceBarSize(),
+				prefCache.getMaxTypeLabelSize());
 	}
 
 	@Override

@@ -37,6 +37,7 @@ public final class Messages extends NLS {
 	public static String ChangeCommentCommand_LABEL_ChangeComment;
 	public static String ConnectionSection_Comment;
 	public static String ConnectionSection_ShowConnection;
+	public static String ConnectionSection_NegateConnection;
 
 	public static String ConnectionSection_Source;
 	public static String ConnectionSection_Target;
@@ -77,6 +78,8 @@ public final class Messages extends NLS {
 	public static String DiagramPreferences_ExpandedInterfaceGroupText;
 	public static String DiagramPreferences_ExpandedInterfaceStackPins;
 	public static String DiagramPreferences_ExpandedInterfaceEvents;
+
+	public static String DiagramPreferences_DeactivateTransferingComments_DEMUX_to_MUX;
 
 	public static String FBFigure_TYPE_NOT_SET;
 	public static String FordiacContextMenuProvider_Align;
@@ -123,6 +126,8 @@ public final class Messages extends NLS {
 	public static String InterfaceElementSection_InConnections;
 	public static String InterfaceElementSection_OutConnections;
 	public static String InterfaceElementSection_MessageDialog_TITLE;
+
+	public static String HandlerPreferenceSafeError;
 
 	static {
 		// initialize resource bundle

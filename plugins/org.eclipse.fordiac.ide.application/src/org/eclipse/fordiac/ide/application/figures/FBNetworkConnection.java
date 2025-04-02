@@ -24,6 +24,8 @@ import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.RotatableDecoration;
+import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.text.FlowPage;
 import org.eclipse.draw2d.text.ParagraphTextLayout;
 import org.eclipse.draw2d.text.TextFlow;
@@ -41,17 +43,18 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 public class FBNetworkConnection extends HideableConnection {
 
 	private static final String THREE_DOTS = "\u2026"; //$NON-NLS-1$
+	private static final String NOT_SIGN = "\u00AC"; //$NON-NLS-1$
 
-	private static int maxWidth = GefPreferenceConstants.STORE
-			.getInt(GefPreferenceConstants.MAX_HIDDEN_CONNECTION_LABEL_SIZE);
+	private final int maxHiddenConnectionLabelSize;
 
-	private static String pinLabelStyle = GefPreferenceConstants.STORE
-			.getString(GefPreferenceConstants.PIN_LABEL_STYLE);
+	private final String pinLabelStyle;
 
 	private final ConnectionEditPart connEP;
 
-	public FBNetworkConnection(final ConnectionEditPart connEP) {
+	public FBNetworkConnection(final ConnectionEditPart connEP, final int maxWidth, final String pinLabelStyle) {
 		this.connEP = connEP;
+		this.maxHiddenConnectionLabelSize = maxWidth;
+		this.pinLabelStyle = pinLabelStyle;
 		super.setModel(connEP.getModel());
 	}
 
@@ -103,6 +106,23 @@ public class FBNetworkConnection extends HideableConnection {
 			}
 			paintFigure(graphics);
 			paintBorder(graphics);
+			if (getModel().isNegated()) {
+				addNegationPoint(graphics);
+			}
+		}
+	}
+
+	public void addNegationPoint(final Graphics graphics) {
+		graphics.setBackgroundColor(getLocalForegroundColor());
+		final int diameter = 12;
+		final PointList points = getPoints();
+
+		if (points != null && points.size() > 1) {
+			final Point targetPoint = points.getPoint(points.size() - 1);
+			final int x = targetPoint.x - diameter - 1;
+			final int y = targetPoint.y - (diameter / 2);
+
+			graphics.fillOval(x, y, diameter, diameter);
 		}
 	}
 
@@ -123,8 +143,16 @@ public class FBNetworkConnection extends HideableConnection {
 			getSourceDecoration().getLabel().setText(createDestinationLabelText());
 			updateSourceTooltip();
 		}
+		if (getTargetDecoration() == null && getModel().isNegated()) {
+			setTargetDecoration(createTargetLabel());
+		}
 		if (getTargetDecoration() != null) {
-			getTargetDecoration().getLabel().setText(createSourceLabelText());
+			String labelText = createSourceLabelText();
+
+			if (isHidden() && getModel().isNegated()) {
+				labelText = NOT_SIGN + labelText;
+			}
+			getTargetDecoration().getLabel().setText(labelText);
 			updateTargetTooltip();
 		}
 	}
@@ -191,21 +219,21 @@ public class FBNetworkConnection extends HideableConnection {
 
 	private String generateIEString(final IInterfaceElement ie) {
 		final StringBuilder builder = generateFullIEString(ie);
-		if (builder.length() > maxWidth) {
+		if (builder.length() > maxHiddenConnectionLabelSize) {
 			switch (pinLabelStyle) {
 			case GefPreferenceConstants.PIN_LABEL_STYLE_PIN_COMMENT: {
 				if (CommentHelper.hasComment(ie)) {
-					builder.delete(maxWidth, builder.length()); // start inclusive, end exclusive
-					builder.insert(maxWidth, THREE_DOTS);
+					builder.delete(maxHiddenConnectionLabelSize, builder.length()); // start inclusive, end exclusive
+					builder.insert(maxHiddenConnectionLabelSize, THREE_DOTS);
 				} else {
-					builder.delete(0, builder.length() - maxWidth);
+					builder.delete(0, builder.length() - maxHiddenConnectionLabelSize);
 					builder.insert(0, THREE_DOTS);
 				}
 
 				break;
 			}
 			case GefPreferenceConstants.PIN_LABEL_STYLE_PIN_NAME, GefPreferenceConstants.PIN_LABEL_STYLE_SRC_PIN_NAME: {
-				builder.delete(0, builder.length() - maxWidth);
+				builder.delete(0, builder.length() - maxHiddenConnectionLabelSize);
 				builder.insert(0, THREE_DOTS);
 				break;
 			}

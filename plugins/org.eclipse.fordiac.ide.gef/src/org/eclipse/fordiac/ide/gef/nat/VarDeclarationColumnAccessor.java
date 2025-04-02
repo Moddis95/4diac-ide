@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2023 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2025 Primetals Technologies Austria GmbH
  *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
@@ -17,7 +17,8 @@ package org.eclipse.fordiac.ide.gef.nat;
 import java.util.List;
 import java.util.Objects;
 
-import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferencePage;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
@@ -29,10 +30,14 @@ import org.eclipse.fordiac.ide.model.commands.change.HidePinCommand;
 import org.eclipse.fordiac.ide.model.datatype.helper.RetainHelper;
 import org.eclipse.fordiac.ide.model.edit.helper.CommentHelper;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
+import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
+import org.eclipse.fordiac.ide.ui.preferences.PreferenceStoreProvider;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.gef.commands.Command;
 
@@ -50,7 +55,8 @@ public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDecl
 	@Override
 	public Object getDataValue(final VarDeclaration rowObject, final VarDeclarationTableColumn column) {
 		return switch (column) {
-		case NAME -> rowObject.getName();
+		case NAME ->
+			(rowObject instanceof final MemberVarDeclaration memVar) ? memVar.getDisplayName() : rowObject.getName();
 		case TYPE -> rowObject.getFullTypeName();
 		case COMMENT -> CommentHelper.getInstanceComment(rowObject);
 		case INITIAL_VALUE -> getInitialValue(rowObject);
@@ -58,7 +64,8 @@ public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDecl
 		case VISIBLE -> Boolean.valueOf(rowObject.isVisible());
 		case RETAIN -> getAttributeValueAsString(rowObject);
 		case VISIBLEIN, VISIBLEOUT -> Boolean.valueOf(handleInOutCheck(rowObject, column));
-
+		case LOCATION -> EcoreUtil.getURI(rowObject).toPlatformString(true);
+		case PATH -> FordiacMarkerHelper.getLocation(rowObject);
 		default -> throw new IllegalArgumentException("Unexpected value: " + column); //$NON-NLS-1$
 		};
 	}
@@ -112,7 +119,11 @@ public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDecl
 
 	protected static String getInitialValue(final VarDeclaration rowObject) {
 		final String value = InitialValueHelper.getInitialOrDefaultValue(rowObject);
-		if (value.length() > DiagramPreferencePage.getMaxDefaultValueLength()) {
+
+		if (value.length() > PreferenceStoreProvider
+				.getStore(GefPreferenceConstants.GEF_PREFERENCES_ID,
+						TypeLibraryManager.INSTANCE.getTypeLibraryFromContext(rowObject).getProject())
+				.getInt(GefPreferenceConstants.MAX_DEFAULT_VALUE_LENGTH)) {
 			return FordiacMessages.ValueTooLarge;
 		}
 		return value;

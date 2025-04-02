@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2024 fortiss GmbH, Johannes Kepler University Linz,
+ * Copyright (c) 2016, 2025 fortiss GmbH, Johannes Kepler University Linz,
  * 							Primetals Technologies Austria GmbH,
  *                          Martin Erich Jobst
  *
@@ -26,7 +26,7 @@ import java.text.MessageFormat;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.gef.editors.InitialValueEditor;
-import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferencePage;
+import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.fordiac.ide.gef.properties.AbstractDoubleColumnSection;
 import org.eclipse.fordiac.ide.gef.widgets.ConnectionDisplayWidget;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
@@ -41,9 +41,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
+import org.eclipse.fordiac.ide.ui.preferences.PreferenceStoreProvider;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
@@ -234,7 +236,9 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 
 	private void updateTypeInitialValue(final String value) {
 		if (!parameterText.isDisposed() && FordiacMessages.ComputingPlaceholderValue.equals(parameterText.getText())) {
-			if (value.length() <= DiagramPreferencePage.getMaxDefaultValueLength()) {
+			if (value.length() <= PreferenceStoreProvider
+					.getStore(GefPreferenceConstants.GEF_PREFERENCES_ID, getTypeLibrary().getProject())
+					.getInt(GefPreferenceConstants.MAX_DEFAULT_VALUE_LENGTH)) {
 				parameterText.setText(value);
 			} else {
 				parameterText.setText(FordiacMessages.ValueTooLarge);
@@ -249,8 +253,10 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 		return null;
 	}
 
-	private Object getPinName() {
-		return getType().getName() != null ? getType().getName() : ""; //$NON-NLS-1$
+	private String getPinName() {
+		final String pinName = (getType() instanceof final MemberVarDeclaration memVar) ? memVar.getDisplayName()
+				: getType().getName();
+		return pinName != null ? pinName : ""; //$NON-NLS-1$
 	}
 
 	private void refreshParameterVisibility() {

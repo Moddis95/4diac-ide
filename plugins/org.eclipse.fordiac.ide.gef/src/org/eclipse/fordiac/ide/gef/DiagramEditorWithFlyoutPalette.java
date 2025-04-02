@@ -20,6 +20,7 @@ package org.eclipse.fordiac.ide.gef;
 import java.util.EventObject;
 import java.util.List;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.PositionConstants;
@@ -34,10 +35,12 @@ import org.eclipse.fordiac.ide.gef.handlers.AdvancedGraphicalViewerKeyHandler;
 import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
 import org.eclipse.fordiac.ide.gef.listeners.FigureFontUpdateListener;
 import org.eclipse.fordiac.ide.gef.listeners.IFontUpdateListener;
+import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstantsCache;
 import org.eclipse.fordiac.ide.gef.print.PrintPreviewAction;
 import org.eclipse.fordiac.ide.gef.ruler.FordiacRulerComposite;
 import org.eclipse.fordiac.ide.gef.tools.AdvancedPanningSelectionTool;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.fordiac.ide.model.ui.editors.IContentEditorInput;
 import org.eclipse.fordiac.ide.model.ui.editors.UntypedEditorInput;
@@ -80,6 +83,7 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IReusableEditor;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
@@ -181,7 +185,9 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 	protected void createGraphicalViewer(final Composite parent) {
 		rulerComp = new FordiacRulerComposite(parent, SWT.NONE);
 
-		final AdvancedScrollingGraphicalViewer viewer = new AdvancedScrollingGraphicalViewer();
+		final var prefCache = getPreferenceConstantsCache();
+
+		final AdvancedScrollingGraphicalViewer viewer = new AdvancedScrollingGraphicalViewer(prefCache);
 		viewer.createControl(rulerComp);
 
 		setGraphicalViewer(viewer);
@@ -201,6 +207,18 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 				.addDisposeListener(e -> JFaceResources.getFontRegistry().removeListener(fontChangeListener));
 
 		rulerComp.setGraphicalViewer(getGraphicalViewer());
+	}
+
+	private GefPreferenceConstantsCache getPreferenceConstantsCache() {
+		IProject project = null;
+		final IEditorInput input = getEditorInput();
+		if (input instanceof final IContentEditorInput contentInput) {
+			project = TypeLibraryManager.INSTANCE.getTypeLibraryFromContext(contentInput.getContent()).getProject();
+		} else if (input instanceof final IFileEditorInput fileInput) {
+			project = fileInput.getFile().getProject();
+		}
+
+		return new GefPreferenceConstantsCache(project);
 	}
 
 	@Override

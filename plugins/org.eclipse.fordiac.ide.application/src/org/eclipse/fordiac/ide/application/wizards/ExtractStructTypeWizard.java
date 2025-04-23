@@ -60,7 +60,8 @@ public class ExtractStructTypeWizard extends AbstractSaveAsWizard {
 	public boolean performFinish() {
 		if (perform()) {
 			final IFile targetFile = getTargetTypeFile();
-			final WorkspaceModifyOperation operation = new WorkspaceModifyOperation(targetFile.getParent()) {
+			final WorkspaceModifyOperation operation = new WorkspaceModifyOperation(
+					getFirstExistingParent(targetFile)) {
 
 				@Override
 				protected void execute(final IProgressMonitor monitor)
@@ -69,7 +70,7 @@ public class ExtractStructTypeWizard extends AbstractSaveAsWizard {
 					final StructuredType type = DataFactory.eINSTANCE.createStructuredType();
 					InterfaceListCopier.copyVarList(type.getMemberVariables(), varDecl, true);
 
-					TypeManagementPreferencesHelper.setupVersionInfo(type);
+					TypeManagementPreferencesHelper.setupVersionInfo(type, targetFile.getProject());
 
 					datatypeName = TypeEntry.getTypeNameFromFile(targetFile);
 					type.setName(datatypeName);

@@ -39,13 +39,14 @@ import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
 import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
 import org.eclipse.fordiac.ide.gef.figures.ToolTipFigure;
 import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
-import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerDataTypeImpl;
+import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
@@ -60,7 +61,6 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 
 	private final TargetPinManager targetPinManager = new TargetPinManager(this);
 	protected TargetInterfaceAdapter targetInteraceAdapter = null;
-	protected static int subappInterfaceBarMaxWidth = -1;
 
 	private boolean isOverflow = false;
 
@@ -158,12 +158,7 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 		if (children.isEmpty()) {
 			return getFigure().getBounds().height;
 		}
-		int height = -(children.size() - 1) * 2;
-		for (final TargetInterfaceElement modelObject : children) {
-			final IFigure child = ((GraphicalEditPart) createChild(modelObject)).getFigure();
-			height += child.getPreferredSize().height;
-		}
-		return height;
+		return -(children.size() - 1) * 2 + getTargetInterfaceLabelHeight() * children.size();
 	}
 
 	public int getCollapsedFigureHeight() {
@@ -171,12 +166,11 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 		if (children.isEmpty()) {
 			return getFigure().getBounds().height;
 		}
-		int height = -(children.size() - 1) * 2;
-		for (final TargetInterfaceElement modelObject : children) {
-			final IFigure child = ((GraphicalEditPart) createChild(modelObject)).getFigure();
-			height += child.getPreferredSize().height;
-		}
-		return height;
+		return -(children.size() - 1) * 2 + getTargetInterfaceLabelHeight() * children.size();
+	}
+
+	private static int getTargetInterfaceLabelHeight() {
+		return 2 * (int) CoordinateConverter.INSTANCE.getLineHeight();
 	}
 
 	public Label getNameLabel() {
@@ -212,7 +206,7 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 		final InterfaceFigure figure = new InterfaceFigure() {
 			@Override
 			public String getSubStringText() {
-				return (getChildren().isEmpty()) ? super.getSubStringText() : "";
+				return (getChildren().isEmpty()) ? super.getSubStringText() : ""; //$NON-NLS-1$
 			}
 
 			@Override
@@ -299,12 +293,8 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 		return super.getMaxWidth();
 	}
 
-	protected static int getInterfaceBarMaxWidth() {
-		if (-1 == subappInterfaceBarMaxWidth) {
-			subappInterfaceBarMaxWidth = GefPreferenceConstants.STORE
-					.getInt(GefPreferenceConstants.MAX_INTERFACE_BAR_SIZE);
-		}
-		return subappInterfaceBarMaxWidth;
+	protected int getInterfaceBarMaxWidth() {
+		return ((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache().getMaxInterfaceBarSize();
 	}
 
 }

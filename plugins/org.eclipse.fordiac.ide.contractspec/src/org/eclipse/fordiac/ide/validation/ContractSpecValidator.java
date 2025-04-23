@@ -15,16 +15,20 @@ package org.eclipse.fordiac.ide.validation;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.fordiac.ide.Messages;
 import org.eclipse.fordiac.ide.contractSpec.Age;
 import org.eclipse.fordiac.ide.contractSpec.CausalAge;
 import org.eclipse.fordiac.ide.contractSpec.CausalFuncDecl;
 import org.eclipse.fordiac.ide.contractSpec.CausalReaction;
 import org.eclipse.fordiac.ide.contractSpec.ContractSpecPackage;
 import org.eclipse.fordiac.ide.contractSpec.EventExpr;
+import org.eclipse.fordiac.ide.contractSpec.EventList;
 import org.eclipse.fordiac.ide.contractSpec.EventSpec;
 import org.eclipse.fordiac.ide.contractSpec.Interval;
 import org.eclipse.fordiac.ide.contractSpec.Port;
 import org.eclipse.fordiac.ide.contractSpec.Reaction;
+import org.eclipse.fordiac.ide.contractSpec.Repetition;
+import org.eclipse.fordiac.ide.contractSpec.SingleEvent;
 import org.eclipse.fordiac.ide.contractSpec.Value;
 import org.eclipse.xtext.validation.Check;
 
@@ -39,6 +43,8 @@ public class ContractSpecValidator extends AbstractContractSpecValidator {
 	private static final int OUTPUT = 0;
 
 	public static final String EMPTY_INTERVAL = "emptyInterval"; //$NON-NLS-1$
+	public static final String SPECIAL_EMPTY_INTERVAL = "specialEmptyInterval"; //$NON-NLS-1$
+	public static final String DEGENERATE_INTERVAL = "degenerateInterval"; //$NON-NLS-1$
 	public static final String PORT_NOT_INPUT = "portNotInput"; //$NON-NLS-1$
 	public static final String PORT_NOT_OUTPUT = "portNotOutput"; //$NON-NLS-1$
 
@@ -50,13 +56,26 @@ public class ContractSpecValidator extends AbstractContractSpecValidator {
 		final double begin = value2Double(interval.getV1());
 		final double end = value2Double(interval.getV2());
 
-		if (end < begin) {
-			warning("Interval is empty. The first number should be smaller than the second.",
-					ContractSpecPackage.Literals.INTERVAL__V1, EMPTY_INTERVAL);
+		final boolean isOpen = interval.getB1().equals("]") || interval.getB2().equals("["); //$NON-NLS-1$ //$NON-NLS-2$
+
+		if (begin > end) { // e.g. [10, 5]
+			warning(Messages.EmptyIntervalWarning, ContractSpecPackage.Literals.INTERVAL__V1, EMPTY_INTERVAL);
+		} else if (begin == end && isOpen) { // e.g. ]10, 10] or [10, 10[ or ]10, 10[
+			warning(Messages.EmptyIntervalWarning, ContractSpecPackage.Literals.INTERVAL__V1, SPECIAL_EMPTY_INTERVAL);
+		} else if (begin == end && !isOpen) { // e.g. [10, 10]
+			warning(Messages.DegenerateIntervalWarning, ContractSpecPackage.Literals.INTERVAL__V1, DEGENERATE_INTERVAL);
 		}
 	}
 
-	// TODO: SingleEvent, Repetition still unclear regarding input/output ports...
+	@Check
+	public void checkSingleEvent(final SingleEvent singleEvent) {
+		checkPortsOfSameType(singleEvent.getEvents(), ContractSpecPackage.Literals.SINGLE_EVENT__EVENTS);
+	}
+
+	@Check
+	public void checkRepetition(final Repetition repetition) {
+		checkPortsOfSameType(repetition.getEvents(), ContractSpecPackage.Literals.REPETITION__EVENTS);
+	}
 
 	@Check
 	public void checkReaction(final Reaction reaction) {
@@ -88,6 +107,13 @@ public class ContractSpecValidator extends AbstractContractSpecValidator {
 		checkPortOfType(causalFuncDecl.getP2(), OUTPUT, ContractSpecPackage.Literals.CAUSAL_FUNC_DECL__P2);
 	}
 
+	private void checkPortsOfSameType(final EventList list, final EStructuralFeature feature) {
+		if (list != null && list.getEvents() != null && list.getEvents().size() > 0) {
+			final int firstType = list.getEvents().get(0).getPort().getIsInput();
+			checkPortsOfType(list.getEvents(), firstType, feature);
+		}
+	}
+
 	private void checkPortsOfType(final EventExpr expr, final int type, final EStructuralFeature feature) {
 		if (expr.getEvent() != null) {
 			checkPortOfType(expr.getEvent().getPort(), type, feature);
@@ -116,10 +142,10 @@ public class ContractSpecValidator extends AbstractContractSpecValidator {
 	private void checkPortOfType(final Port port, final int type, final EStructuralFeature feature) {
 		if (port != null && port.getIsInput() != type) {
 			if (type == INPUT) {
-				final String s = String.format("Expected input ports, but %s is an output port.", port.getName());
+				final String s = String.format(Messages.InputPortExpectedError, port.getName());
 				error(s, feature, PORT_NOT_INPUT);
 			} else {
-				final String s = String.format("Expected output ports, but %s is an input port.", port.getName());
+				final String s = String.format(Messages.OutputPortExpectedError, port.getName());
 				error(s, feature, PORT_NOT_OUTPUT);
 			}
 		}

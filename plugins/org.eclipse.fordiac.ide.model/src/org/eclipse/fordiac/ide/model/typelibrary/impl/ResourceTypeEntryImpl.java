@@ -15,13 +15,11 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
+import org.eclipse.fordiac.ide.model.dataexport.ResourceTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.RESImporter;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceType;
 import org.eclipse.fordiac.ide.model.typelibrary.ResourceTypeEntry;
@@ -33,23 +31,18 @@ public class ResourceTypeEntryImpl extends AbstractCheckedTypeEntryImpl<Resource
 	}
 
 	@Override
-	public void save(final LibraryElement toSave, final IProgressMonitor monitor) throws CoreException {
-		// currently we can not save resources, but we also have no editor for it
-	}
-
-	@Override
 	protected CommonElementImporter getImporter() {
 		return new RESImporter(getFile());
 	}
 
 	@Override
 	protected AbstractTypeExporter getTypeExporter(final ResourceType type) {
-		// currently we can not save resources, but we also have no editor for it
-		return null;
+		return new ResourceTypeExporter(type);
 	}
 
 	@Override
 	public EClass getTypeEClass() {
 		return LibraryElementPackage.Literals.RESOURCE_TYPE;
 	}
+
 }

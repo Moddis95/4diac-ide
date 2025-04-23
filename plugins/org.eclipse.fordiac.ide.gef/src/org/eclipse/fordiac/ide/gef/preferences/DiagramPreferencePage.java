@@ -22,11 +22,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.preferences;
 
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.fordiac.ide.gef.Messages;
 import org.eclipse.fordiac.ide.model.preferences.ModelPreferenceConstants;
+import org.eclipse.fordiac.ide.ui.preferences.FixedScopedPreferenceStore;
+import org.eclipse.fordiac.ide.ui.preferences.FordiacPropertyPreferencePage;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditor;
-import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.jface.preference.RadioGroupFieldEditor;
@@ -35,25 +37,19 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPreferencePage;
-import org.eclipse.ui.PlatformUI;
 
 /** The Class DiagramPreferences. */
-public class DiagramPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+public class DiagramPreferencePage extends FordiacPropertyPreferencePage {
 
 	private boolean changesOnLabelSize = false;
 
-	private static int maxDefaultValueLength = GefPreferenceConstants.STORE
-			.getInt(GefPreferenceConstants.MAX_DEFAULT_VALUE_LENGTH);
-
 	/** Instantiates a new diagram preferences. */
 	public DiagramPreferencePage() {
-		super(GRID);
-		setPreferenceStore(GefPreferenceConstants.STORE);
+		super(GRID, GefPreferenceConstants.GEF_PREFERENCES_ID);
 	}
 
 	/*
@@ -65,17 +61,28 @@ public class DiagramPreferencePage extends FieldEditorPreferencePage implements 
 	@Override
 	public void createFieldEditors() {
 
-		// Create a Group to hold the ruler fields
-		createGroupRulerGrid();
+		final Composite parent = getFieldEditorParent();
+
+		final BooleanFieldEditor snapToGrid = new BooleanFieldEditor(GefPreferenceConstants.SNAP_TO_GRID,
+				Messages.DiagramPreferences_FieldEditors_SnapToGrid, parent);
+		addField(snapToGrid);
+
+		final BooleanFieldEditor connectionAutoLayout = new BooleanFieldEditor(
+				GefPreferenceConstants.CONNECTION_AUTO_LAYOUT,
+				Messages.DiagramPreferences_LayoutConnectionsAutomatically, parent);
+		addField(connectionAutoLayout);
+
+		final IntegerFieldEditor integerFieldEditorValue = new IntegerFieldEditor(
+				GefPreferenceConstants.MAX_DEFAULT_VALUE_LENGTH, Messages.DiagramPreferences_MaximumDefaultValueSize,
+				parent);
+		integerFieldEditorValue.setValidRange(120, 100000);
+		addField(integerFieldEditorValue);
 
 		// Create a Group to hold label size field
 		createGroupLabelSize();
 
 		// Create a Group to hold the interface pin field
 		createGroupInterfacePins();
-
-		// Create a Group to hold the layout options field
-		createGroupLayoutOptionsPins();
 
 		// Create a Group to hold the block margin fields
 		createGroupBlockMargins();
@@ -134,20 +141,12 @@ public class DiagramPreferencePage extends FieldEditorPreferencePage implements 
 
 	private static void showMessageBox() {
 
-		final MessageBox msgBox = new MessageBox(Display.getDefault().getActiveShell(), SWT.YES | SWT.NO);
+		final MessageBox msgBox = new MessageBox(Display.getDefault().getActiveShell(), SWT.OK);
 		Display.getDefault().getActiveShell();
 		msgBox.setText("4diac IDE"); //$NON-NLS-1$
 		msgBox.setMessage(Messages.DiagramPreferences_Restart);
 
-		switch (msgBox.open()) {
-		case SWT.NO:
-			break;
-		case SWT.YES:
-			PlatformUI.getWorkbench().restart();
-			break;
-		default:
-			break;
-		}
+		msgBox.open();
 	}
 
 	private void createGroupLabelSize() {
@@ -158,12 +157,6 @@ public class DiagramPreferencePage extends FieldEditorPreferencePage implements 
 				labelSize);
 		integerFieldEditorLabel.setValidRange(0, 120);
 		addField(integerFieldEditorLabel);
-
-		final IntegerFieldEditor integerFieldEditorValue = new IntegerFieldEditor(
-				GefPreferenceConstants.MAX_DEFAULT_VALUE_LENGTH, Messages.DiagramPreferences_MaximumDefaultValueSize,
-				labelSize);
-		integerFieldEditorValue.setValidRange(120, 100000);
-		addField(integerFieldEditorValue);
 
 		final IntegerFieldEditor integerFieldEditorTypeLabel = new IntegerFieldEditor(
 				GefPreferenceConstants.MAX_TYPE_LABEL_SIZE, Messages.DiagramPreferences_MaximumTypeLabelSize,
@@ -202,33 +195,6 @@ public class DiagramPreferencePage extends FieldEditorPreferencePage implements 
 		configGroup(labelSize);
 	}
 
-	private void createGroupRulerGrid() {
-		final Group group = createGroup(Messages.DiagramPreferences_FieldEditors_RulerAndGrid);
-		// Add the fields to the group
-		final BooleanFieldEditor showRulers = new BooleanFieldEditor(GefPreferenceConstants.SHOW_RULERS,
-				Messages.DiagramPreferences_FieldEditors_ShowRuler, group);
-		addField(showRulers);
-
-		final BooleanFieldEditor showGrid = new BooleanFieldEditor(GefPreferenceConstants.SHOW_GRID,
-				Messages.DiagramPreferences_FieldEditors_ShowGrid, group);
-		addField(showGrid);
-
-		final BooleanFieldEditor snapToGrid = new BooleanFieldEditor(GefPreferenceConstants.SNAP_TO_GRID,
-				Messages.DiagramPreferences_FieldEditors_SnapToGrid, group);
-		addField(snapToGrid);
-
-		configGroup(group);
-	}
-
-	private void createGroupLayoutOptionsPins() {
-		final Group group = createGroup(Messages.DiagramPreferences_LayoutOptions);
-		final BooleanFieldEditor connectionAutoLayout = new BooleanFieldEditor(
-				GefPreferenceConstants.CONNECTION_AUTO_LAYOUT,
-				Messages.DiagramPreferences_LayoutConnectionsAutomatically, group);
-		addField(connectionAutoLayout);
-		configGroup(group);
-	}
-
 	private void createGroupInterfacePins() {
 		addField(new RadioGroupFieldEditor(GefPreferenceConstants.PIN_LABEL_STYLE,
 				Messages.DiagramPreferences_PinLabelText, 1,
@@ -243,7 +209,8 @@ public class DiagramPreferencePage extends FieldEditorPreferencePage implements 
 
 	private void createGroupBlockMargins() {
 		final Group group = createGroup(Messages.DiagramPreferences_BlockMargins);
-		final IPreferenceStore modelStore = ModelPreferenceConstants.STORE;
+		final IPreferenceStore modelStore = new FixedScopedPreferenceStore(InstanceScope.INSTANCE,
+				ModelPreferenceConstants.MODEL_PREFERENCES_ID);
 
 		final IntegerFieldEditor integerFieldEditorTopBottom = new IntegerFieldEditor(
 				ModelPreferenceConstants.MARGIN_TOP_BOTTOM, Messages.DiagramPreferences_TopBottom, group);
@@ -267,9 +234,13 @@ public class DiagramPreferencePage extends FieldEditorPreferencePage implements 
 				Messages.DiagramPreferences_ExpandedInterfaceStackPins, group);
 		final BooleanFieldEditor events = new BooleanFieldEditor(GefPreferenceConstants.EXPANDED_INTERFACE_EVENTS_TOP,
 				Messages.DiagramPreferences_ExpandedInterfaceEvents, group);
+		final BooleanFieldEditor transfer = new BooleanFieldEditor(
+				GefPreferenceConstants.P_DEACTIVATE_COMMENT_TRANSFERRING_DEMUX_TO_MUX,
+				Messages.DiagramPreferences_DeactivateTransferingComments_DEMUX_to_MUX, group);
 
 		addField(direct);
 		addField(events);
+		addField(transfer);
 		configGroup(group);
 
 		events.setEnabled(
@@ -284,11 +255,12 @@ public class DiagramPreferencePage extends FieldEditorPreferencePage implements 
 	}
 
 	@Override
-	public void init(final IWorkbench workbench) {
-		// nothing to do here
+	protected String getPreferencePageID() {
+		return "org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences"; //$NON-NLS-1$
 	}
 
-	public static int getMaxDefaultValueLength() {
-		return maxDefaultValueLength;
+	@Override
+	protected String getPropertyPageID() {
+		return "org.eclipse.fordiac.ide.gef.properties.DiagramPreferences"; //$NON-NLS-1$
 	}
 }

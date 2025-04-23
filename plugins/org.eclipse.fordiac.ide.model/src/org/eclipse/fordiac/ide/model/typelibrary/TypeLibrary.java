@@ -47,7 +47,6 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.IdentifierVerifier;
 import org.eclipse.fordiac.ide.model.Messages;
@@ -232,8 +231,8 @@ public final class TypeLibrary {
 	/** Instantiates a new fB type library. */
 	TypeLibrary(final IProject project) {
 		this.project = project;
+		buildpath = BuildpathUtil.loadBuildpath(project);
 		if (project != null && project.isAccessible()) {
-			buildpath = BuildpathUtil.loadBuildpath(project);
 			checkAdditions(project);
 		}
 	}
@@ -406,13 +405,7 @@ public final class TypeLibrary {
 		return programTypes.remove(fullTypeName, entry);
 	}
 
-	void refresh() {
-		try {
-			project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
-		} catch (final CoreException e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
-		}
-
+	public void refresh() {
 		buildpath = BuildpathUtil.loadBuildpath(project);
 		checkDeletions();
 		checkAdditions(project);

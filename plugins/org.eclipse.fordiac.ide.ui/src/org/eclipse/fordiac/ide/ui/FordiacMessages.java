@@ -24,7 +24,7 @@ import org.eclipse.osgi.util.NLS;
 /** The Class Messages. */
 @SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public final class FordiacMessages extends NLS {
-	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.ui.messages"; //$NON-NLS-1$
+	private static final String BUNDLE_NAME = "plugin"; //$NON-NLS-1$
 
 	public static String OPEN_TYPE_EDITOR_MESSAGE; // NOSONAR
 
@@ -59,6 +59,7 @@ public final class FordiacMessages extends NLS {
 	public static String InstanceInfo; // NOSONAR
 	public static String Interface; // NOSONAR
 	public static String Language; // NOSONAR
+	public static String Location; // NOSONAR
 	public static String NA; // NOSONAR
 	public static String ND; // NOSONAR
 	public static String Name; // NOSONAR
@@ -67,7 +68,8 @@ public final class FordiacMessages extends NLS {
 	public static String Outputs; // NOSONAR
 	public static String Package; // NOSONAR
 
-	public static String PackageInfoWidget_OrganizeImports;
+	public static String PackageInfoWidget_OrganizeImports; // NOSONAR
+	public static String Path; // NOSONAR
 	public static String Pin; // NOSONAR
 	public static String Product; // NOSONAR
 	public static String Properties; // NOSONAR
@@ -147,6 +149,12 @@ public final class FordiacMessages extends NLS {
 	public static String Repair_Dialog_BestFitFBType;// NOSONAR
 
 	public static String Subapp_Size_DisableAutoResize; // NOSONAR
+
+	public static String PropertyAndPreferencePage_useprojectsettings_label; // NOSONAR
+	public static String PropertyAndPreferencePage_showprojectspecificsettings_label; // NOSONAR
+	public static String PropertyAndPreferencePage_useworkspacesettings_change; // NOSONAR
+	public static String PropertyAndPreferencePage_ChooseProjectDialog_title; // NOSONAR
+	public static String PropertyAndPreferencePage_ChooseProjectDialog_description; // NOSONAR
 
 	static {
 		// initialize resource bundle

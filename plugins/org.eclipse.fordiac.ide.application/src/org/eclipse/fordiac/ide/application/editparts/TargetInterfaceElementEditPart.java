@@ -22,8 +22,9 @@ import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.policies.DeleteTargetInterfaceElementPolicy;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
-import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
+import org.eclipse.fordiac.ide.gef.preferences.PreferenceInitializer;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -32,8 +33,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
-import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceGetter;
+import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
@@ -45,15 +46,18 @@ import org.eclipse.ui.IEditorPart;
 public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 
 	public static final int LABEL_ALPHA = 120;
-	public static final int MAX_LABEL_LENGTH = GefPreferenceConstants.STORE
-			.getInt(GefPreferenceConstants.MAX_INTERFACE_BAR_SIZE);
+	private static final String NOT_SIGN = "\u00AC"; //$NON-NLS-1$
+
+	private int maxLabelLength = PreferenceInitializer.DEFAULT_MAX_INTERFACE_BAR_SIZE;
 
 	private final Adapter nameChangeAdapter = new AdapterImpl() {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			final Object feature = notification.getFeature();
 			if (LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)
-					|| LibraryElementPackage.eINSTANCE.getINamedElement_Comment().equals(feature)) {
+					|| LibraryElementPackage.eINSTANCE.getINamedElement_Comment().equals(feature)
+					|| !getModel().getRefElement().getOutputConnections().stream().map(Connection::isNegated).toList()
+							.isEmpty()) {
 				refreshVisuals();
 			}
 			super.notifyChanged(notification);
@@ -63,6 +67,7 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 	@Override
 	public void activate() {
 		if (!isActive()) {
+			initializeMaxLabelLength();
 			super.activate();
 			getRefElement().eAdapters().add(nameChangeAdapter);
 			final FBNetworkElement parent = getRefElement().getFBNetworkElement();
@@ -132,8 +137,11 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 	}
 
 	private String getLabelText() {
-		return labelTruncate(getModel().getRefPinFullName()) + "\n" //$NON-NLS-1$
-				+ labelTruncate(getRefElement().getComment());
+		String labelText = labelTruncate(getModel().getRefPinFullName());
+		if (getRefElement().getOutputConnections().stream().anyMatch(con -> !con.isVisible() && con.isNegated())) {
+			labelText = NOT_SIGN + labelText;
+		}
+		return labelText + "\n" + labelTruncate(getRefElement().getComment()); //$NON-NLS-1$
 	}
 
 	@Override
@@ -163,20 +171,20 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 
 	private Color getModelColor() {
 		if (getRefElement() instanceof Event) {
-			return PreferenceGetter.getColor(UIPreferenceConstants.P_EVENT_CONNECTOR_COLOR);
+			return UIPreferenceConstants.getEventConnectorColor();
 		}
 
 		if (getRefElement() instanceof AdapterDeclaration) {
-			return PreferenceGetter.getColor(UIPreferenceConstants.P_ADAPTER_CONNECTOR_COLOR);
+			return UIPreferenceConstants.getAdapterConnectorColor();
 		}
 		return PreferenceGetter.getDataColor(getRefElement().getType().getName());
 	}
 
-	private static String labelTruncate(final String label) {
-		if (label.length() <= MAX_LABEL_LENGTH) {
+	private String labelTruncate(final String label) {
+		if (label.length() <= maxLabelLength) {
 			return label;
 		}
-		return label.substring(0, MAX_LABEL_LENGTH) + "\u2026"; //$NON-NLS-1$
+		return label.substring(0, maxLabelLength) + "\u2026"; //$NON-NLS-1$
 	}
 
 	public static void openInBreadCrumb(final IInterfaceElement target) {
@@ -216,4 +224,12 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 		}
 		return super.getAdapter(key);
 	}
+
+	private void initializeMaxLabelLength() {
+		final AdvancedScrollingGraphicalViewer viewer = (AdvancedScrollingGraphicalViewer) getViewer();
+		if (viewer != null) {
+			maxLabelLength = viewer.getPreferencesCache().getMaxInterfaceBarSize();
+		}
+	}
+
 }

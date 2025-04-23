@@ -13,12 +13,15 @@
 package org.eclipse.fordiac.ide.application.commands;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.editparts.AbstractContainerContentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.GroupContentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.GroupEditPart;
@@ -28,19 +31,21 @@ import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPa
 import org.eclipse.fordiac.ide.application.figures.SubAppForFbNetworkFigure;
 import org.eclipse.fordiac.ide.application.policies.ContainerContentLayoutPolicy;
 import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
+import org.eclipse.fordiac.ide.model.commands.QualNameAffectedCommand;
 import org.eclipse.fordiac.ide.model.commands.change.AbstractChangeContainerBoundsCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.commands.Command;
 
-public class ResizeGroupOrSubappCommand extends Command implements ConnectionLayoutTagger {
+public class ResizeGroupOrSubappCommand extends Command implements ConnectionLayoutTagger, QualNameAffectedCommand {
 
 	final GraphicalEditPart graphicalEditPart;
 	List<FBNetworkElement> fbnetworkElements;
 
-	Command cmdToExecuteBefore;
+	private Command cmdToExecuteBefore;
 
 	List<AbstractChangeContainerBoundsCommand> changeContainerBoundsCommandList = new ArrayList<>();
 
@@ -250,6 +255,45 @@ public class ResizeGroupOrSubappCommand extends Command implements ConnectionLay
 					final Rectangle pin = ((GraphicalEditPart) ep).getFigure().getBounds().getCopy();
 					fbBounds.union(pin);
 				});
+	}
+
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		return Collections.emptySet();
+	}
+
+	@Override
+	public String getOldQualName(final INamedElement element) {
+		final QualNameAffectedCommand cmd = getQualNameAffectedCommand();
+		if (cmd != null) {
+			return cmd.getOldQualName(element);
+		}
+		return null;
+	}
+
+	@Override
+	public String getNewQualName(final INamedElement element) {
+		final QualNameAffectedCommand cmd = getQualNameAffectedCommand();
+		if (cmd != null) {
+			return cmd.getNewQualName(element);
+		}
+		return null;
+	}
+
+	@Override
+	public List<INamedElement> getChangedElements() {
+		final QualNameAffectedCommand cmd = getQualNameAffectedCommand();
+		if (cmd != null) {
+			return cmd.getChangedElements();
+		}
+		return Collections.emptyList();
+	}
+
+	private QualNameAffectedCommand getQualNameAffectedCommand() {
+		if (cmdToExecuteBefore instanceof final QualNameAffectedCommand cmd) {
+			return cmd;
+		}
+		return null;
 	}
 
 }

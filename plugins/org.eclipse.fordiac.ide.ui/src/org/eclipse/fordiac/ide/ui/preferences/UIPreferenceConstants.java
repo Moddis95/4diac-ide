@@ -17,9 +17,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.preferences;
 
-import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.ui.preferences.ScopedPreferenceStore;
+import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.swt.graphics.Color;
 
 /**
  * Constant definitions for plug-in preferences.
@@ -30,21 +29,18 @@ public final class UIPreferenceConstants {
 
 	public static final String FORDIAC_UI_PREFERENCES_ID = "org.eclipse.fordiac.ide.ui"; //$NON-NLS-1$
 
-	public static final IPreferenceStore STORE = new ScopedPreferenceStore(InstanceScope.INSTANCE,
-			FORDIAC_UI_PREFERENCES_ID);
-
 	/** The Constant P_EVENT_CONNECTOR_COLOR. */
-	public static final String P_EVENT_CONNECTOR_COLOR = "EventConnectionConnectorColor"; //$NON-NLS-1$
+	public static final String P_EVENT_CONNECTOR_COLOR = "org.eclipse.fordiac.ide.ui.EventConnectionConnectorColor"; //$NON-NLS-1$
 
-	public static final String P_BOOL_CONNECTOR_COLOR = "BoolConnectionConnectorColor"; //$NON-NLS-1$
-	public static final String P_ANY_BIT_CONNECTOR_COLOR = "AnyBitConnectionConnectorColor"; //$NON-NLS-1$
-	public static final String P_ANY_INT_CONNECTOR_COLOR = "AnyIntConnectionConnectorColor"; //$NON-NLS-1$
-	public static final String P_ANY_REAL_CONNECTOR_COLOR = "AnyRealConnectionConnectorColor"; //$NON-NLS-1$
-	public static final String P_ANY_STRING_CONNECTOR_COLOR = "AnyStringConnectionConnectorColor"; //$NON-NLS-1$
-	public static final String P_REMAINING_DATA_CONNECTOR_COLOR = "DataConnectionConnectorColor";//$NON-NLS-1$
+	public static final String P_BOOL_CONNECTOR_COLOR = "org.eclipse.fordiac.ide.ui.BoolConnectionConnectorColor"; //$NON-NLS-1$
+	public static final String P_ANY_BIT_CONNECTOR_COLOR = "org.eclipse.fordiac.ide.ui.AnyBitConnectionConnectorColor"; //$NON-NLS-1$
+	public static final String P_ANY_INT_CONNECTOR_COLOR = "org.eclipse.fordiac.ide.ui.AnyIntConnectionConnectorColor"; //$NON-NLS-1$
+	public static final String P_ANY_REAL_CONNECTOR_COLOR = "org.eclipse.fordiac.ide.ui.AnyRealConnectionConnectorColor"; //$NON-NLS-1$
+	public static final String P_ANY_STRING_CONNECTOR_COLOR = "org.eclipse.fordiac.ide.ui.AnyStringConnectionConnectorColor"; //$NON-NLS-1$
+	public static final String P_REMAINING_DATA_CONNECTOR_COLOR = "org.eclipse.fordiac.ide.ui.DataConnectionConnectorColor";//$NON-NLS-1$
 
 	/** The Constant P_ADAPTER_CONNECTOR_COLOR. */
-	public static final String P_ADAPTER_CONNECTOR_COLOR = "AdapterConnectionConnectorColor";//$NON-NLS-1$
+	public static final String P_ADAPTER_CONNECTOR_COLOR = "org.eclipse.fordiac.ide.ui.AdapterConnectionConnectorColor";//$NON-NLS-1$
 
 	/** The Constant P_DEFAULT_COMPLIANCE_PROFILE. */
 	public static final String P_DEFAULT_COMPLIANCE_PROFILE = "P_DEFAULT_COMPLIANCE_PROFILE";//$NON-NLS-1$
@@ -84,11 +80,39 @@ public final class UIPreferenceConstants {
 	public static final String P_SHOW_ERRORS_AT_MOUSE_CURSOR = "ShowErrorsAtMouseCursor"; //$NON-NLS-1$
 	public static final boolean P_SHOW_ERRORS_AT_MOUSE_CURSOR_DEFAULT_VALUE = true;
 
-	public static final String P_DEACTIVATE_COMMENT_TRANSFERRING_DEMUX_TO_MUX = "DeactivateCommentsTransferringDemuxToMux"; //$NON-NLS-1$
-	public static final boolean P_DEACTIVATE_COMMENT_TRANSFERRING_DEMUX_TO_MUX_DEFAULT_VALUE = false;
-
 	private UIPreferenceConstants() {
 		throw new UnsupportedOperationException();
 	}
 
+	public static Color getEventConnectorColor() {
+		return JFaceResources.getColorRegistry().get(P_EVENT_CONNECTOR_COLOR);
+	}
+
+	public static Color getBoolConnectorColor() {
+		return JFaceResources.getColorRegistry().get(P_BOOL_CONNECTOR_COLOR);
+	}
+
+	public static Color getAnyBitConnectorColor() {
+		return JFaceResources.getColorRegistry().get(P_ANY_BIT_CONNECTOR_COLOR);
+	}
+
+	public static Color getAnyIntConnectorColor() {
+		return JFaceResources.getColorRegistry().get(P_ANY_INT_CONNECTOR_COLOR);
+	}
+
+	public static Color getAnyRealConnectorColor() {
+		return JFaceResources.getColorRegistry().get(P_ANY_REAL_CONNECTOR_COLOR);
+	}
+
+	public static Color getAnyStringConnectorColor() {
+		return JFaceResources.getColorRegistry().get(P_ANY_STRING_CONNECTOR_COLOR);
+	}
+
+	public static Color getRemainingDataConnectorColor() {
+		return JFaceResources.getColorRegistry().get(P_REMAINING_DATA_CONNECTOR_COLOR);
+	}
+
+	public static Color getAdapterConnectorColor() {
+		return JFaceResources.getColorRegistry().get(P_ADAPTER_CONNECTOR_COLOR);
+	}
 }

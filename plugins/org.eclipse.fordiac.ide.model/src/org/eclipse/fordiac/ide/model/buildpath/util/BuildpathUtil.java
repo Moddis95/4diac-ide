@@ -54,11 +54,10 @@ public final class BuildpathUtil {
 	/**
 	 * Create a default build path configuration for project
 	 *
-	 * @param project The project
+	 * @param project The project (may be null)
 	 * @return The default build path configuration
 	 */
 	public static Buildpath createDefaultBuildpath(final IProject project) {
-		Objects.requireNonNull(project);
 		final Buildpath buildpath = BuildpathFactory.eINSTANCE.createBuildpath();
 		final SourceFolder projectFolder = createSourceFolder(""); //$NON-NLS-1$
 		buildpath.getSourceFolders().add(projectFolder);
@@ -76,13 +75,12 @@ public final class BuildpathUtil {
 	/**
 	 * Load build path configuration for project
 	 *
-	 * @param project The project
+	 * @param project The project (may be null)
 	 * @return The build path configuration, either loaded from disk or using
 	 *         default values
 	 */
 	public static Buildpath loadBuildpath(final IProject project) {
-		Objects.requireNonNull(project);
-		if (project.isAccessible() && getBuildpathFile(project).exists()) {
+		if (project != null && project.isAccessible() && getBuildpathFile(project).exists()) {
 			try {
 				final ResourceSet resourceSet = new ResourceSetImpl();
 				final Resource resource = resourceSet.getResource(getBuildpathURI(project), true);
@@ -300,6 +298,9 @@ public final class BuildpathUtil {
 	}
 
 	private static URI getBuildpathURI(final IProject project) {
+		if (project == null) {
+			return URI.createFileURI(BUILDPATH_FILE_NAME);
+		}
 		return URI.createPlatformResourceURI(getBuildpathFile(project).getFullPath().toString(), true);
 	}
 

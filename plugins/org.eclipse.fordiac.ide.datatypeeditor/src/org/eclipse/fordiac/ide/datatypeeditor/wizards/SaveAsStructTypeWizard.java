@@ -121,7 +121,7 @@ public class SaveAsStructTypeWizard extends AbstractSaveAsWizard {
 
 	private IFile persistNewType() {
 		final IFile targetFile = getTargetTypeFile();
-		final WorkspaceModifyOperation operation = new WorkspaceModifyOperation(targetFile.getParent()) {
+		final WorkspaceModifyOperation operation = new WorkspaceModifyOperation(getFirstExistingParent(targetFile)) {
 
 			@Override
 			protected void execute(final IProgressMonitor monitor)
@@ -131,7 +131,7 @@ public class SaveAsStructTypeWizard extends AbstractSaveAsWizard {
 				type.setName(structuredType.getName());
 				type.setComment(structuredType.getComment());
 				InterfaceListCopier.copyVarList(type.getMemberVariables(), structuredType.getMemberVariables(), true);
-				TypeManagementPreferencesHelper.setupVersionInfo(type);
+				TypeManagementPreferencesHelper.setupVersionInfo(type, targetFile.getProject());
 				type.setName(newName);
 				createTypeEntry(targetFile).save(type, monitor);
 			}

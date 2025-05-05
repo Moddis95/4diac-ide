@@ -58,7 +58,6 @@ class StructuredTypeImplTemplate extends StructBaseTemplate {
 		«type.memberVariables.generateAccessorDefinition("getMember", false)»
 		«type.memberVariables.generateAccessorDefinition("getMember", true)»
 	'''
-
 	
 	def protected generateSetValue() '''
 		void «className»::setValue(const CIEC_ANY &paValue) {
@@ -70,9 +69,8 @@ class StructuredTypeImplTemplate extends StructBaseTemplate {
 		  }
 		}
 	'''
-	
+
 	override Set<String> getUsedStrings(Map<?, ?> options) {
 		(super.getUsedStrings(options) + type.memberVariables.map[name]).toSet
 	}
-
 }

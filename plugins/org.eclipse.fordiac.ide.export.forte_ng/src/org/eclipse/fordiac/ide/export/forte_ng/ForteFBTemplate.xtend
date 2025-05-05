@@ -631,4 +631,5 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 		strings.add(fb.name)
 		strings.add(fb.type.generateTypeNamePlain)
 	}
+
 }

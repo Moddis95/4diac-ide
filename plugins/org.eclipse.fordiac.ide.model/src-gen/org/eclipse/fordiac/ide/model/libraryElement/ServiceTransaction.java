@@ -31,6 +31,7 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction#getInputPrimitive <em>Input Primitive</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction#getOutputPrimitive <em>Output Primitive</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction#getDeadlineTime <em>Deadline Time</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getServiceTransaction()
@@ -73,6 +74,28 @@ public interface ServiceTransaction extends EObject {
 	 * @generated
 	 */
 	EList<OutputPrimitive> getOutputPrimitive();
+
+	/**
+	 * Returns the value of the '<em><b>Deadline Time</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Deadline Time</em>' reference.
+	 * @see #setDeadlineTime(DeadlineTime)
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getServiceTransaction_DeadlineTime()
+	 * @model
+	 * @generated
+	 */
+	DeadlineTime getDeadlineTime();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction#getDeadlineTime <em>Deadline Time</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Deadline Time</em>' reference.
+	 * @see #getDeadlineTime()
+	 * @generated
+	 */
+	void setDeadlineTime(DeadlineTime value);
 
 	/**
 	 * <!-- begin-user-doc -->

@@ -32,6 +32,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
+import org.eclipse.fordiac.ide.model.libraryElement.DeadlineTime;
 import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
@@ -48,6 +49,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceTransactionImpl#getInputPrimitive <em>Input Primitive</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceTransactionImpl#getOutputPrimitive <em>Output Primitive</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceTransactionImpl#getDeadlineTime <em>Deadline Time</em>}</li>
  * </ul>
  *
  * @generated
@@ -72,6 +74,16 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 	 * @ordered
 	 */
 	protected EList<OutputPrimitive> outputPrimitive;
+
+	/**
+	 * The cached value of the '{@link #getDeadlineTime() <em>Deadline Time</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDeadlineTime()
+	 * @generated
+	 * @ordered
+	 */
+	protected DeadlineTime deadlineTime;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -156,6 +168,46 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 	 * @generated
 	 */
 	@Override
+	public DeadlineTime getDeadlineTime() {
+		if (deadlineTime != null && deadlineTime.eIsProxy()) {
+			InternalEObject oldDeadlineTime = (InternalEObject)deadlineTime;
+			deadlineTime = (DeadlineTime)eResolveProxy(oldDeadlineTime);
+			if (deadlineTime != oldDeadlineTime) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.SERVICE_TRANSACTION__DEADLINE_TIME, oldDeadlineTime, deadlineTime));
+			}
+		}
+		return deadlineTime;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public DeadlineTime basicGetDeadlineTime() {
+		return deadlineTime;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setDeadlineTime(DeadlineTime newDeadlineTime) {
+		DeadlineTime oldDeadlineTime = deadlineTime;
+		deadlineTime = newDeadlineTime;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.SERVICE_TRANSACTION__DEADLINE_TIME, oldDeadlineTime, deadlineTime));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public ServiceSequence getServiceSequence() {
 		return (ServiceSequence) this.eContainer();
 	}
@@ -189,6 +241,9 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 				return getInputPrimitive();
 			case LibraryElementPackage.SERVICE_TRANSACTION__OUTPUT_PRIMITIVE:
 				return getOutputPrimitive();
+			case LibraryElementPackage.SERVICE_TRANSACTION__DEADLINE_TIME:
+				if (resolve) return getDeadlineTime();
+				return basicGetDeadlineTime();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -210,6 +265,9 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 				getOutputPrimitive().clear();
 				getOutputPrimitive().addAll((Collection<? extends OutputPrimitive>)newValue);
 				return;
+			case LibraryElementPackage.SERVICE_TRANSACTION__DEADLINE_TIME:
+				setDeadlineTime((DeadlineTime)newValue);
+				return;
 			default:
 				super.eSet(featureID, newValue);
 				return;
@@ -230,6 +288,9 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 			case LibraryElementPackage.SERVICE_TRANSACTION__OUTPUT_PRIMITIVE:
 				getOutputPrimitive().clear();
 				return;
+			case LibraryElementPackage.SERVICE_TRANSACTION__DEADLINE_TIME:
+				setDeadlineTime((DeadlineTime)null);
+				return;
 			default:
 				super.eUnset(featureID);
 				return;
@@ -248,6 +309,8 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 				return inputPrimitive != null;
 			case LibraryElementPackage.SERVICE_TRANSACTION__OUTPUT_PRIMITIVE:
 				return outputPrimitive != null && !outputPrimitive.isEmpty();
+			case LibraryElementPackage.SERVICE_TRANSACTION__DEADLINE_TIME:
+				return deadlineTime != null;
 			default:
 				return super.eIsSet(featureID);
 		}

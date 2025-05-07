@@ -1054,6 +1054,18 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case LibraryElementPackage.DEADLINE_TIME: {
+				DeadlineTime deadlineTime = (DeadlineTime)theEObject;
+				T result = caseDeadlineTime(deadlineTime);
+				if (result == null) result = caseVarDeclaration(deadlineTime);
+				if (result == null) result = caseIInterfaceElement(deadlineTime);
+				if (result == null) result = caseITypedElement(deadlineTime);
+				if (result == null) result = caseHiddenElement(deadlineTime);
+				if (result == null) result = caseINamedElement(deadlineTime);
+				if (result == null) result = caseConfigurableObject(deadlineTime);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -2645,6 +2657,21 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseWith(With object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Deadline Time</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Deadline Time</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseDeadlineTime(DeadlineTime object) {
 		return null;
 	}
 

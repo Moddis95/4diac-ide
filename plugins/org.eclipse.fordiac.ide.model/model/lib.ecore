@@ -2074,6 +2074,7 @@
         <details key="namespace" value="##targetNamespace"/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="deadlineTime" eType="#//DeadlineTime"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ServiceInterface" eSuperTypes="#//INamedElement">
     <eOperations name="getService" lowerBound="1" eType="#//Service">
@@ -2551,4 +2552,12 @@
   <eClassifiers xsi:type="ecore:EDataType" name="TypeEntry" instanceClassName="org.eclipse.fordiac.ide.model.typelibrary.TypeEntry"/>
   <eClassifiers xsi:type="ecore:EDataType" name="TypeLibrary" instanceClassName="org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary"/>
   <eClassifiers xsi:type="ecore:EDataType" name="VarDeclList" instanceTypeName="java.util.List&lt;org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration>"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="DeadlineType">
+    <eLiterals name="SoftDeadline" literal="SOFT"/>
+    <eLiterals name="FirmDeadline" value="1" literal="FIRM"/>
+    <eLiterals name="HardDeadline" value="2" literal="HARD"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DeadlineTime" eSuperTypes="#//VarDeclaration">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="deadlineType" eType="#//DeadlineType"/>
+  </eClassifiers>
 </ecore:EPackage>

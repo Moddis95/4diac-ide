@@ -697,6 +697,13 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass deadlineTimeEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EClass memberVarDeclarationEClass = null;
 
 	/**
@@ -704,6 +711,13 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	private EEnum languageEEnum = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum deadlineTypeEEnum = null;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -3078,6 +3092,16 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getServiceTransaction_DeadlineTime() {
+		return (EReference)serviceTransactionEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -3685,6 +3709,26 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
+	public EClass getDeadlineTime() {
+		return deadlineTimeEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getDeadlineTime_DeadlineType() {
+		return (EAttribute)deadlineTimeEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getMemberVarDeclaration() {
 		return memberVarDeclarationEClass;
 	}
@@ -3706,6 +3750,16 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	@Override
 	public EEnum getLanguage() {
 		return languageEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EEnum getDeadlineType() {
+		return deadlineTypeEEnum;
 	}
 
 	/**
@@ -4149,6 +4203,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		serviceTransactionEClass = createEClass(SERVICE_TRANSACTION);
 		createEReference(serviceTransactionEClass, SERVICE_TRANSACTION__INPUT_PRIMITIVE);
 		createEReference(serviceTransactionEClass, SERVICE_TRANSACTION__OUTPUT_PRIMITIVE);
+		createEReference(serviceTransactionEClass, SERVICE_TRANSACTION__DEADLINE_TIME);
 
 		serviceInterfaceEClass = createEClass(SERVICE_INTERFACE);
 
@@ -4239,8 +4294,12 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		withEClass = createEClass(WITH);
 		createEReference(withEClass, WITH__VARIABLES);
 
+		deadlineTimeEClass = createEClass(DEADLINE_TIME);
+		createEAttribute(deadlineTimeEClass, DEADLINE_TIME__DEADLINE_TYPE);
+
 		// Create enums
 		languageEEnum = createEEnum(LANGUAGE);
+		deadlineTypeEEnum = createEEnum(DEADLINE_TYPE);
 
 		// Create data types
 		commandStackEDataType = createEDataType(COMMAND_STACK);
@@ -4385,6 +4444,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		typedSubAppEClass.getESuperTypes().add(this.getSubApp());
 		untypedSubAppEClass.getESuperTypes().add(this.getSubApp());
 		varDeclarationEClass.getESuperTypes().add(this.getIInterfaceElement());
+		deadlineTimeEClass.getESuperTypes().add(this.getVarDeclaration());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(adapterConnectionEClass, AdapterConnection.class, "AdapterConnection", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
@@ -5308,6 +5368,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEClass(serviceTransactionEClass, ServiceTransaction.class, "ServiceTransaction", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getServiceTransaction_InputPrimitive(), this.getInputPrimitive(), null, "inputPrimitive", null, 0, 1, ServiceTransaction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getServiceTransaction_OutputPrimitive(), this.getOutputPrimitive(), null, "outputPrimitive", null, 0, -1, ServiceTransaction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getServiceTransaction_DeadlineTime(), this.getDeadlineTime(), null, "deadlineTime", null, 0, 1, ServiceTransaction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(serviceTransactionEClass, this.getServiceSequence(), "getServiceSequence", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
@@ -5550,12 +5611,20 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEClass(withEClass, With.class, "With", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getWith_Variables(), this.getVarDeclaration(), this.getVarDeclaration_Withs(), "variables", null, 1, 1, With.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
+		initEClass(deadlineTimeEClass, DeadlineTime.class, "DeadlineTime", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEAttribute(getDeadlineTime_DeadlineType(), this.getDeadlineType(), "deadlineType", null, 0, 1, DeadlineTime.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
 		// Initialize enums and add enum literals
 		initEEnum(languageEEnum, Language.class, "Language"); //$NON-NLS-1$
 		addEEnumLiteral(languageEEnum, Language.C);
 		addEEnumLiteral(languageEEnum, Language.OTHER);
 		addEEnumLiteral(languageEEnum, Language.JAVA);
 		addEEnumLiteral(languageEEnum, Language.CPP);
+
+		initEEnum(deadlineTypeEEnum, DeadlineType.class, "DeadlineType"); //$NON-NLS-1$
+		addEEnumLiteral(deadlineTypeEEnum, DeadlineType.SOFT_DEADLINE);
+		addEEnumLiteral(deadlineTypeEEnum, DeadlineType.FIRM_DEADLINE);
+		addEEnumLiteral(deadlineTypeEEnum, DeadlineType.HARD_DEADLINE);
 
 		// Initialize data types
 		initEDataType(commandStackEDataType, CommandStack.class, "CommandStack", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$

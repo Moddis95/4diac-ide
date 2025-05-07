@@ -57,6 +57,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
+import org.eclipse.fordiac.ide.model.libraryElement.DeadlineTime;
+import org.eclipse.fordiac.ide.model.libraryElement.DeadlineType;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
@@ -695,8 +697,12 @@ public class LibraryElementValidator extends EObjectValidator {
 				return validateVersionInfo((VersionInfo)value, diagnostics, context);
 			case LibraryElementPackage.WITH:
 				return validateWith((With)value, diagnostics, context);
+			case LibraryElementPackage.DEADLINE_TIME:
+				return validateDeadlineTime((DeadlineTime)value, diagnostics, context);
 			case LibraryElementPackage.LANGUAGE:
 				return validateLanguage((Language)value, diagnostics, context);
+			case LibraryElementPackage.DEADLINE_TYPE:
+				return validateDeadlineType((DeadlineType)value, diagnostics, context);
 			case LibraryElementPackage.COMMAND_STACK:
 				return validateCommandStack((CommandStack)value, diagnostics, context);
 			case LibraryElementPackage.IFILE:
@@ -2838,6 +2844,34 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean validateDeadlineTime(DeadlineTime deadlineTime, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		if (!validate_NoCircularContainment(deadlineTime, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(deadlineTime, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(deadlineTime, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(deadlineTime, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(deadlineTime, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(deadlineTime, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(deadlineTime, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(deadlineTime, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(deadlineTime, diagnostics, context);
+		if (result || diagnostics != null) result &= validateIInterfaceElement_validateName(deadlineTime, diagnostics, context);
+		if (result || diagnostics != null) result &= validateITypedElement_validateType(deadlineTime, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateMultipleInputConnections(deadlineTime, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateNoValueForGenericTypeVariable(deadlineTime, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateNoValueForVariableLengthArrayVariable(deadlineTime, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateValueForGenericInstanceVariable(deadlineTime, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutSourceTypeIsWellDefined(deadlineTime, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutIsWithed(deadlineTime, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutSubappInterface(deadlineTime, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutSubappNetwork(deadlineTime, diagnostics, context);
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public boolean validateMemberVarDeclaration(MemberVarDeclaration memberVarDeclaration, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		if (!validate_NoCircularContainment(memberVarDeclaration, diagnostics, context)) return false;
 		boolean result = validate_EveryMultiplicityConforms(memberVarDeclaration, diagnostics, context);
@@ -2867,6 +2901,15 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * @generated
 	 */
 	public boolean validateLanguage(Language language, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return true;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateDeadlineType(DeadlineType deadlineType, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return true;
 	}
 

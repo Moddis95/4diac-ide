@@ -55,6 +55,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
+import org.eclipse.fordiac.ide.model.libraryElement.DeadlineTime;
+import org.eclipse.fordiac.ide.model.libraryElement.DeadlineType;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
@@ -264,6 +266,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			case LibraryElementPackage.VAR_DECLARATION: return createVarDeclaration();
 			case LibraryElementPackage.VERSION_INFO: return createVersionInfo();
 			case LibraryElementPackage.WITH: return createWith();
+			case LibraryElementPackage.DEADLINE_TIME: return createDeadlineTime();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -279,6 +282,8 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 		switch (eDataType.getClassifierID()) {
 			case LibraryElementPackage.LANGUAGE:
 				return createLanguageFromString(eDataType, initialValue);
+			case LibraryElementPackage.DEADLINE_TYPE:
+				return createDeadlineTypeFromString(eDataType, initialValue);
 			case LibraryElementPackage.COMMAND_STACK:
 				return createCommandStackFromString(eDataType, initialValue);
 			case LibraryElementPackage.IFILE:
@@ -312,6 +317,8 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 		switch (eDataType.getClassifierID()) {
 			case LibraryElementPackage.LANGUAGE:
 				return convertLanguageToString(eDataType, instanceValue);
+			case LibraryElementPackage.DEADLINE_TYPE:
+				return convertDeadlineTypeToString(eDataType, instanceValue);
 			case LibraryElementPackage.COMMAND_STACK:
 				return convertCommandStackToString(eDataType, instanceValue);
 			case LibraryElementPackage.IFILE:
@@ -1309,6 +1316,17 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
+	public DeadlineTime createDeadlineTime() {
+		DeadlineTimeImpl deadlineTime = new DeadlineTimeImpl();
+		return deadlineTime;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public MemberVarDeclaration createMemberVarDeclaration() {
 		MemberVarDeclarationImpl memberVarDeclaration = new MemberVarDeclarationImpl();
 		return memberVarDeclaration;
@@ -1331,6 +1349,26 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated
 	 */
 	public String convertLanguageToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public DeadlineType createDeadlineTypeFromString(EDataType eDataType, String initialValue) {
+		DeadlineType result = DeadlineType.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertDeadlineTypeToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 

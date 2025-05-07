@@ -6624,13 +6624,22 @@ public interface LibraryElementPackage extends EPackage {
 	int SERVICE_TRANSACTION__OUTPUT_PRIMITIVE = 1;
 
 	/**
+	 * The feature id for the '<em><b>Deadline Time</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE_TRANSACTION__DEADLINE_TIME = 2;
+
+	/**
 	 * The number of structural features of the '<em>Service Transaction</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SERVICE_TRANSACTION_FEATURE_COUNT = 2;
+	int SERVICE_TRANSACTION_FEATURE_COUNT = 3;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceInterfaceImpl <em>Service Interface</em>}' class.
@@ -8074,6 +8083,124 @@ public interface LibraryElementPackage extends EPackage {
 	int WITH_FEATURE_COUNT = 1;
 
 	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeadlineTimeImpl <em>Deadline Time</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.DeadlineTimeImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getDeadlineTime()
+	 * @generated
+	 */
+	int DEADLINE_TIME = 107;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEADLINE_TIME__NAME = VAR_DECLARATION__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEADLINE_TIME__COMMENT = VAR_DECLARATION__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEADLINE_TIME__ATTRIBUTES = VAR_DECLARATION__ATTRIBUTES;
+
+	/**
+	 * The feature id for the '<em><b>Is Input</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEADLINE_TIME__IS_INPUT = VAR_DECLARATION__IS_INPUT;
+
+	/**
+	 * The feature id for the '<em><b>Input Connections</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEADLINE_TIME__INPUT_CONNECTIONS = VAR_DECLARATION__INPUT_CONNECTIONS;
+
+	/**
+	 * The feature id for the '<em><b>Output Connections</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEADLINE_TIME__OUTPUT_CONNECTIONS = VAR_DECLARATION__OUTPUT_CONNECTIONS;
+
+	/**
+	 * The feature id for the '<em><b>Type</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEADLINE_TIME__TYPE = VAR_DECLARATION__TYPE;
+
+	/**
+	 * The feature id for the '<em><b>Array Size</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEADLINE_TIME__ARRAY_SIZE = VAR_DECLARATION__ARRAY_SIZE;
+
+	/**
+	 * The feature id for the '<em><b>Withs</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEADLINE_TIME__WITHS = VAR_DECLARATION__WITHS;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEADLINE_TIME__VALUE = VAR_DECLARATION__VALUE;
+
+	/**
+	 * The feature id for the '<em><b>Deadline Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEADLINE_TIME__DEADLINE_TYPE = VAR_DECLARATION_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Deadline Time</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEADLINE_TIME_FEATURE_COUNT = VAR_DECLARATION_FEATURE_COUNT + 1;
+
+	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.Language <em>Language</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8081,7 +8208,17 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getLanguage()
 	 * @generated
 	 */
-	int LANGUAGE = 107;
+	int LANGUAGE = 108;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.DeadlineType <em>Deadline Type</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.DeadlineType
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getDeadlineType()
+	 * @generated
+	 */
+	int DEADLINE_TYPE = 109;
 
 	/**
 	 * The meta object id for the '<em>Command Stack</em>' data type.
@@ -8091,7 +8228,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getCommandStack()
 	 * @generated
 	 */
-	int COMMAND_STACK = 108;
+	int COMMAND_STACK = 110;
 
 	/**
 	 * The meta object id for the '<em>IFile</em>' data type.
@@ -8101,7 +8238,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIFile()
 	 * @generated
 	 */
-	int IFILE = 109;
+	int IFILE = 111;
 
 	/**
 	 * The meta object id for the '<em>Interface Element Stream</em>' data type.
@@ -8111,7 +8248,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getInterfaceElementStream()
 	 * @generated
 	 */
-	int INTERFACE_ELEMENT_STREAM = 110;
+	int INTERFACE_ELEMENT_STREAM = 112;
 
 	/**
 	 * The meta object id for the '<em>IProject</em>' data type.
@@ -8121,7 +8258,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIProject()
 	 * @generated
 	 */
-	int IPROJECT = 111;
+	int IPROJECT = 113;
 
 	/**
 	 * The meta object id for the '<em>Named Element Stream</em>' data type.
@@ -8131,7 +8268,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getNamedElementStream()
 	 * @generated
 	 */
-	int NAMED_ELEMENT_STREAM = 112;
+	int NAMED_ELEMENT_STREAM = 114;
 
 	/**
 	 * The meta object id for the '<em>Point</em>' data type.
@@ -8141,7 +8278,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getPoint()
 	 * @generated
 	 */
-	int POINT = 113;
+	int POINT = 115;
 
 	/**
 	 * The meta object id for the '<em>Type Entry</em>' data type.
@@ -8151,7 +8288,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTypeEntry()
 	 * @generated
 	 */
-	int TYPE_ENTRY = 114;
+	int TYPE_ENTRY = 116;
 
 	/**
 	 * The meta object id for the '<em>Type Library</em>' data type.
@@ -8161,7 +8298,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTypeLibrary()
 	 * @generated
 	 */
-	int TYPE_LIBRARY = 115;
+	int TYPE_LIBRARY = 117;
 
 	/**
 	 * The meta object id for the '<em>Var Decl List</em>' data type.
@@ -8171,7 +8308,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getVarDeclList()
 	 * @generated
 	 */
-	int VAR_DECL_LIST = 116;
+	int VAR_DECL_LIST = 118;
 
 
 	/**
@@ -10831,6 +10968,17 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getServiceTransaction_OutputPrimitive();
 
 	/**
+	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction#getDeadlineTime <em>Deadline Time</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Deadline Time</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction#getDeadlineTime()
+	 * @see #getServiceTransaction()
+	 * @generated
+	 */
+	EReference getServiceTransaction_DeadlineTime();
+
+	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceInterface <em>Service Interface</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -11522,6 +11670,27 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getWith_Variables();
 
 	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.DeadlineTime <em>Deadline Time</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Deadline Time</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.DeadlineTime
+	 * @generated
+	 */
+	EClass getDeadlineTime();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.DeadlineTime#getDeadlineType <em>Deadline Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Deadline Type</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.DeadlineTime#getDeadlineType()
+	 * @see #getDeadlineTime()
+	 * @generated
+	 */
+	EAttribute getDeadlineTime_DeadlineType();
+
+	/**
 	 * Returns the meta object for enum '{@link org.eclipse.fordiac.ide.model.libraryElement.Language <em>Language</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -11530,6 +11699,16 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 */
 	EEnum getLanguage();
+
+	/**
+	 * Returns the meta object for enum '{@link org.eclipse.fordiac.ide.model.libraryElement.DeadlineType <em>Deadline Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Deadline Type</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.DeadlineType
+	 * @generated
+	 */
+	EEnum getDeadlineType();
 
 	/**
 	 * Returns the meta object for data type '{@link org.eclipse.gef.commands.CommandStack <em>Command Stack</em>}'.
@@ -13811,6 +13990,14 @@ public interface LibraryElementPackage extends EPackage {
 		EReference SERVICE_TRANSACTION__OUTPUT_PRIMITIVE = eINSTANCE.getServiceTransaction_OutputPrimitive();
 
 		/**
+		 * The meta object literal for the '<em><b>Deadline Time</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SERVICE_TRANSACTION__DEADLINE_TIME = eINSTANCE.getServiceTransaction_DeadlineTime();
+
+		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceInterfaceImpl <em>Service Interface</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -14379,6 +14566,24 @@ public interface LibraryElementPackage extends EPackage {
 		EReference WITH__VARIABLES = eINSTANCE.getWith_Variables();
 
 		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeadlineTimeImpl <em>Deadline Time</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.DeadlineTimeImpl
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getDeadlineTime()
+		 * @generated
+		 */
+		EClass DEADLINE_TIME = eINSTANCE.getDeadlineTime();
+
+		/**
+		 * The meta object literal for the '<em><b>Deadline Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DEADLINE_TIME__DEADLINE_TYPE = eINSTANCE.getDeadlineTime_DeadlineType();
+
+		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.Language <em>Language</em>}' enum.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -14387,6 +14592,16 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EEnum LANGUAGE = eINSTANCE.getLanguage();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.DeadlineType <em>Deadline Type</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.DeadlineType
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getDeadlineType()
+		 * @generated
+		 */
+		EEnum DEADLINE_TYPE = eINSTANCE.getDeadlineType();
 
 		/**
 		 * The meta object literal for the '<em>Command Stack</em>' data type.

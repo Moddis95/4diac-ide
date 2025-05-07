@@ -2107,6 +2107,29 @@ public class LibraryElementItemProviderAdapterFactory extends LibraryElementAdap
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.DeadlineTime} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected DeadlineTimeItemProvider deadlineTimeItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.DeadlineTime}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createDeadlineTimeAdapter() {
+		if (deadlineTimeItemProvider == null) {
+			deadlineTimeItemProvider = new DeadlineTimeItemProvider(this);
+		}
+
+		return deadlineTimeItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

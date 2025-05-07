@@ -726,6 +726,11 @@ public class ServiceSequenceItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createDeadlineTime()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
 				 DataFactory.eINSTANCE.createAnyType()));
 
 		newChildDescriptors.add

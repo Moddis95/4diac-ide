@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2020 Andrea Zoitl
- *               2021 Johannes Kepler University Linz
+ * Copyright (c) 2020, 2025 Andrea Zoitl, Johannes Kepler University Linz,
+ *             		  		Carl von Ossietzky Universität Oldenburg
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,6 +12,7 @@
  *    Andrea Zoitl
  *      - externalized all translatable strings
  *    Melanie Winter - clean up
+ *    Mattis Harzmann - added DeadlineTime and -Type
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence;
 
@@ -21,6 +22,8 @@ import org.eclipse.osgi.util.NLS;
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.messages"; //$NON-NLS-1$
 
+	public static String ServiceSequenceSection_DeadlineType;
+	public static String ServiceSequenceSection_DeadlineTime;
 	public static String CreateOutputPrimitiveCommand_NotAvailable;
 	public static String InterfaceSelectorButton_Interface;
 	public static String PrimitiveSection_CreateControls_PrimitiveSpecification;

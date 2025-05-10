@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2024 fortiss GmbH, Johannes Kepler University Linz
+ * Copyright (c) 2014, 2025 fortiss GmbH, Johannes Kepler University Linz,
+ * 							Carl von Ossietzky Universität Oldenburg
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,6 +14,7 @@
  *   Alois Zoitl - cleaned command stack handling for property sections
  *   Melanie Winter - renewed section, use tableviewer
  *   Felix Roithmayr - added startstate and type support
+ *   Mattis Harzmann - added DeadlineTime, -Type and ServiceSequenceCellModifier
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.properties;
 
@@ -23,8 +25,12 @@ import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.Messages;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangeSequenceNameCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangeSequenceStartStateCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangeSequenceTypeCommand;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangeTransactionDeadlineDurationCommand;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangeTransactionDeadlineTypeCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.CreateTransactionCommand;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.CreateTransactionDeadlineDurationCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.DeleteTransactionCommand;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.DeleteTransactionDeadlineDurationCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.contentprovider.ServiceSequenceContentProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.widgets.StateComboHelper;
@@ -32,19 +38,27 @@ import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.ServiceSequenceTypes;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeTransactionOrderCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.DeadlineTime;
+import org.eclipse.fordiac.ide.model.libraryElement.DeadlineType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
+import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnPixelData;
+import org.eclipse.jface.viewers.ComboBoxCellEditor;
+import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.graphics.Image;
@@ -55,6 +69,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
@@ -67,8 +82,10 @@ public class ServiceSequenceSection extends AbstractSection {
 	private CCombo serviceSequencetype;
 
 	private static final String INDEX = "index"; //$NON-NLS-1$
-	private static final String INPUT_PRIMIIVE = "input primitive"; //$NON-NLS-1$
-	private static final String OUTPUT_PRIMIIVES = "output primitives"; //$NON-NLS-1$
+	private static final String INPUT_PRIMITIVE = "input primitive"; //$NON-NLS-1$
+	private static final String OUTPUT_PRIMITIVES = "output primitives"; //$NON-NLS-1$
+	private static final String DEADLINE_TYPE = "deadline type"; //$NON-NLS-1$ added
+	private static final String DEADLINE_TIME = "duration"; //$NON-NLS-1$ added
 
 	@Override
 	protected ServiceSequence getType() {
@@ -158,7 +175,7 @@ public class ServiceSequenceSection extends AbstractSection {
 	private CCombo createTypeSelector(final Group parent) {
 		final CCombo combo = getWidgetFactory().createCCombo(parent);
 		final List<String> items = ServiceSequenceTypes.getAllTypes();
-		combo.setItems(items.toArray(new String[0]));
+		combo.setItems(items != null ? items.toArray(new String[0]) : new String[0]);
 		return combo;
 	}
 
@@ -193,12 +210,11 @@ public class ServiceSequenceSection extends AbstractSection {
 		viewer.getTable().setLayout(createTableLayout(viewer.getTable()));
 		viewer.setColumnProperties(getColumnProperties());
 		viewer.setLabelProvider(new TransactionLabelProvider());
-
 		return viewer;
 	}
 
 	private static String[] getColumnProperties() {
-		return new String[] { INDEX, INPUT_PRIMIIVE, OUTPUT_PRIMIIVES };
+		return new String[] { INDEX, INPUT_PRIMITIVE, OUTPUT_PRIMITIVES, DEADLINE_TIME, DEADLINE_TYPE };
 	}
 
 	private static Layout createTableLayout(final Table table) {
@@ -208,10 +224,16 @@ public class ServiceSequenceSection extends AbstractSection {
 		inputPrimitiveColumn.setText(Messages.ServiceSequenceSection_InputPrimitive);
 		final TableColumn outputPrimitiveColumn = new TableColumn(table, SWT.LEFT);
 		outputPrimitiveColumn.setText(Messages.ServiceSequenceSection_OutputPrimitives);
+		final TableColumn deadlineTimeColumn = new TableColumn(table, SWT.LEFT);
+		deadlineTimeColumn.setText(Messages.ServiceSequenceSection_DeadlineTime);
+		final TableColumn deadlineTypeColumn = new TableColumn(table, SWT.LEFT);
+		deadlineTypeColumn.setText(Messages.ServiceSequenceSection_DeadlineType);
 		final TableLayout layout = new TableLayout();
 		layout.addColumnData(new ColumnPixelData(80));
-		layout.addColumnData(new ColumnPixelData(125));
-		layout.addColumnData(new ColumnPixelData(300));
+		layout.addColumnData(new ColumnPixelData(145));
+		layout.addColumnData(new ColumnPixelData(145));
+		layout.addColumnData(new ColumnPixelData(145));
+		layout.addColumnData(new ColumnPixelData(145));
 		return layout;
 	}
 
@@ -226,6 +248,14 @@ public class ServiceSequenceSection extends AbstractSection {
 		transactionsViewer.setInput(getType());
 	}
 
+	private static CellEditor[] createCellEditors(final Table table) {
+		final CellEditor deadlineTimeEditor = new TextCellEditor(table);
+		final CellEditor deadlineTypeEditor = ComboBoxWidgetFactory.createComboBoxCellEditor(table,
+				getDeadlineTypeValues(), SWT.READ_ONLY);
+		deadlineTypeEditor.setStyle(ComboBoxCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION);
+		return new CellEditor[] { null, null, null, deadlineTimeEditor, deadlineTypeEditor };
+	}
+
 	@Override
 	protected void setInputCode() {
 		nameText.setEnabled(false);
@@ -235,13 +265,21 @@ public class ServiceSequenceSection extends AbstractSection {
 
 	@Override
 	protected void setInputInit() {
-		// currently nothing to be done here
+		transactionsViewer.setCellEditors(createCellEditors(transactionsViewer.getTable()));
+		transactionsViewer.setCellModifier(new ServiceSequenceCellModifier());
+	}
+
+	public static String[] getDeadlineTypeValues() {
+		final String[] codes = Arrays.stream(DeadlineType.values()).map(DeadlineType::getName).toArray(String[]::new);
+		return codes;
 	}
 
 	protected static class TransactionLabelProvider extends LabelProvider implements ITableLabelProvider {
 		private static final int INDEX_COL_INDEX = 0;
 		private static final int INPUT_PRIMITIVE_COL_INDEX = 1;
 		private static final int OUTPUT_PRIMITIVE_COL_INDEX = 2;
+		private static final int DEADLINE_TIME_COL_INDEX = 3;
+		private static final int DEADLINE_TYPE_COL_INDEX = 4;
 
 		@Override
 		public Image getColumnImage(final Object element, final int columnIndex) {
@@ -260,6 +298,14 @@ public class ServiceSequenceSection extends AbstractSection {
 					return transaction.getInputPrimitive().getEvent();
 				case OUTPUT_PRIMITIVE_COL_INDEX:
 					return getOutputPrimitives(transaction);
+				case DEADLINE_TIME_COL_INDEX:
+					return transaction.getDeadlineTime() != null && transaction.getDeadlineTime().getValue() != null
+							? transaction.getDeadlineTime().getValue().getValue() + " ms" //$NON-NLS-1$
+							: ""; //$NON-NLS-1$
+				case DEADLINE_TYPE_COL_INDEX:
+					return transaction.getDeadlineTime() != null
+							? transaction.getDeadlineTime().getDeadlineType().getName()
+							: " "; //$NON-NLS-1$
 				default:
 					break;
 				}
@@ -275,5 +321,85 @@ public class ServiceSequenceSection extends AbstractSection {
 			}
 			return sb.toString();
 		}
+
+	}
+
+	public class ServiceSequenceCellModifier implements ICellModifier {
+
+		@Override
+		public boolean canModify(final Object element, final String property) {
+			if (INDEX.equals(property)) {
+				return false;
+			}
+			if (DEADLINE_TYPE.equals(property)) {
+				final ServiceTransaction transaction = (ServiceTransaction) element;
+				return transaction.getDeadlineTime() != null;
+			}
+			return true;
+		}
+
+		@Override
+		public Object getValue(final Object element, final String property) {
+			if (element instanceof final ServiceTransaction transaction) {
+				switch (property) {
+				case DEADLINE_TIME:
+					return transaction.getDeadlineTime() != null ? transaction.getDeadlineTime().getValue().getValue()
+							: " "; //$NON-NLS-1$
+				case DEADLINE_TYPE:
+					return transaction.getDeadlineTime() != null
+							? transaction.getDeadlineTime().getDeadlineType().getValue()
+							: " "; //$NON-NLS-1$
+				default:
+					break;
+				}
+			}
+			return element;
+		}
+
+		@Override
+		public void modify(final Object element, final String property, final Object value) {
+			final TableItem tableItem = (TableItem) element;
+			final ServiceTransaction transaction = (ServiceTransaction) tableItem.getData();
+			Command cmd = null;
+
+			switch (property) {
+			case DEADLINE_TIME:
+				final String stringValue = (String) value;
+				String result = ""; //$NON-NLS-1$
+				if (stringValue != null) {
+					result = stringValue.replaceAll("[a-zA-Z]", ""); //$NON-NLS-1$
+				}
+				if (stringValue == null || result.trim().isEmpty() || stringValue.equals("0")) { //$NON-NLS-1$
+					cmd = new DeleteTransactionDeadlineDurationCommand(transaction);
+				} else if (transaction.getDeadlineTime() == null) {
+					createDeadlineTimeForTransaction(transaction, result);
+					cmd = new CreateTransactionDeadlineDurationCommand(transaction, result);
+				} else {
+					cmd = new ChangeTransactionDeadlineDurationCommand(transaction.getDeadlineTime(), result);
+				}
+				break;
+			case DEADLINE_TYPE:
+				final int index = (int) value;
+				final String selectedValue = getDeadlineTypeValues()[index];
+				final DeadlineType newType = DeadlineType.getByName(selectedValue);
+				cmd = new ChangeTransactionDeadlineTypeCommand(transaction.getDeadlineTime(), newType);
+				break;
+			default:
+				break;
+			}
+			if (cmd != null) {
+				executeCommand(cmd);
+				refresh();
+			}
+		}
+
+		private void createDeadlineTimeForTransaction(final ServiceTransaction transaction, final String initialValue) {
+			final DeadlineTime deadline = LibraryElementFactory.eINSTANCE.createDeadlineTime();
+			final Value value = LibraryElementFactory.eINSTANCE.createValue();
+			value.setValue(initialValue);
+			deadline.setValue(value);
+			transaction.setDeadlineTime(deadline);
+		}
+
 	}
 }

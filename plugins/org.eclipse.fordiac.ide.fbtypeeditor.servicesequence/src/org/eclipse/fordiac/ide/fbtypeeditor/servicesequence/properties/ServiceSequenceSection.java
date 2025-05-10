@@ -84,8 +84,8 @@ public class ServiceSequenceSection extends AbstractSection {
 	private static final String INDEX = "index"; //$NON-NLS-1$
 	private static final String INPUT_PRIMITIVE = "input primitive"; //$NON-NLS-1$
 	private static final String OUTPUT_PRIMITIVES = "output primitives"; //$NON-NLS-1$
-	private static final String DEADLINE_TYPE = "deadline type"; //$NON-NLS-1$ added
-	private static final String DEADLINE_TIME = "duration"; //$NON-NLS-1$ added
+	private static final String DEADLINE_TYPE = "deadline type"; //$NON-NLS-1$
+	private static final String DEADLINE_TIME = "deadline time"; //$NON-NLS-1$
 
 	@Override
 	protected ServiceSequence getType() {

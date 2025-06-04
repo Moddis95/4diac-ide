@@ -123,6 +123,9 @@ public class ServiceSequenceEditor extends DiagramEditorWithFlyoutPalette implem
 
 	@Override
 	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
+		if (!(part.getSite().getPage().getActiveEditor() instanceof FBTypeEditor)) {
+			return;
+		}
 		super.selectionChanged(part, selection);
 		// If not in FBTypeEditor ignore selection changed
 		if (part.getSite().getPage().getActiveEditor() instanceof FBTypeEditor) {

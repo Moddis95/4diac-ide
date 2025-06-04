@@ -16,3 +16,5 @@ Export-Package: org.eclipse.fordiac.ide.model.eval,
  org.eclipse.fordiac.ide.model.eval.variable
 Bundle-Activator: org.eclipse.fordiac.ide.model.eval.plugin.EvaluatorPlugin
 Bundle-ActivationPolicy: lazy
+Import-Package: org.apache.tools.ant;version="[1.10.0,2.0.0)",
+ org.eclipse.elk.core.data

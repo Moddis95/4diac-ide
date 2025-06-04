@@ -55,6 +55,9 @@ public final class Messages extends NLS {
 	public static String TransactionSection_CollectOutputPrimitiveGroupName_AndLeftInterface;
 	public static String TransactionSection_CreateTableLayout_Parameter;
 	public static String TransactionSection_CreateTableLayout_Index;
+	public static String TransactionSection_DeadlineJitter;
+	public static String TransactionSection_DeadlineType;
+	public static String TransactionSection_DeadlineTime;
 	public static String TransactionSection_InputPrimitive;
 	public static String TransactionSection_OutputPrimitives;
 	public static String TransactionSection_Parameter;

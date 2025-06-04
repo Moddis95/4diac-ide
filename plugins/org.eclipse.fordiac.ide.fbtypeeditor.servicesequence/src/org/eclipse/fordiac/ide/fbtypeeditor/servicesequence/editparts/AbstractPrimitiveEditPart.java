@@ -37,6 +37,7 @@ import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.gef.policies.EmptyXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.gef.policies.IChangeStringEditPart;
+import org.eclipse.fordiac.ide.model.libraryElement.DeadlineTime;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Primitive;
@@ -53,7 +54,7 @@ import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.tools.DirectEditManager;
 
 public abstract class AbstractPrimitiveEditPart extends AbstractDirectEditableEditPart
-implements NodeEditPart, IChangeStringEditPart {
+		implements NodeEditPart, IChangeStringEditPart {
 
 	private final PrimitiveConnection connection;
 	protected FixedAnchor srcAnchor;
@@ -65,7 +66,17 @@ implements NodeEditPart, IChangeStringEditPart {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
+
+			final DeadlineTime dt = getModel().getDeadlineTime();
+			if (dt != null) {
+				dt.eAdapters().add(adapter);
+				if (dt.getValue() != null) {
+					dt.getValue().eAdapters().add(adapter);
+				}
+			}
+
 			refresh();
+
 		}
 	};
 
@@ -76,16 +87,28 @@ implements NodeEditPart, IChangeStringEditPart {
 	@Override
 	public void activate() {
 		if (!isActive()) {
-			getModel().eContainer().eAdapters().add(adapter);
+
+			final EObject container = getModel().eContainer();
+			if (container != null) {
+				container.eAdapters().add(adapter);
+			}
+
+			final DeadlineTime dt = getModel().getDeadlineTime();
+			if (dt != null) {
+				dt.eAdapters().add(adapter);
+				if (dt.getValue() != null) {
+					dt.getValue().eAdapters().add(adapter);
+				}
+			}
+			super.activate();
 		}
-		super.activate();
 	}
 
 	@Override
 	public void deactivate() {
-		if (isActive() && (getModel().eContainer() != null)) {
-
+		if (isActive() && (getModel().eContainer() != null && getModel().getDeadlineTime() != null)) {
 			getModel().eContainer().eAdapters().remove(adapter);
+			getModel().getDeadlineTime().getValue().eAdapters().remove(adapter);
 		}
 		super.deactivate();
 	}
@@ -107,6 +130,7 @@ implements NodeEditPart, IChangeStringEditPart {
 			figure.setInterfaceDirection(isLeftInterface());
 			figure.setNameLabelText(getModel().getEvent());
 			figure.setParameterLabelText(getModel().getParameters());
+			figure.setDeadlineTime(getModel().getDeadlineTime());
 			connection.setInputDirection(isLeftInterface());
 		}
 	}
@@ -160,7 +184,8 @@ implements NodeEditPart, IChangeStringEditPart {
 
 	@Override
 	protected IFigure createFigure() {
-		return new PrimitiveFigure(isLeftInterface(), getModel().getEvent(), getModel().getParameters());
+		final DeadlineTime deadlineTime = getModel().getDeadlineTime();
+		return new PrimitiveFigure(isLeftInterface(), getModel().getEvent(), getModel().getParameters(), deadlineTime);
 	}
 
 	@Override
@@ -213,7 +238,6 @@ implements NodeEditPart, IChangeStringEditPart {
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new EmptyXYLayoutEditPolicy());
 	}
 
-
 	@Override
 	protected DirectEditManager createDirectEditManager() {
 		return new ServicePrimitiveDirectEditManager(this, getModel(), getFigure().getNameLabel(), getZoomManager(),
@@ -227,13 +251,11 @@ implements NodeEditPart, IChangeStringEditPart {
 	private static List<String> getRelevantEvents(final EditPart editPart, final Primitive primitive) {
 		final List<String> events = new ArrayList<>();
 		if (editPart instanceof InputPrimitiveEditPart) {
-			for (final Event event : primitive.getService().getFBType().getInterfaceList()
-					.getEventInputs()) {
+			for (final Event event : primitive.getService().getFBType().getInterfaceList().getEventInputs()) {
 				events.add(event.getName());
 			}
 		} else if (editPart instanceof OutputPrimitiveEditPart) {
-			for (final Event event : primitive.getService().getFBType().getInterfaceList()
-					.getEventOutputs()) {
+			for (final Event event : primitive.getService().getFBType().getInterfaceList().getEventOutputs()) {
 				events.add(event.getName());
 			}
 		}
@@ -259,4 +281,5 @@ implements NodeEditPart, IChangeStringEditPart {
 	public INamedElement getINamedElement() {
 		return null;
 	}
+
 }

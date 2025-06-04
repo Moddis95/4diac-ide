@@ -24,6 +24,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
+import org.eclipse.fordiac.ide.model.libraryElement.DeadlineTime;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Primitive;
 import org.eclipse.fordiac.ide.model.libraryElement.Service;
@@ -41,6 +42,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.PrimitiveImpl#getEvent <em>Event</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.PrimitiveImpl#getParameters <em>Parameters</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.PrimitiveImpl#getInterface <em>Interface</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.PrimitiveImpl#getDeadlineTime <em>Deadline Time</em>}</li>
  * </ul>
  *
  * @generated
@@ -95,6 +97,16 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 	 * @ordered
 	 */
 	protected ServiceInterface interface_;
+
+	/**
+	 * The cached value of the '{@link #getDeadlineTime() <em>Deadline Time</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDeadlineTime()
+	 * @generated
+	 * @ordered
+	 */
+	protected DeadlineTime deadlineTime;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -207,6 +219,46 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 	 * @generated
 	 */
 	@Override
+	public DeadlineTime getDeadlineTime() {
+		if (deadlineTime != null && deadlineTime.eIsProxy()) {
+			InternalEObject oldDeadlineTime = (InternalEObject)deadlineTime;
+			deadlineTime = (DeadlineTime)eResolveProxy(oldDeadlineTime);
+			if (deadlineTime != oldDeadlineTime) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.PRIMITIVE__DEADLINE_TIME, oldDeadlineTime, deadlineTime));
+			}
+		}
+		return deadlineTime;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public DeadlineTime basicGetDeadlineTime() {
+		return deadlineTime;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setDeadlineTime(DeadlineTime newDeadlineTime) {
+		DeadlineTime oldDeadlineTime = deadlineTime;
+		deadlineTime = newDeadlineTime;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.PRIMITIVE__DEADLINE_TIME, oldDeadlineTime, deadlineTime));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public ServiceTransaction getServiceTransaction() {
 		return (ServiceTransaction) this.eContainer();
 	}
@@ -236,6 +288,9 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 			case LibraryElementPackage.PRIMITIVE__INTERFACE:
 				if (resolve) return getInterface();
 				return basicGetInterface();
+			case LibraryElementPackage.PRIMITIVE__DEADLINE_TIME:
+				if (resolve) return getDeadlineTime();
+				return basicGetDeadlineTime();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -257,6 +312,9 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 				return;
 			case LibraryElementPackage.PRIMITIVE__INTERFACE:
 				setInterface((ServiceInterface)newValue);
+				return;
+			case LibraryElementPackage.PRIMITIVE__DEADLINE_TIME:
+				setDeadlineTime((DeadlineTime)newValue);
 				return;
 			default:
 				super.eSet(featureID, newValue);
@@ -281,6 +339,9 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 			case LibraryElementPackage.PRIMITIVE__INTERFACE:
 				setInterface((ServiceInterface)null);
 				return;
+			case LibraryElementPackage.PRIMITIVE__DEADLINE_TIME:
+				setDeadlineTime((DeadlineTime)null);
+				return;
 			default:
 				super.eUnset(featureID);
 				return;
@@ -301,6 +362,8 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 				return PARAMETERS_EDEFAULT == null ? parameters != null : !PARAMETERS_EDEFAULT.equals(parameters);
 			case LibraryElementPackage.PRIMITIVE__INTERFACE:
 				return interface_ != null;
+			case LibraryElementPackage.PRIMITIVE__DEADLINE_TIME:
+				return deadlineTime != null;
 			default:
 				return super.eIsSet(featureID);
 		}

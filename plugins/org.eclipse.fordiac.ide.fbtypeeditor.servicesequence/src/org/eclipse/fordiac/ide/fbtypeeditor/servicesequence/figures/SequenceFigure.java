@@ -74,7 +74,7 @@ public final class SequenceFigure extends Layer {
 		setLayoutManager(sequenceLayout);
 
 		// creating title bar
-		titleBar.setLayoutManager(new GridLayout(2, true));
+		titleBar.setLayoutManager(new GridLayout(2, false));
 		titleBar.setBackgroundColor(ColorManager.getColor(ServiceConstants.LIGHT_GRAY));
 		titleBar.setOpaque(true);
 
@@ -90,6 +90,7 @@ public final class SequenceFigure extends Layer {
 
 		final GridData nameLayoutData = new GridData(SWT.LEFT, SWT.FILL, true, true);
 		titleBar.getLayoutManager().setConstraint(nameLabel, nameLayoutData);
+		nameLayoutData.widthHint = 30;
 
 		final GridData commentLayoutData = new GridData(SWT.RIGHT, SWT.FILL, true, true);
 		titleBar.getLayoutManager().setConstraint(commentLabel, commentLayoutData);
@@ -102,7 +103,6 @@ public final class SequenceFigure extends Layer {
 		// container for service transactions
 		final FlowLayout containerLayout = new FlowLayout();
 		transactionContainer.setLayoutManager(containerLayout);
-
 		add(transactionContainer);
 
 	}
@@ -140,16 +140,12 @@ public final class SequenceFigure extends Layer {
 	}
 
 	private static String getIconText(final String serviceSequenceType) {
-		switch (serviceSequenceType) {
-		case ServiceSequenceTypes.ALWAYS:
-			return TYPE_ALWAYS;
-		case ServiceSequenceTypes.FORBIDDEN:
-			return TYPE_FORBIDDEN;
-		case ServiceSequenceTypes.CONDITIONAL:
-			return TYPE_CONDITIONAL;
-		default:
-			return TYPE_POSSIBLE;
-		}
+		return switch (serviceSequenceType) {
+		case ServiceSequenceTypes.ALWAYS -> TYPE_ALWAYS;
+		case ServiceSequenceTypes.FORBIDDEN -> TYPE_FORBIDDEN;
+		case ServiceSequenceTypes.CONDITIONAL -> TYPE_CONDITIONAL;
+		default -> TYPE_POSSIBLE;
+		};
 	}
 
 }

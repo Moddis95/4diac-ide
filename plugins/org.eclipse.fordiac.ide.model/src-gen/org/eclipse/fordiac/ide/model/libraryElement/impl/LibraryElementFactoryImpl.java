@@ -55,6 +55,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
+import org.eclipse.fordiac.ide.model.libraryElement.DeadlineJitter;
 import org.eclipse.fordiac.ide.model.libraryElement.DeadlineTime;
 import org.eclipse.fordiac.ide.model.libraryElement.DeadlineType;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
@@ -267,6 +268,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			case LibraryElementPackage.VERSION_INFO: return createVersionInfo();
 			case LibraryElementPackage.WITH: return createWith();
 			case LibraryElementPackage.DEADLINE_TIME: return createDeadlineTime();
+			case LibraryElementPackage.DEADLINE_JITTER: return createDeadlineJitter();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -1319,6 +1321,17 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	public DeadlineTime createDeadlineTime() {
 		DeadlineTimeImpl deadlineTime = new DeadlineTimeImpl();
 		return deadlineTime;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public DeadlineJitter createDeadlineJitter() {
+		DeadlineJitterImpl deadlineJitter = new DeadlineJitterImpl();
+		return deadlineJitter;
 	}
 
 	/**

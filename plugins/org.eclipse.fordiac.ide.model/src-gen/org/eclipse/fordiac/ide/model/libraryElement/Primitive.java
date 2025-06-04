@@ -30,6 +30,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Primitive#getEvent <em>Event</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Primitive#getParameters <em>Parameters</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Primitive#getInterface <em>Interface</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Primitive#getDeadlineTime <em>Deadline Time</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getPrimitive()
@@ -104,6 +105,28 @@ public interface Primitive extends EObject {
 	 * @generated
 	 */
 	void setInterface(ServiceInterface value);
+
+	/**
+	 * Returns the value of the '<em><b>Deadline Time</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Deadline Time</em>' reference.
+	 * @see #setDeadlineTime(DeadlineTime)
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getPrimitive_DeadlineTime()
+	 * @model
+	 * @generated
+	 */
+	DeadlineTime getDeadlineTime();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Primitive#getDeadlineTime <em>Deadline Time</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Deadline Time</em>' reference.
+	 * @see #getDeadlineTime()
+	 * @generated
+	 */
+	void setDeadlineTime(DeadlineTime value);
 
 	/**
 	 * <!-- begin-user-doc -->

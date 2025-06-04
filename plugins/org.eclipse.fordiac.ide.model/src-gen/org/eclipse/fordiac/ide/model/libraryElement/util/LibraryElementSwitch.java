@@ -1066,6 +1066,18 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case LibraryElementPackage.DEADLINE_JITTER: {
+				DeadlineJitter deadlineJitter = (DeadlineJitter)theEObject;
+				T result = caseDeadlineJitter(deadlineJitter);
+				if (result == null) result = caseVarDeclaration(deadlineJitter);
+				if (result == null) result = caseIInterfaceElement(deadlineJitter);
+				if (result == null) result = caseITypedElement(deadlineJitter);
+				if (result == null) result = caseHiddenElement(deadlineJitter);
+				if (result == null) result = caseINamedElement(deadlineJitter);
+				if (result == null) result = caseConfigurableObject(deadlineJitter);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -2672,6 +2684,21 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseDeadlineTime(DeadlineTime object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Deadline Jitter</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Deadline Jitter</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseDeadlineJitter(DeadlineJitter object) {
 		return null;
 	}
 

@@ -4744,13 +4744,22 @@ public interface LibraryElementPackage extends EPackage {
 	int PRIMITIVE__INTERFACE = 2;
 
 	/**
+	 * The feature id for the '<em><b>Deadline Time</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRIMITIVE__DEADLINE_TIME = 3;
+
+	/**
 	 * The number of structural features of the '<em>Primitive</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PRIMITIVE_FEATURE_COUNT = 3;
+	int PRIMITIVE_FEATURE_COUNT = 4;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InputPrimitiveImpl <em>Input Primitive</em>}' class.
@@ -4788,6 +4797,15 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int INPUT_PRIMITIVE__INTERFACE = PRIMITIVE__INTERFACE;
+
+	/**
+	 * The feature id for the '<em><b>Deadline Time</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INPUT_PRIMITIVE__DEADLINE_TIME = PRIMITIVE__DEADLINE_TIME;
 
 	/**
 	 * The number of structural features of the '<em>Input Primitive</em>' class.
@@ -5874,6 +5892,15 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int OUTPUT_PRIMITIVE__INTERFACE = PRIMITIVE__INTERFACE;
+
+	/**
+	 * The feature id for the '<em><b>Deadline Time</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OUTPUT_PRIMITIVE__DEADLINE_TIME = PRIMITIVE__DEADLINE_TIME;
 
 	/**
 	 * The number of structural features of the '<em>Output Primitive</em>' class.
@@ -8192,13 +8219,131 @@ public interface LibraryElementPackage extends EPackage {
 	int DEADLINE_TIME__DEADLINE_TYPE = VAR_DECLARATION_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Deadline Jitter</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEADLINE_TIME__DEADLINE_JITTER = VAR_DECLARATION_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Deadline Time</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DEADLINE_TIME_FEATURE_COUNT = VAR_DECLARATION_FEATURE_COUNT + 1;
+	int DEADLINE_TIME_FEATURE_COUNT = VAR_DECLARATION_FEATURE_COUNT + 2;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeadlineJitterImpl <em>Deadline Jitter</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.DeadlineJitterImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getDeadlineJitter()
+	 * @generated
+	 */
+	int DEADLINE_JITTER = 108;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEADLINE_JITTER__NAME = VAR_DECLARATION__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEADLINE_JITTER__COMMENT = VAR_DECLARATION__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEADLINE_JITTER__ATTRIBUTES = VAR_DECLARATION__ATTRIBUTES;
+
+	/**
+	 * The feature id for the '<em><b>Is Input</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEADLINE_JITTER__IS_INPUT = VAR_DECLARATION__IS_INPUT;
+
+	/**
+	 * The feature id for the '<em><b>Input Connections</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEADLINE_JITTER__INPUT_CONNECTIONS = VAR_DECLARATION__INPUT_CONNECTIONS;
+
+	/**
+	 * The feature id for the '<em><b>Output Connections</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEADLINE_JITTER__OUTPUT_CONNECTIONS = VAR_DECLARATION__OUTPUT_CONNECTIONS;
+
+	/**
+	 * The feature id for the '<em><b>Type</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEADLINE_JITTER__TYPE = VAR_DECLARATION__TYPE;
+
+	/**
+	 * The feature id for the '<em><b>Array Size</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEADLINE_JITTER__ARRAY_SIZE = VAR_DECLARATION__ARRAY_SIZE;
+
+	/**
+	 * The feature id for the '<em><b>Withs</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEADLINE_JITTER__WITHS = VAR_DECLARATION__WITHS;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEADLINE_JITTER__VALUE = VAR_DECLARATION__VALUE;
+
+	/**
+	 * The number of structural features of the '<em>Deadline Jitter</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEADLINE_JITTER_FEATURE_COUNT = VAR_DECLARATION_FEATURE_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.Language <em>Language</em>}' enum.
@@ -8208,7 +8353,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getLanguage()
 	 * @generated
 	 */
-	int LANGUAGE = 108;
+	int LANGUAGE = 109;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.DeadlineType <em>Deadline Type</em>}' enum.
@@ -8218,7 +8363,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getDeadlineType()
 	 * @generated
 	 */
-	int DEADLINE_TYPE = 109;
+	int DEADLINE_TYPE = 110;
 
 	/**
 	 * The meta object id for the '<em>Command Stack</em>' data type.
@@ -8228,7 +8373,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getCommandStack()
 	 * @generated
 	 */
-	int COMMAND_STACK = 110;
+	int COMMAND_STACK = 111;
 
 	/**
 	 * The meta object id for the '<em>IFile</em>' data type.
@@ -8238,7 +8383,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIFile()
 	 * @generated
 	 */
-	int IFILE = 111;
+	int IFILE = 112;
 
 	/**
 	 * The meta object id for the '<em>Interface Element Stream</em>' data type.
@@ -8248,7 +8393,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getInterfaceElementStream()
 	 * @generated
 	 */
-	int INTERFACE_ELEMENT_STREAM = 112;
+	int INTERFACE_ELEMENT_STREAM = 113;
 
 	/**
 	 * The meta object id for the '<em>IProject</em>' data type.
@@ -8258,7 +8403,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIProject()
 	 * @generated
 	 */
-	int IPROJECT = 113;
+	int IPROJECT = 114;
 
 	/**
 	 * The meta object id for the '<em>Named Element Stream</em>' data type.
@@ -8268,7 +8413,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getNamedElementStream()
 	 * @generated
 	 */
-	int NAMED_ELEMENT_STREAM = 114;
+	int NAMED_ELEMENT_STREAM = 115;
 
 	/**
 	 * The meta object id for the '<em>Point</em>' data type.
@@ -8278,7 +8423,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getPoint()
 	 * @generated
 	 */
-	int POINT = 115;
+	int POINT = 116;
 
 	/**
 	 * The meta object id for the '<em>Type Entry</em>' data type.
@@ -8288,7 +8433,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTypeEntry()
 	 * @generated
 	 */
-	int TYPE_ENTRY = 116;
+	int TYPE_ENTRY = 117;
 
 	/**
 	 * The meta object id for the '<em>Type Library</em>' data type.
@@ -8298,7 +8443,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTypeLibrary()
 	 * @generated
 	 */
-	int TYPE_LIBRARY = 117;
+	int TYPE_LIBRARY = 118;
 
 	/**
 	 * The meta object id for the '<em>Var Decl List</em>' data type.
@@ -8308,7 +8453,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getVarDeclList()
 	 * @generated
 	 */
-	int VAR_DECL_LIST = 118;
+	int VAR_DECL_LIST = 119;
 
 
 	/**
@@ -10625,6 +10770,17 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getPrimitive_Interface();
 
 	/**
+	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.Primitive#getDeadlineTime <em>Deadline Time</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Deadline Time</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.Primitive#getDeadlineTime()
+	 * @see #getPrimitive()
+	 * @generated
+	 */
+	EReference getPrimitive_DeadlineTime();
+
+	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.Resource <em>Resource</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -11689,6 +11845,27 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getDeadlineTime_DeadlineType();
+
+	/**
+	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.DeadlineTime#getDeadlineJitter <em>Deadline Jitter</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Deadline Jitter</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.DeadlineTime#getDeadlineJitter()
+	 * @see #getDeadlineTime()
+	 * @generated
+	 */
+	EReference getDeadlineTime_DeadlineJitter();
+
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.DeadlineJitter <em>Deadline Jitter</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Deadline Jitter</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.DeadlineJitter
+	 * @generated
+	 */
+	EClass getDeadlineJitter();
 
 	/**
 	 * Returns the meta object for enum '{@link org.eclipse.fordiac.ide.model.libraryElement.Language <em>Language</em>}'.
@@ -13716,6 +13893,14 @@ public interface LibraryElementPackage extends EPackage {
 		EReference PRIMITIVE__INTERFACE = eINSTANCE.getPrimitive_Interface();
 
 		/**
+		 * The meta object literal for the '<em><b>Deadline Time</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PRIMITIVE__DEADLINE_TIME = eINSTANCE.getPrimitive_DeadlineTime();
+
+		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceImpl <em>Resource</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -14582,6 +14767,24 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute DEADLINE_TIME__DEADLINE_TYPE = eINSTANCE.getDeadlineTime_DeadlineType();
+
+		/**
+		 * The meta object literal for the '<em><b>Deadline Jitter</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference DEADLINE_TIME__DEADLINE_JITTER = eINSTANCE.getDeadlineTime_DeadlineJitter();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeadlineJitterImpl <em>Deadline Jitter</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.DeadlineJitterImpl
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getDeadlineJitter()
+		 * @generated
+		 */
+		EClass DEADLINE_JITTER = eINSTANCE.getDeadlineJitter();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.Language <em>Language</em>}' enum.

@@ -60,7 +60,6 @@ public class TransactionEditPart extends AbstractGraphicalEditPart {
 		super.deactivate();
 	}
 
-
 	@Override
 	protected IFigure createFigure() {
 		return new TransactionFigure();
@@ -113,6 +112,8 @@ public class TransactionEditPart extends AbstractGraphicalEditPart {
 			final TransactionFigure thisFigure = (TransactionFigure) getFigure();
 			final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 			thisFigure.add(child, childEditPart instanceof InputPrimitiveEditPart ? 0 : index);
+			thisFigure.revalidate();
+			thisFigure.repaint();
 		}
 	}
 

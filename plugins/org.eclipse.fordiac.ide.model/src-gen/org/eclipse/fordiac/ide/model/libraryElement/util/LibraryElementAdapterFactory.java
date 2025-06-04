@@ -515,6 +515,10 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 				return createDeadlineTimeAdapter();
 			}
 			@Override
+			public Adapter caseDeadlineJitter(DeadlineJitter object) {
+				return createDeadlineJitterAdapter();
+			}
+			@Override
 			public Adapter caseDataType(DataType object) {
 				return createDataTypeAdapter();
 			}
@@ -2033,6 +2037,20 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createDeadlineTimeAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.DeadlineJitter <em>Deadline Jitter</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.DeadlineJitter
+	 * @generated
+	 */
+	public Adapter createDeadlineJitterAdapter() {
 		return null;
 	}
 

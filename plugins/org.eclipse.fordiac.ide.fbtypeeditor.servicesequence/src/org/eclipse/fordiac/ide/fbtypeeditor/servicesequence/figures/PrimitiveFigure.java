@@ -25,10 +25,12 @@ import org.eclipse.draw2d.Layer;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.ServiceConstants;
+import org.eclipse.fordiac.ide.model.libraryElement.DeadlineTime;
 import org.eclipse.fordiac.ide.util.ColorManager;
 import org.eclipse.swt.SWT;
 
 public class PrimitiveFigure extends Layer {
+
 	private final Label nameLabel;
 	private final Label emptyLabel;
 	private final Label parameterLabel;
@@ -36,31 +38,41 @@ public class PrimitiveFigure extends Layer {
 	private final Figure centerFigure;
 	private final Figure leftFigure;
 	private final Figure rightFigure;
+	private DeadlineFigure deadlineFigure;
 
-	public PrimitiveFigure(final boolean isLeftInterface, final String name, final String parameter) {
-		final GridLayout mainLayout = new GridLayout(6, false);
+	public PrimitiveFigure(final boolean isLeftInterface, final String name, final String parameter,
+			final DeadlineTime deadlineTime) {
+
+		final GridLayout mainLayout = new GridLayout(7, false);
 		setLayoutManager(mainLayout);
 		mainLayout.marginHeight = 0;
 		mainLayout.marginWidth = 0;
 		mainLayout.horizontalSpacing = 0;
 
-
 		nameLabel = new Label();
 		nameLabel.setForegroundColor(ColorConstants.black);
 		final GridData nameLabelData = new GridData(SWT.FILL, SWT.CENTER, false, false);
-		nameLabelData.widthHint = ServiceConstants.getNameLabelWidth();
 
 		parameterLabel = new Label();
 		parameterLabel.setForegroundColor(ColorManager.getColor(ServiceConstants.GRAY));
 		final GridData parameterLabelData = new GridData(SWT.FILL, SWT.CENTER, false, false);
-		parameterLabelData.widthHint = ServiceConstants.getParameterLabelWidth();
 
 		emptyLabel = new Label();
 		final GridData emptyLabelData = new GridData(SWT.FILL, SWT.CENTER, false, false);
-		emptyLabelData.widthHint = ServiceConstants.getEmptyLabelWidth();
+
+		if (isLeftInterface) {
+			nameLabelData.widthHint = ServiceConstants.getLeftNameLabelWidth();
+			parameterLabelData.widthHint = ServiceConstants.getLeftParameterLabelWidth();
+			emptyLabelData.widthHint = ServiceConstants.getLEmptyLabelWidth();
+
+		} else if (!isLeftInterface) {
+			nameLabelData.widthHint = ServiceConstants.getRightNameLabelWidth();
+			parameterLabelData.widthHint = ServiceConstants.getRightParameterLabelWidth();
+			emptyLabelData.widthHint = ServiceConstants.getREmptyLabelWidth();
+		}
 
 		final GridData arrowLeftData = new GridData(SWT.FILL, SWT.CENTER, false, false);
-		arrowLeftData.widthHint = ServiceConstants.getArrowWidth();
+		arrowLeftData.widthHint = ServiceConstants.getLeftArrowWidth();
 		leftFigure = new Figure();
 
 		centerFigure = new Figure();
@@ -68,8 +80,17 @@ public class PrimitiveFigure extends Layer {
 		spaceData.widthHint = ServiceConstants.getMiddleSectionWidth();
 
 		final GridData arrowRightData = new GridData(SWT.FILL, SWT.CENTER, false, false);
-		arrowRightData.widthHint = ServiceConstants.getArrowWidth();
+		arrowRightData.widthHint = ServiceConstants.getRightArrowWidth();
 		rightFigure = new Figure();
+
+		final GridData deadlineData = new GridData(SWT.FILL, SWT.CENTER, false, false);
+		deadlineData.widthHint = ServiceConstants.getDeadlineSectionWidth();
+
+		if (deadlineTime != null) {
+			deadlineFigure = new DeadlineFigure(deadlineTime);
+		} else {
+			deadlineFigure = new DeadlineFigure();
+		}
 
 		setInterfaceDirection(isLeftInterface);
 
@@ -81,9 +102,12 @@ public class PrimitiveFigure extends Layer {
 		setConstraint(rightFigure, arrowRightData);
 		setConstraint(nameLabel, nameLabelData);
 		setConstraint(parameterLabel, parameterLabelData);
+		setConstraint(deadlineFigure, deadlineData);
+
 	}
 
 	public void setInterfaceDirection(final boolean interfaceDirection) {
+
 		if (!this.getChildren().isEmpty()) {
 			this.getChildren().clear();
 		}
@@ -98,6 +122,10 @@ public class PrimitiveFigure extends Layer {
 			add(centerFigure);
 			add(rightFigure);
 			add(emptyLabel);
+			add(deadlineFigure);
+			this.revalidate();
+			this.repaint();
+
 		} else {
 			nameLabel.setLabelAlignment(PositionConstants.LEFT);
 			parameterLabel.setLabelAlignment(PositionConstants.RIGHT);
@@ -109,6 +137,10 @@ public class PrimitiveFigure extends Layer {
 			add(rightFigure);
 			add(nameLabel);
 			add(parameterLabel);
+			add(deadlineFigure);
+			this.revalidate();
+			this.repaint();
+
 		}
 	}
 
@@ -136,4 +168,22 @@ public class PrimitiveFigure extends Layer {
 			this.parameterLabel.setText(""); //$NON-NLS-1$
 		}
 	}
+
+	public void setDeadlineTime(final DeadlineTime deadlineTime) {
+		if (this.deadlineFigure != null) {
+			this.getChildren().remove(this.deadlineFigure);
+			this.deadlineFigure = null;
+		}
+
+		if (deadlineTime != null) {
+			this.deadlineFigure = new DeadlineFigure(deadlineTime);
+			this.add(deadlineFigure);
+		} else {
+			this.deadlineFigure = new DeadlineFigure();
+			this.add(deadlineFigure);
+		}
+		this.revalidate();
+		this.repaint();
+	}
+
 }

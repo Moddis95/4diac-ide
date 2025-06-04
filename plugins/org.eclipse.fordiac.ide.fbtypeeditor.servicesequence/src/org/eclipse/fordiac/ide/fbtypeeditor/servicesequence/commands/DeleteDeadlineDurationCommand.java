@@ -15,17 +15,26 @@ package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands;
 
 import org.eclipse.fordiac.ide.model.libraryElement.DeadlineTime;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 import org.eclipse.gef.commands.Command;
 
-public class DeleteTransactionDeadlineDurationCommand extends Command {
+public class DeleteDeadlineDurationCommand extends Command {
 	private final ServiceTransaction transaction;
+	private final OutputPrimitive outputPrimitive;
 	private final DeadlineTime deadlineTime;
 	private String oldValue;
 
-	public DeleteTransactionDeadlineDurationCommand(final ServiceTransaction transaction) {
+	public DeleteDeadlineDurationCommand(final ServiceTransaction transaction) {
 		this.transaction = transaction;
+		this.outputPrimitive = null;
 		this.deadlineTime = transaction.getDeadlineTime();
+	}
+
+	public DeleteDeadlineDurationCommand(final OutputPrimitive primitive) {
+		this.transaction = null;
+		this.outputPrimitive = primitive;
+		this.deadlineTime = primitive.getDeadlineTime();
 	}
 
 	@Override
@@ -37,7 +46,7 @@ public class DeleteTransactionDeadlineDurationCommand extends Command {
 	public void execute() {
 		if (deadlineTime != null) {
 			oldValue = deadlineTime.getValue().getValue();
-			transaction.setDeadlineTime(null);
+			clearDeadline();
 		}
 	}
 
@@ -46,12 +55,28 @@ public class DeleteTransactionDeadlineDurationCommand extends Command {
 		if (oldValue != null) {
 			final DeadlineTime newDeadlineTime = LibraryElementFactory.eINSTANCE.createDeadlineTime();
 			newDeadlineTime.getValue().setValue(oldValue);
-			transaction.setDeadlineTime(newDeadlineTime);
+			setDeadline(newDeadlineTime);
 		}
 	}
 
 	@Override
 	public void redo() {
-		transaction.setDeadlineTime(null);
+		clearDeadline();
+	}
+
+	private void clearDeadline() {
+		if (transaction != null) {
+			transaction.setDeadlineTime(null);
+		} else if (outputPrimitive != null) {
+			outputPrimitive.setDeadlineTime(null);
+		}
+	}
+
+	private void setDeadline(final DeadlineTime deadline) {
+		if (transaction != null) {
+			transaction.setDeadlineTime(deadline);
+		} else if (outputPrimitive != null) {
+			outputPrimitive.setDeadlineTime(deadline);
+		}
 	}
 }

@@ -60,6 +60,7 @@ public class DeadlineTimeItemProvider extends VarDeclarationItemProvider {
 			super.getPropertyDescriptors(object);
 
 			addDeadlineTypePropertyDescriptor(object);
+			addDeadlineJitterPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -82,6 +83,28 @@ public class DeadlineTimeItemProvider extends VarDeclarationItemProvider {
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Deadline Jitter feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDeadlineJitterPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_DeadlineTime_deadlineJitter_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_DeadlineTime_deadlineJitter_feature", "_UI_DeadlineTime_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 LibraryElementPackage.Literals.DEADLINE_TIME__DEADLINE_JITTER,
+				 true,
+				 false,
+				 true,
+				 null,
 				 null,
 				 null));
 	}

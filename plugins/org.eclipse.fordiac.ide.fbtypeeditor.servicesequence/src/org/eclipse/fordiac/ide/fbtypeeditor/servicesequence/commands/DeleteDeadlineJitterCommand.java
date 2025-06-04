@@ -1,0 +1,70 @@
+package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands;
+
+import org.eclipse.fordiac.ide.model.libraryElement.DeadlineJitter;
+import org.eclipse.fordiac.ide.model.libraryElement.DeadlineTime;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
+import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
+import org.eclipse.gef.commands.Command;
+
+public class DeleteDeadlineJitterCommand extends Command {
+	private final ServiceTransaction transaction;
+	private final OutputPrimitive outputPrimitive;
+	private final DeadlineTime deadlineTime;
+	private String oldValue;
+
+	public DeleteDeadlineJitterCommand(final ServiceTransaction transaction) {
+		this.transaction = transaction;
+		this.outputPrimitive = null;
+		this.deadlineTime = transaction.getDeadlineTime();
+	}
+
+	public DeleteDeadlineJitterCommand(final OutputPrimitive primitive) {
+		this.transaction = null;
+		this.outputPrimitive = primitive;
+		this.deadlineTime = primitive.getDeadlineTime();
+	}
+
+	@Override
+	public boolean canExecute() {
+		return deadlineTime.getDeadlineJitter() != null;
+	}
+
+	@Override
+	public void execute() {
+		if (deadlineTime.getDeadlineJitter() != null) {
+			oldValue = deadlineTime.getDeadlineJitter().getValue().getValue();
+			clearDeadlineJitter();
+		}
+	}
+
+	@Override
+	public void undo() {
+		if (oldValue != null) {
+			final DeadlineJitter newDeadlineJitter = LibraryElementFactory.eINSTANCE.createDeadlineJitter();
+			newDeadlineJitter.getValue().setValue(oldValue);
+			setDeadlineJitter(newDeadlineJitter);
+		}
+	}
+
+	@Override
+	public void redo() {
+		clearDeadlineJitter();
+	}
+
+	private void clearDeadlineJitter() {
+		if (transaction != null && transaction.getDeadlineTime() != null) {
+			transaction.getDeadlineTime().setDeadlineJitter(null);
+		} else if (outputPrimitive != null) {
+			outputPrimitive.getDeadlineTime().setDeadlineJitter(null);
+		}
+	}
+
+	private void setDeadlineJitter(final DeadlineJitter jitter) {
+		if (transaction != null && transaction.getDeadlineTime() != null) {
+			transaction.getDeadlineTime().setDeadlineJitter(jitter);
+		} else if (outputPrimitive != null) {
+			outputPrimitive.getDeadlineTime().setDeadlineJitter(jitter);
+		}
+	}
+}

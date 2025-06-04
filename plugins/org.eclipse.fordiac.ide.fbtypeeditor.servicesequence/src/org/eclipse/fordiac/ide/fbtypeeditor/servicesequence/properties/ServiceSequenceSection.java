@@ -22,15 +22,18 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.Messages;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangeDeadlineDurationCommand;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangeDeadlineJitterCommand;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangeDeadlineTypeCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangeSequenceNameCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangeSequenceStartStateCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangeSequenceTypeCommand;
-import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangeTransactionDeadlineDurationCommand;
-import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangeTransactionDeadlineTypeCommand;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.CreateDeadlineDurationCommand;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.CreateDeadlineJitterCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.CreateTransactionCommand;
-import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.CreateTransactionDeadlineDurationCommand;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.DeleteDeadlineDurationCommand;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.DeleteDeadlineJitterCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.DeleteTransactionCommand;
-import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.DeleteTransactionDeadlineDurationCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.contentprovider.ServiceSequenceContentProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.widgets.StateComboHelper;
@@ -38,6 +41,7 @@ import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.ServiceSequenceTypes;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeTransactionOrderCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.DeadlineJitter;
 import org.eclipse.fordiac.ide.model.libraryElement.DeadlineTime;
 import org.eclipse.fordiac.ide.model.libraryElement.DeadlineType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -50,6 +54,7 @@ import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnPixelData;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
@@ -85,7 +90,8 @@ public class ServiceSequenceSection extends AbstractSection {
 	private static final String INPUT_PRIMITIVE = "input primitive"; //$NON-NLS-1$
 	private static final String OUTPUT_PRIMITIVES = "output primitives"; //$NON-NLS-1$
 	private static final String DEADLINE_TYPE = "deadline type"; //$NON-NLS-1$
-	private static final String DEADLINE_TIME = "deadline time"; //$NON-NLS-1$
+	private static final String DEADLINE_TIME = "deadline duration"; //$NON-NLS-1$
+	private static final String DEADLINE_JITTER = "deadline jitter"; //$NON-NLS-1$
 
 	@Override
 	protected ServiceSequence getType() {
@@ -214,7 +220,8 @@ public class ServiceSequenceSection extends AbstractSection {
 	}
 
 	private static String[] getColumnProperties() {
-		return new String[] { INDEX, INPUT_PRIMITIVE, OUTPUT_PRIMITIVES, DEADLINE_TIME, DEADLINE_TYPE };
+		return new String[] { INDEX, INPUT_PRIMITIVE, OUTPUT_PRIMITIVES, DEADLINE_TIME, DEADLINE_TYPE,
+				DEADLINE_JITTER };
 	}
 
 	private static Layout createTableLayout(final Table table) {
@@ -228,8 +235,11 @@ public class ServiceSequenceSection extends AbstractSection {
 		deadlineTimeColumn.setText(Messages.ServiceSequenceSection_DeadlineTime);
 		final TableColumn deadlineTypeColumn = new TableColumn(table, SWT.LEFT);
 		deadlineTypeColumn.setText(Messages.ServiceSequenceSection_DeadlineType);
+		final TableColumn deadlineJitterColumn = new TableColumn(table, SWT.LEFT);
+		deadlineJitterColumn.setText(Messages.ServiceSequenceSection_DeadlineTime);
 		final TableLayout layout = new TableLayout();
 		layout.addColumnData(new ColumnPixelData(80));
+		layout.addColumnData(new ColumnPixelData(145));
 		layout.addColumnData(new ColumnPixelData(145));
 		layout.addColumnData(new ColumnPixelData(145));
 		layout.addColumnData(new ColumnPixelData(145));
@@ -249,11 +259,11 @@ public class ServiceSequenceSection extends AbstractSection {
 	}
 
 	private static CellEditor[] createCellEditors(final Table table) {
-		final CellEditor deadlineTimeEditor = new TextCellEditor(table);
 		final CellEditor deadlineTypeEditor = ComboBoxWidgetFactory.createComboBoxCellEditor(table,
 				getDeadlineTypeValues(), SWT.READ_ONLY);
 		deadlineTypeEditor.setStyle(ComboBoxCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION);
-		return new CellEditor[] { null, null, null, deadlineTimeEditor, deadlineTypeEditor };
+		return new CellEditor[] { null, null, null, new TextCellEditor(table), deadlineTypeEditor,
+				new TextCellEditor(table) };
 	}
 
 	@Override
@@ -280,6 +290,7 @@ public class ServiceSequenceSection extends AbstractSection {
 		private static final int OUTPUT_PRIMITIVE_COL_INDEX = 2;
 		private static final int DEADLINE_TIME_COL_INDEX = 3;
 		private static final int DEADLINE_TYPE_COL_INDEX = 4;
+		private static final int DEADLINE_JITTER_COL_INDEX = 5;
 
 		@Override
 		public Image getColumnImage(final Object element, final int columnIndex) {
@@ -300,12 +311,18 @@ public class ServiceSequenceSection extends AbstractSection {
 					return getOutputPrimitives(transaction);
 				case DEADLINE_TIME_COL_INDEX:
 					return transaction.getDeadlineTime() != null && transaction.getDeadlineTime().getValue() != null
-							? transaction.getDeadlineTime().getValue().getValue() + " ms" //$NON-NLS-1$
+							? transaction.getDeadlineTime().getValue().getValue() + " micro s" //$NON-NLS-1$
 							: ""; //$NON-NLS-1$
 				case DEADLINE_TYPE_COL_INDEX:
 					return transaction.getDeadlineTime() != null
 							? transaction.getDeadlineTime().getDeadlineType().getName()
 							: " "; //$NON-NLS-1$
+				case DEADLINE_JITTER_COL_INDEX:
+					return transaction.getDeadlineTime() != null
+							&& transaction.getDeadlineTime().getDeadlineJitter() != null
+									? transaction.getDeadlineTime().getDeadlineJitter().getValue().getValue()
+											+ " micro s" //$NON-NLS-1$
+									: ""; //$NON-NLS-1$
 				default:
 					break;
 				}
@@ -328,12 +345,18 @@ public class ServiceSequenceSection extends AbstractSection {
 
 		@Override
 		public boolean canModify(final Object element, final String property) {
+			final ServiceTransaction transaction = (ServiceTransaction) element;
 			if (INDEX.equals(property)) {
 				return false;
 			}
 			if (DEADLINE_TYPE.equals(property)) {
-				final ServiceTransaction transaction = (ServiceTransaction) element;
 				return transaction.getDeadlineTime() != null;
+			}
+			if (DEADLINE_JITTER.equals(property)) {
+				if (transaction.getDeadlineTime() == null) {
+					return false;
+				}
+				return transaction.getDeadlineTime().getDeadlineType().getValue() != 2;
 			}
 			return true;
 		}
@@ -349,6 +372,11 @@ public class ServiceSequenceSection extends AbstractSection {
 					return transaction.getDeadlineTime() != null
 							? transaction.getDeadlineTime().getDeadlineType().getValue()
 							: " "; //$NON-NLS-1$
+				case DEADLINE_JITTER:
+					return transaction.getDeadlineTime().getDeadlineJitter() != null
+							&& transaction.getDeadlineTime() != null
+									? transaction.getDeadlineTime().getDeadlineJitter().getValue().getValue()
+									: " "; //$NON-NLS-1$
 				default:
 					break;
 				}
@@ -366,23 +394,87 @@ public class ServiceSequenceSection extends AbstractSection {
 			case DEADLINE_TIME:
 				final String stringValue = (String) value;
 				String result = ""; //$NON-NLS-1$
+				String jitter = ""; //$NON-NLS-1$
 				if (stringValue != null) {
-					result = stringValue.replaceAll("[a-zA-Z]", ""); //$NON-NLS-1$
+					result = stringValue.replaceAll("[^0-9,]", ""); //$NON-NLS-1$ //$NON-NLS-2$
+
+					if (result.contains("[") && result.contains("]")) {
+						result = result.replaceAll("[\\[\\]]", "");
+						final String[] values = result.split(",");
+						if (values.length == 2) {
+							final double firstValue = Double.parseDouble(values[0].trim());
+							final double secondValue = Double.parseDouble(values[1].trim());
+							final double calculatedJitter = secondValue - firstValue;
+							jitter = String.valueOf(calculatedJitter);
+							result = values[0];
+						}
+					} else if (result.contains("-")) {
+						final String[] values = result.split("-");
+						if (values.length == 2) {
+							final double firstValue = Double.parseDouble(values[0].trim());
+							final double secondValue = Double.parseDouble(values[1].trim());
+							final double calculatedJitter = secondValue - firstValue;
+							jitter = String.valueOf(calculatedJitter);
+							result = values[0];
+						}
+					} else if (result.contains(",")) {
+						final String[] values = result.split(",");
+						if (values.length == 2) {
+							final double firstValue = Double.parseDouble(values[0].trim());
+							final double secondValue = Double.parseDouble(values[1].trim());
+							final double calculatedJitter = secondValue - firstValue;
+							jitter = String.valueOf(calculatedJitter);
+							result = values[0];
+						}
+					}
 				}
 				if (stringValue == null || result.trim().isEmpty() || stringValue.equals("0")) { //$NON-NLS-1$
-					cmd = new DeleteTransactionDeadlineDurationCommand(transaction);
+					cmd = new DeleteDeadlineDurationCommand(transaction);
 				} else if (transaction.getDeadlineTime() == null) {
-					createDeadlineTimeForTransaction(transaction, result);
-					cmd = new CreateTransactionDeadlineDurationCommand(transaction, result);
+					if (jitter == "") {
+						createDeadlineTimeForTransaction(transaction, result);
+						cmd = new CreateDeadlineDurationCommand(transaction, result);
+					} else {
+						final CompoundCommand compound2 = new CompoundCommand();
+						createDeadlineTimeForTransaction(transaction, result);
+						compound2.add(new CreateDeadlineDurationCommand(transaction, result));
+						compound2.add(new CreateDeadlineJitterCommand(transaction, jitter));
+						cmd = compound2;
+					}
+				} else if (jitter == "" || !transaction.getDeadlineTime().getDeadlineType().equals(2)) {
+					cmd = new ChangeDeadlineDurationCommand(transaction.getDeadlineTime(), result);
 				} else {
-					cmd = new ChangeTransactionDeadlineDurationCommand(transaction.getDeadlineTime(), result);
+					final CompoundCommand compound3 = new CompoundCommand();
+					compound3.add(cmd = new ChangeDeadlineDurationCommand(transaction.getDeadlineTime(), result));
+					compound3.add(cmd = new ChangeDeadlineJitterCommand(
+							transaction.getDeadlineTime().getDeadlineJitter(), jitter));
 				}
 				break;
 			case DEADLINE_TYPE:
+				final CompoundCommand compound1 = new CompoundCommand();
 				final int index = (int) value;
 				final String selectedValue = getDeadlineTypeValues()[index];
 				final DeadlineType newType = DeadlineType.getByName(selectedValue);
-				cmd = new ChangeTransactionDeadlineTypeCommand(transaction.getDeadlineTime(), newType);
+				compound1.add(new ChangeDeadlineTypeCommand(transaction.getDeadlineTime(), newType));
+				if (newType.getValue() == 2) {
+					compound1.add(new DeleteDeadlineJitterCommand(transaction));
+				}
+				cmd = compound1;
+				break;
+			case DEADLINE_JITTER:
+				final String stringValue1 = (String) value;
+				String result1 = ""; //$NON-NLS-1$
+				if (stringValue1 != null) {
+					result1 = stringValue1.replaceAll("[^0-9]", ""); //$NON-NLS-1$ //$NON-NLS-2$
+				}
+				if (stringValue1 == null || result1.trim().isEmpty() || stringValue1.equals("0")) { //$NON-NLS-1$
+					cmd = new DeleteDeadlineJitterCommand(transaction);
+				} else if (transaction.getDeadlineTime().getDeadlineJitter() == null) {
+					createDeadlineJitterForDeadlineTime(transaction.getDeadlineTime(), result1);
+					cmd = new CreateDeadlineJitterCommand(transaction, result1);
+				} else {
+					cmd = new ChangeDeadlineJitterCommand(transaction.getDeadlineTime().getDeadlineJitter(), result1);
+				}
 				break;
 			default:
 				break;
@@ -391,6 +483,14 @@ public class ServiceSequenceSection extends AbstractSection {
 				executeCommand(cmd);
 				refresh();
 			}
+		}
+
+		private void createDeadlineJitterForDeadlineTime(final DeadlineTime deadlineTime, final String initialValue) {
+			final DeadlineJitter jitter = LibraryElementFactory.eINSTANCE.createDeadlineJitter();
+			final Value value = LibraryElementFactory.eINSTANCE.createValue();
+			value.setValue(initialValue);
+			jitter.setValue(value);
+			deadlineTime.setDeadlineJitter(jitter);
 		}
 
 		private void createDeadlineTimeForTransaction(final ServiceTransaction transaction, final String initialValue) {

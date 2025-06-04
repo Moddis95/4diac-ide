@@ -101,6 +101,28 @@ public class PrimitiveItemProvider extends ItemProviderAdapter implements IEditi
 						LibraryElementPackage.Literals.PRIMITIVE__INTERFACE, true, false, true, null, null, null));
 	}
 
+	/**
+	 * This adds a property descriptor for the Deadline Time feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDeadlineTimePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Primitive_deadlineTime_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Primitive_deadlineTime_feature", "_UI_Primitive_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 LibraryElementPackage.Literals.PRIMITIVE__DEADLINE_TIME,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
 	/** This returns Primitive.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated */

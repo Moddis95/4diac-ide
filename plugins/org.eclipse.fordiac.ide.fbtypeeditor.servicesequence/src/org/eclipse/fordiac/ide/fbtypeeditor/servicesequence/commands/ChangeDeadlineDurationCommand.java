@@ -13,30 +13,32 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands;
 
-import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
+import org.eclipse.fordiac.ide.model.libraryElement.DeadlineTime;
 import org.eclipse.gef.commands.Command;
 
-public class CreateTransactionDeadlineDurationCommand extends Command {
-	private final ServiceTransaction transaction; // Use Transaction instead of DeadlineTime
-	private final String value;
+public class ChangeDeadlineDurationCommand extends Command {
+	private final DeadlineTime deadlineTime;
+	private final String newValue;
+	private String oldValue;
 
-	public CreateTransactionDeadlineDurationCommand(final ServiceTransaction transaction, final String value) {
-		this.transaction = transaction;
-		this.value = value;
+	public ChangeDeadlineDurationCommand(final DeadlineTime deadlineTime, final String newValue) {
+		this.deadlineTime = deadlineTime;
+		this.newValue = newValue;
 	}
 
 	@Override
 	public void execute() {
-		transaction.getDeadlineTime().getValue().setValue(value); // Assuming you have a setValue method on Transaction
+		oldValue = deadlineTime.getValue().getValue();
+		deadlineTime.getValue().setValue(newValue);
 	}
 
 	@Override
 	public void undo() {
-		transaction.getDeadlineTime().getValue().setValue(null); // Revert the change in case of undo
+		deadlineTime.getValue().setValue(oldValue);
 	}
 
 	@Override
 	public void redo() {
-		transaction.getDeadlineTime().getValue().setValue(value); // Redo the change after undo
+		deadlineTime.getValue().setValue(newValue);
 	}
 }

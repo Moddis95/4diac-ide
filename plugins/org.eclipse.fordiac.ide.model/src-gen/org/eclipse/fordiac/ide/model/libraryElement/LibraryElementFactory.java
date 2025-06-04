@@ -837,6 +837,15 @@ public interface LibraryElementFactory extends EFactory {
 	DeadlineTime createDeadlineTime();
 
 	/**
+	 * Returns a new object of class '<em>Deadline Jitter</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Deadline Jitter</em>'.
+	 * @generated
+	 */
+	DeadlineJitter createDeadlineJitter();
+
+	/**
 	 * Returns a new object of class '<em>Member Var Declaration</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

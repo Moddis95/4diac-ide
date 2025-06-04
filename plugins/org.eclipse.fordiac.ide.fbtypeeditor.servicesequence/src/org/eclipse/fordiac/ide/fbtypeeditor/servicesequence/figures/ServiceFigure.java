@@ -112,9 +112,9 @@ public final class ServiceFigure extends FreeformLayeredPane {
 		middleGridData.widthHint = ServiceConstants.getMiddleSectionWidth();
 		layout.setConstraint(middleFigure, middleGridData);
 		final GridData leftGridData = new GridData(SWT.FILL, SWT.FILL, true, true);
-		leftGridData.widthHint = ServiceConstants.getRightLeftSectionWidth();
-		final GridData rightGridData = new GridData(SWT.FILL, SWT.FILL, true, true);
-		rightGridData.widthHint = ServiceConstants.getRightLeftSectionWidth();
+		leftGridData.widthHint = ServiceConstants.getLeftSectionWidth();
+		final GridData rightGridData = new GridData(SWT.FILL, SWT.FILL, false, true);
+		rightGridData.widthHint = ServiceConstants.getRightSectionWidth();
 		layout.setConstraint(leftFigure, leftGridData);
 		layout.setConstraint(rightFigure, rightGridData);
 

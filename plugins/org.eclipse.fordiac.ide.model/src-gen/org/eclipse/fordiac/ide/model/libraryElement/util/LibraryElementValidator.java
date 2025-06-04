@@ -57,6 +57,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
+import org.eclipse.fordiac.ide.model.libraryElement.DeadlineJitter;
 import org.eclipse.fordiac.ide.model.libraryElement.DeadlineTime;
 import org.eclipse.fordiac.ide.model.libraryElement.DeadlineType;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
@@ -699,6 +700,8 @@ public class LibraryElementValidator extends EObjectValidator {
 				return validateWith((With)value, diagnostics, context);
 			case LibraryElementPackage.DEADLINE_TIME:
 				return validateDeadlineTime((DeadlineTime)value, diagnostics, context);
+			case LibraryElementPackage.DEADLINE_JITTER:
+				return validateDeadlineJitter((DeadlineJitter)value, diagnostics, context);
 			case LibraryElementPackage.LANGUAGE:
 				return validateLanguage((Language)value, diagnostics, context);
 			case LibraryElementPackage.DEADLINE_TYPE:
@@ -2864,6 +2867,34 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutIsWithed(deadlineTime, diagnostics, context);
 		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutSubappInterface(deadlineTime, diagnostics, context);
 		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutSubappNetwork(deadlineTime, diagnostics, context);
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateDeadlineJitter(DeadlineJitter deadlineJitter, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		if (!validate_NoCircularContainment(deadlineJitter, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(deadlineJitter, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(deadlineJitter, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(deadlineJitter, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(deadlineJitter, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(deadlineJitter, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(deadlineJitter, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(deadlineJitter, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(deadlineJitter, diagnostics, context);
+		if (result || diagnostics != null) result &= validateIInterfaceElement_validateName(deadlineJitter, diagnostics, context);
+		if (result || diagnostics != null) result &= validateITypedElement_validateType(deadlineJitter, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateMultipleInputConnections(deadlineJitter, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateNoValueForGenericTypeVariable(deadlineJitter, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateNoValueForVariableLengthArrayVariable(deadlineJitter, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateValueForGenericInstanceVariable(deadlineJitter, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutSourceTypeIsWellDefined(deadlineJitter, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutIsWithed(deadlineJitter, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutSubappInterface(deadlineJitter, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutSubappNetwork(deadlineJitter, diagnostics, context);
 		return result;
 	}
 

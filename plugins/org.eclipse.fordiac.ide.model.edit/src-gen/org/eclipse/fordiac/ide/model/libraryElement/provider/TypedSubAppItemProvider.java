@@ -194,6 +194,11 @@ public class TypedSubAppItemProvider extends SubAppItemProvider {
 			(createChildParameter
 				(LibraryElementPackage.Literals.TYPED_SUB_APP__VAR_CONFIG_PARAMS,
 				 LibraryElementFactory.eINSTANCE.createDeadlineTime()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.TYPED_SUB_APP__VAR_CONFIG_PARAMS,
+				 LibraryElementFactory.eINSTANCE.createDeadlineJitter()));
 	}
 
 }

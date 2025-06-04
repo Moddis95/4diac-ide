@@ -17,12 +17,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.DeadlineTime;
 import org.eclipse.fordiac.ide.model.libraryElement.DeadlineType;
 import org.eclipse.gef.commands.Command;
 
-public class ChangeTransactionDeadlineTypeCommand extends Command {
+public class ChangeDeadlineTypeCommand extends Command {
 	private final DeadlineTime deadlineTime;
 	private final DeadlineType newDeadlineType;
 	private DeadlineType oldDeadlineType;
 
-	public ChangeTransactionDeadlineTypeCommand(final DeadlineTime deadlineTime, final DeadlineType newDeadline) {
+	public ChangeDeadlineTypeCommand(final DeadlineTime deadlineTime, final DeadlineType newDeadline) {
 		this.deadlineTime = deadlineTime;
 		this.newDeadlineType = newDeadline;
 	}

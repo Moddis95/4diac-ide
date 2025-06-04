@@ -27,6 +27,7 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.DeadlineTime#getDeadlineType <em>Deadline Type</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.DeadlineTime#getDeadlineJitter <em>Deadline Jitter</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getDeadlineTime()
@@ -59,4 +60,26 @@ public interface DeadlineTime extends VarDeclaration {
 	 * @generated
 	 */
 	void setDeadlineType(DeadlineType value);
+
+	/**
+	 * Returns the value of the '<em><b>Deadline Jitter</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Deadline Jitter</em>' reference.
+	 * @see #setDeadlineJitter(DeadlineJitter)
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getDeadlineTime_DeadlineJitter()
+	 * @model
+	 * @generated
+	 */
+	DeadlineJitter getDeadlineJitter();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.DeadlineTime#getDeadlineJitter <em>Deadline Jitter</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Deadline Jitter</em>' reference.
+	 * @see #getDeadlineJitter()
+	 * @generated
+	 */
+	void setDeadlineJitter(DeadlineJitter value);
 } // DeadlineTime

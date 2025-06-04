@@ -10,7 +10,9 @@
   <genAnnotations source="http://www.eclipse.org/emf/2002/GenModel/importer/org.eclipse.xsd.ecore.importer">
     <details key="sortAttributes" value="false"/>
   </genAnnotations>
-  <foreignModel>buildpath.xsd</foreignModel>
+  <foreignModel>lib.ecore</foreignModel>
+  <foreignModel>data.ecore</foreignModel>
+  <foreignModel>buildpath.ecore</foreignModel>
   <genPackages prefix="LibraryElement" basePackage="org.eclipse.fordiac.ide.model"
       disposableProviderFactory="true" fileExtensions="" ecorePackage="lib.ecore#/">
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="lib.ecore#//Language">
@@ -532,7 +534,6 @@
         <genParameters ecoreParameter="lib.ecore#//Group/validateCollisions/diagnostics"/>
         <genParameters ecoreParameter="lib.ecore#//Group/validateCollisions/context"/>
       </genOperations>
-      <genOperations ecoreOperation="lib.ecore#//Comment/getInterface" body="return org.eclipse.fordiac.ide.model.annotations.FBNetworkElementAnnotations.EMPTY_INTERFACE_LIST;"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//HiddenElement">
       <genOperations ecoreOperation="lib.ecore#//HiddenElement/setVisible" body="org.eclipse.fordiac.ide.model.annotations.HiddenElementAnnotations.setVisible(this,visible);">
@@ -716,6 +717,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Primitive/event"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Primitive/parameters"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Primitive/interface"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Primitive/deadlineTime"/>
       <genOperations ecoreOperation="lib.ecore#//Primitive/getServiceTransaction"
           body="return (ServiceTransaction) this.eContainer();"/>
       <genOperations ecoreOperation="lib.ecore#//Primitive/getService" body="return getServiceTransaction().getServiceSequence().getService();"/>
@@ -955,7 +957,9 @@
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//DeadlineTime">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//DeadlineTime/deadlineType"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//DeadlineTime/deadlineJitter"/>
     </genClasses>
+    <genClasses ecoreClass="lib.ecore#//DeadlineJitter"/>
   </genPackages>
   <genPackages prefix="Data" basePackage="org.eclipse.fordiac.ide.model" disposableProviderFactory="true"
       ecorePackage="data.ecore#/">

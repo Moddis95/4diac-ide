@@ -35,38 +35,70 @@ public final class ServiceConstants {
 
 	private static final int WHOLE_WIDTH = 1120;
 	private static final int MIDDLE_SECTION_PERCENT = 16;
-	private static final int RIGHT_LEFT_SECTION_PERCENT = 42;
+	private static final int RIGHT_SECTION_PERCENT = 45;
+	private static final int LEFT_SECTION_PERCENT = 35;
 
-	private static final int NAME_WIDTH_PERCENT = 17;
-	private static final int PARAMETER_WIDTH_PERCENT = 15;
-	private static final int ARROW_WIDTH_PERCENT = 10;
-	private static final int EMPTY_SPACE_WIDTH_PERCENT = 32;
+	private static final int LEFT_NAME_WIDTH_PERCENT = 17;
+	private static final int LEFT_PARAMETER_WIDTH_PERCENT = 15;
+	private static final int LEFT_ARROW_WIDTH_PERCENT = 10;
+
+	private static final int RIGHT_NAME_WIDTH_PERCENT = 15;
+	private static final int RIGHT_PARAMETER_WIDTH_PERCENT = 10;
+	private static final int RIGHT_ARROW_WIDTH_PERCENT = 8;
+
+	private static final int LEMPTY_SPACE_WIDTH_PERCENT = 25;
+	private static final int REMPTY_SPACE_WIDTH_PERCENT = 32;
+	private static final int DEADLINE_WIDTH_PERCENT = 10;
 
 	public static int getMiddleSectionWidth() {
 		return ((WHOLE_WIDTH * MIDDLE_SECTION_PERCENT) / 100);
 	}
 
-	public static int getRightLeftSectionWidth() {
-		return ((WHOLE_WIDTH * RIGHT_LEFT_SECTION_PERCENT) / 100);
+	public static int getRightSectionWidth() {
+		return ((WHOLE_WIDTH * RIGHT_SECTION_PERCENT) / 100) - 2;
 	}
 
-	public static int getParameterLabelWidth() {
-		return ((WHOLE_WIDTH * PARAMETER_WIDTH_PERCENT) / 100);
+	public static int getLeftSectionWidth() {
+		return ((WHOLE_WIDTH * LEFT_SECTION_PERCENT) / 100) + 2;
 	}
 
-	public static int getNameLabelWidth() {
-		return ((WHOLE_WIDTH * NAME_WIDTH_PERCENT) / 100) + 32;
+	public static int getLeftParameterLabelWidth() {
+		return ((WHOLE_WIDTH * LEFT_PARAMETER_WIDTH_PERCENT) / 100);
 	}
 
-	public static int getArrowWidth() {
-		return ((WHOLE_WIDTH * ARROW_WIDTH_PERCENT) / 100);
+	public static int getLeftNameLabelWidth() {
+		return ((WHOLE_WIDTH * LEFT_NAME_WIDTH_PERCENT) / 100) + 32;
 	}
 
-	public static int getEmptyLabelWidth() {
-		return ((WHOLE_WIDTH * EMPTY_SPACE_WIDTH_PERCENT) / 100) + 27;
+	public static int getLeftArrowWidth() {
+		return ((WHOLE_WIDTH * LEFT_ARROW_WIDTH_PERCENT) / 100);
+	}
+
+	public static int getRightParameterLabelWidth() {
+		return ((WHOLE_WIDTH * RIGHT_PARAMETER_WIDTH_PERCENT) / 100);
+	}
+
+	public static int getRightNameLabelWidth() {
+		return ((WHOLE_WIDTH * RIGHT_NAME_WIDTH_PERCENT) / 100) + 32;
+	}
+
+	public static int getRightArrowWidth() {
+		return ((WHOLE_WIDTH * RIGHT_ARROW_WIDTH_PERCENT) / 100);
+	}
+
+	public static int getLEmptyLabelWidth() {
+		return ((WHOLE_WIDTH * LEMPTY_SPACE_WIDTH_PERCENT) / 100) + 27;
+	}
+
+	public static int getREmptyLabelWidth() {
+		return ((WHOLE_WIDTH * REMPTY_SPACE_WIDTH_PERCENT) / 100) + 27;
 	}
 
 	private ServiceConstants() {
 		throw new UnsupportedOperationException();
+	}
+
+	public static int getDeadlineSectionWidth() {
+		return ((WHOLE_WIDTH * DEADLINE_WIDTH_PERCENT) / 100);
 	}
 }

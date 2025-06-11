@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2024 fortiss GmbH, Johannes Kepler University Linz
+ * Copyright (c) 2014, 2025 fortiss GmbH, Johannes Kepler University Linz,
+ * 							Carl von Ossietzky Universität Oldenburg
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,6 +13,7 @@
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - cleaned command stack handling for property sections
  *   Melanie Winter, Bianca Wiesmayr - modernize and cleanup section
+ *   Mattis Harzmann - added Deadline-Parameters
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.properties;
 
@@ -455,18 +457,20 @@ public class TransactionSection extends AbstractSection {
 			final TableItem tableItem = (TableItem) element;
 			final OutputPrimitive primitive = (OutputPrimitive) tableItem.getData();
 			Command cmd = null;
+
 			switch (property) {
 			case NAME:
 				final int selectedEv = ((Integer) value).intValue();
 				final String[] eventNames = getOutputEventNames();
 				cmd = new ChangePrimitiveEventCommand(primitive, eventNames[selectedEv]);
 				break;
+
 			case PARAM:
 				cmd = new ChangePrimitiveParameterCommand(primitive, value.toString());
 				break;
+
 			case INTERFACE:
 				final CompoundCommand compound = new CompoundCommand();
-
 				if (primitive.getInterface().isLeftInterface()) {
 					compound.add(
 							new ChangePrimitiveInterfaceCommand(primitive, primitive.getService().getRightInterface()));
@@ -477,72 +481,59 @@ public class TransactionSection extends AbstractSection {
 						compound.add(new DeleteDeadlineDurationCommand(primitive));
 					}
 				}
-
 				cmd = compound;
 				break;
+
 			case DEADLINE_TIME:
 				final String stringValue = (String) value;
-				String result = "";
-				String jitter = "";
+				String result = ""; //$NON-NLS-1$
+				String jitter = ""; //$NON-NLS-1$
 
 				if (stringValue != null) {
 					result = stringValue.replaceAll("[^0-9,.\\[\\]-]", ""); //$NON-NLS-1$ //$NON-NLS-2$
 
-					if (result.contains("[") && result.contains("]")) {
-						result = result.replaceAll("[\\[\\]]", "");
-						final String[] values = result.split(",");
-						if (values.length == 2) {
-							final double firstValue = Double.parseDouble(values[0].trim());
-							final double secondValue = Double.parseDouble(values[1].trim());
-							final double calculatedJitter = secondValue - firstValue;
-							jitter = String.valueOf(calculatedJitter);
-							result = values[0];
-						}
-					} else if (result.contains("-")) {
-						final String[] values = result.split("-");
-						if (values.length == 2) {
-							final double firstValue = Double.parseDouble(values[0].trim());
-							final double secondValue = Double.parseDouble(values[1].trim());
-							final double calculatedJitter = secondValue - firstValue;
-							jitter = String.valueOf(calculatedJitter);
-							result = values[0];
-						}
-					} else if (result.contains(",")) {
-						final String[] values = result.split(",");
-						if (values.length == 2) {
-							final double firstValue = Double.parseDouble(values[0].trim());
-							final double secondValue = Double.parseDouble(values[1].trim());
-							final double calculatedJitter = secondValue - firstValue;
-							jitter = String.valueOf(calculatedJitter);
-							result = values[0];
-						}
+					String[] values = null;
+					if (result.contains("[") && result.contains("]")) { //$NON-NLS-1$ //$NON-NLS-2$
+						result = result.replaceAll("[\\[\\]]", ""); //$NON-NLS-1$ //$NON-NLS-2$
+						values = result.split(","); //$NON-NLS-1$
+					} else if (result.contains("-")) { //$NON-NLS-1$
+						values = result.split("-"); //$NON-NLS-1$
+					} else if (result.contains(",")) { //$NON-NLS-1$
+						values = result.split(","); //$NON-NLS-1$
+					}
+
+					if (values != null && values.length == 2) {
+						final double firstValue = Double.parseDouble(values[0].trim().replace(",", ".")); //$NON-NLS-1$ //$NON-NLS-2$
+						final double secondValue = Double.parseDouble(values[1].trim().replace(",", ".")); //$NON-NLS-1$ //$NON-NLS-2$
+						final double calculatedJitter = secondValue - firstValue;
+						jitter = String.valueOf(calculatedJitter);
+						result = values[0];
 					}
 				}
 
 				if (stringValue == null || result.trim().isEmpty() || stringValue.equals("0")) { //$NON-NLS-1$
 					cmd = new DeleteDeadlineDurationCommand(primitive);
 				} else if (primitive.getDeadlineTime() == null) {
-					if (jitter == "") {
-						createDeadlineTimeForPrimitive(primitive, result);
-						cmd = new CreateDeadlineDurationCommand(primitive, result);
-					} else {
-						final CompoundCommand compound2 = new CompoundCommand();
-						createDeadlineTimeForPrimitive(primitive, result);
-						compound2.add(new CreateDeadlineDurationCommand(primitive, result));
+					createDeadlineTimeForPrimitive(primitive, result);
+					final CompoundCommand compound2 = new CompoundCommand();
+					compound2.add(new CreateDeadlineDurationCommand(primitive, result));
+					if (!jitter.isEmpty()) {
 						compound2.add(new CreateDeadlineJitterCommand(primitive, jitter));
-						cmd = compound2;
 					}
-
-				} else if (jitter == "" || !primitive.getDeadlineTime().getDeadlineType().equals(2)) {
-					cmd = new ChangeDeadlineDurationCommand(primitive.getDeadlineTime(), result);
+					cmd = compound2;
 				} else {
 					final CompoundCommand compound3 = new CompoundCommand();
-					compound3.add(cmd = new ChangeDeadlineDurationCommand(primitive.getDeadlineTime(), result));
-					compound3.add(cmd = new ChangeDeadlineJitterCommand(primitive.getDeadlineTime().getDeadlineJitter(),
-							jitter));
+					compound3.add(new ChangeDeadlineDurationCommand(primitive.getDeadlineTime(), result));
+
+					if (!jitter.isEmpty()) {
+						compound3.add(new ChangeDeadlineJitterCommand(primitive.getDeadlineTime().getDeadlineJitter(),
+								jitter));
+					}
+					cmd = compound3;
 				}
 
 				break;
+
 			case DEADLINE_TYPE:
 				final CompoundCommand compound1 = new CompoundCommand();
 				final int index = (int) value;
@@ -555,6 +546,7 @@ public class TransactionSection extends AbstractSection {
 				}
 				cmd = compound1;
 				break;
+
 			case DEADLINE_JITTER:
 				final String stringValue1 = (String) value;
 				String result1 = ""; //$NON-NLS-1$
@@ -570,9 +562,11 @@ public class TransactionSection extends AbstractSection {
 					cmd = new ChangeDeadlineJitterCommand(primitive.getDeadlineTime().getDeadlineJitter(), result1);
 				}
 				break;
+
 			default:
 				break;
 			}
+
 			if (null != cmd) {
 				executeCommand(cmd);
 				refresh();

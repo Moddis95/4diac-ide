@@ -94,11 +94,12 @@ public final class ServiceConstants {
 		return ((WHOLE_WIDTH * REMPTY_SPACE_WIDTH_PERCENT) / 100) + 27;
 	}
 
+	public static int getDeadlineSectionWidth() {
+		return ((WHOLE_WIDTH * DEADLINE_WIDTH_PERCENT) / 100);
+	}
+
 	private ServiceConstants() {
 		throw new UnsupportedOperationException();
 	}
 
-	public static int getDeadlineSectionWidth() {
-		return ((WHOLE_WIDTH * DEADLINE_WIDTH_PERCENT) / 100);
-	}
 }

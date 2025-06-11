@@ -172,7 +172,6 @@ public class PrimitiveFigure extends Layer {
 	public void setDeadlineTime(final DeadlineTime deadlineTime) {
 		if (this.deadlineFigure != null) {
 			this.getChildren().remove(this.deadlineFigure);
-			this.deadlineFigure = null;
 		}
 
 		if (deadlineTime != null) {
@@ -182,8 +181,6 @@ public class PrimitiveFigure extends Layer {
 			this.deadlineFigure = new DeadlineFigure();
 			this.add(deadlineFigure);
 		}
-		this.revalidate();
-		this.repaint();
 	}
 
 }

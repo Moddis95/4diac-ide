@@ -717,7 +717,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Primitive/event"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Primitive/parameters"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Primitive/interface"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Primitive/deadlineTime"/>
+      <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Primitive/deadlineTime"/>
       <genOperations ecoreOperation="lib.ecore#//Primitive/getServiceTransaction"
           body="return (ServiceTransaction) this.eContainer();"/>
       <genOperations ecoreOperation="lib.ecore#//Primitive/getService" body="return getServiceTransaction().getServiceSequence().getService();"/>
@@ -771,7 +771,7 @@
     <genClasses ecoreClass="lib.ecore#//ServiceTransaction">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//ServiceTransaction/inputPrimitive"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//ServiceTransaction/outputPrimitive"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//ServiceTransaction/deadlineTime"/>
+      <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//ServiceTransaction/deadlineTime"/>
       <genOperations ecoreOperation="lib.ecore#//ServiceTransaction/getServiceSequence"
           body="return (ServiceSequence) this.eContainer();"/>
     </genClasses>
@@ -957,7 +957,7 @@
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//DeadlineTime">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//DeadlineTime/deadlineType"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//DeadlineTime/deadlineJitter"/>
+      <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//DeadlineTime/deadlineJitter"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//DeadlineJitter"/>
   </genPackages>

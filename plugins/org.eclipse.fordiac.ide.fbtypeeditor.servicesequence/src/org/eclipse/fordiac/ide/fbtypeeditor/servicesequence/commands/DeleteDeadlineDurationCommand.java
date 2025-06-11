@@ -15,13 +15,13 @@ package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands;
 
 import org.eclipse.fordiac.ide.model.libraryElement.DeadlineTime;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
+import org.eclipse.fordiac.ide.model.libraryElement.Primitive;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 import org.eclipse.gef.commands.Command;
 
 public class DeleteDeadlineDurationCommand extends Command {
 	private final ServiceTransaction transaction;
-	private final OutputPrimitive outputPrimitive;
+	private final Primitive outputPrimitive;
 	private final DeadlineTime deadlineTime;
 	private String oldValue;
 
@@ -31,7 +31,7 @@ public class DeleteDeadlineDurationCommand extends Command {
 		this.deadlineTime = transaction.getDeadlineTime();
 	}
 
-	public DeleteDeadlineDurationCommand(final OutputPrimitive primitive) {
+	public DeleteDeadlineDurationCommand(final Primitive primitive) {
 		this.transaction = null;
 		this.outputPrimitive = primitive;
 		this.deadlineTime = primitive.getDeadlineTime();

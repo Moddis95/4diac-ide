@@ -4744,7 +4744,7 @@ public interface LibraryElementPackage extends EPackage {
 	int PRIMITIVE__INTERFACE = 2;
 
 	/**
-	 * The feature id for the '<em><b>Deadline Time</b></em>' reference.
+	 * The feature id for the '<em><b>Deadline Time</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -4799,7 +4799,7 @@ public interface LibraryElementPackage extends EPackage {
 	int INPUT_PRIMITIVE__INTERFACE = PRIMITIVE__INTERFACE;
 
 	/**
-	 * The feature id for the '<em><b>Deadline Time</b></em>' reference.
+	 * The feature id for the '<em><b>Deadline Time</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -5894,7 +5894,7 @@ public interface LibraryElementPackage extends EPackage {
 	int OUTPUT_PRIMITIVE__INTERFACE = PRIMITIVE__INTERFACE;
 
 	/**
-	 * The feature id for the '<em><b>Deadline Time</b></em>' reference.
+	 * The feature id for the '<em><b>Deadline Time</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -6651,7 +6651,7 @@ public interface LibraryElementPackage extends EPackage {
 	int SERVICE_TRANSACTION__OUTPUT_PRIMITIVE = 1;
 
 	/**
-	 * The feature id for the '<em><b>Deadline Time</b></em>' reference.
+	 * The feature id for the '<em><b>Deadline Time</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -8219,7 +8219,7 @@ public interface LibraryElementPackage extends EPackage {
 	int DEADLINE_TIME__DEADLINE_TYPE = VAR_DECLARATION_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Deadline Jitter</b></em>' reference.
+	 * The feature id for the '<em><b>Deadline Jitter</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -10770,10 +10770,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getPrimitive_Interface();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.Primitive#getDeadlineTime <em>Deadline Time</em>}'.
+	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.model.libraryElement.Primitive#getDeadlineTime <em>Deadline Time</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Deadline Time</em>'.
+	 * @return the meta object for the containment reference '<em>Deadline Time</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Primitive#getDeadlineTime()
 	 * @see #getPrimitive()
 	 * @generated
@@ -11124,10 +11124,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getServiceTransaction_OutputPrimitive();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction#getDeadlineTime <em>Deadline Time</em>}'.
+	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction#getDeadlineTime <em>Deadline Time</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Deadline Time</em>'.
+	 * @return the meta object for the containment reference '<em>Deadline Time</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction#getDeadlineTime()
 	 * @see #getServiceTransaction()
 	 * @generated
@@ -11847,10 +11847,10 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getDeadlineTime_DeadlineType();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.DeadlineTime#getDeadlineJitter <em>Deadline Jitter</em>}'.
+	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.model.libraryElement.DeadlineTime#getDeadlineJitter <em>Deadline Jitter</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Deadline Jitter</em>'.
+	 * @return the meta object for the containment reference '<em>Deadline Jitter</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.DeadlineTime#getDeadlineJitter()
 	 * @see #getDeadlineTime()
 	 * @generated
@@ -13893,7 +13893,7 @@ public interface LibraryElementPackage extends EPackage {
 		EReference PRIMITIVE__INTERFACE = eINSTANCE.getPrimitive_Interface();
 
 		/**
-		 * The meta object literal for the '<em><b>Deadline Time</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Deadline Time</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
@@ -14175,7 +14175,7 @@ public interface LibraryElementPackage extends EPackage {
 		EReference SERVICE_TRANSACTION__OUTPUT_PRIMITIVE = eINSTANCE.getServiceTransaction_OutputPrimitive();
 
 		/**
-		 * The meta object literal for the '<em><b>Deadline Time</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Deadline Time</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
@@ -14769,7 +14769,7 @@ public interface LibraryElementPackage extends EPackage {
 		EAttribute DEADLINE_TIME__DEADLINE_TYPE = eINSTANCE.getDeadlineTime_DeadlineType();
 
 		/**
-		 * The meta object literal for the '<em><b>Deadline Jitter</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Deadline Jitter</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated

@@ -76,22 +76,22 @@ public interface ServiceTransaction extends EObject {
 	EList<OutputPrimitive> getOutputPrimitive();
 
 	/**
-	 * Returns the value of the '<em><b>Deadline Time</b></em>' reference.
+	 * Returns the value of the '<em><b>Deadline Time</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Deadline Time</em>' reference.
+	 * @return the value of the '<em>Deadline Time</em>' containment reference.
 	 * @see #setDeadlineTime(DeadlineTime)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getServiceTransaction_DeadlineTime()
-	 * @model
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	DeadlineTime getDeadlineTime();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction#getDeadlineTime <em>Deadline Time</em>}' reference.
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction#getDeadlineTime <em>Deadline Time</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Deadline Time</em>' reference.
+	 * @param value the new value of the '<em>Deadline Time</em>' containment reference.
 	 * @see #getDeadlineTime()
 	 * @generated
 	 */

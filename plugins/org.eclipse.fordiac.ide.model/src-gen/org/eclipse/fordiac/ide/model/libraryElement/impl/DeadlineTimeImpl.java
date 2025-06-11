@@ -17,6 +17,7 @@
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
@@ -57,7 +58,7 @@ public class DeadlineTimeImpl extends VarDeclarationImpl implements DeadlineTime
 	protected DeadlineType deadlineType = DEADLINE_TYPE_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getDeadlineJitter() <em>Deadline Jitter</em>}' reference.
+	 * The cached value of the '{@link #getDeadlineJitter() <em>Deadline Jitter</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getDeadlineJitter()
@@ -115,6 +116,12 @@ public class DeadlineTimeImpl extends VarDeclarationImpl implements DeadlineTime
 			InternalEObject oldDeadlineJitter = (InternalEObject)deadlineJitter;
 			deadlineJitter = (DeadlineJitter)eResolveProxy(oldDeadlineJitter);
 			if (deadlineJitter != oldDeadlineJitter) {
+				InternalEObject newDeadlineJitter = (InternalEObject)deadlineJitter;
+				NotificationChain msgs = oldDeadlineJitter.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.DEADLINE_TIME__DEADLINE_JITTER, null, null);
+				if (newDeadlineJitter.eInternalContainer() == null) {
+					msgs = newDeadlineJitter.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.DEADLINE_TIME__DEADLINE_JITTER, null, msgs);
+				}
+				if (msgs != null) msgs.dispatch();
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.DEADLINE_TIME__DEADLINE_JITTER, oldDeadlineJitter, deadlineJitter));
 			}
@@ -136,12 +143,49 @@ public class DeadlineTimeImpl extends VarDeclarationImpl implements DeadlineTime
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public void setDeadlineJitter(DeadlineJitter newDeadlineJitter) {
+	public NotificationChain basicSetDeadlineJitter(DeadlineJitter newDeadlineJitter, NotificationChain msgs) {
 		DeadlineJitter oldDeadlineJitter = deadlineJitter;
 		deadlineJitter = newDeadlineJitter;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.DEADLINE_TIME__DEADLINE_JITTER, oldDeadlineJitter, deadlineJitter));
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryElementPackage.DEADLINE_TIME__DEADLINE_JITTER, oldDeadlineJitter, newDeadlineJitter);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setDeadlineJitter(DeadlineJitter newDeadlineJitter) {
+		if (newDeadlineJitter != deadlineJitter) {
+			NotificationChain msgs = null;
+			if (deadlineJitter != null)
+				msgs = ((InternalEObject)deadlineJitter).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.DEADLINE_TIME__DEADLINE_JITTER, null, msgs);
+			if (newDeadlineJitter != null)
+				msgs = ((InternalEObject)newDeadlineJitter).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.DEADLINE_TIME__DEADLINE_JITTER, null, msgs);
+			msgs = basicSetDeadlineJitter(newDeadlineJitter, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.DEADLINE_TIME__DEADLINE_JITTER, newDeadlineJitter, newDeadlineJitter));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case LibraryElementPackage.DEADLINE_TIME__DEADLINE_JITTER:
+				return basicSetDeadlineJitter(null, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
+		}
 	}
 
 	/**

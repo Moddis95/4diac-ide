@@ -35,7 +35,7 @@ public class DeadlineFigure extends Figure {
 		this.deadlineColorBox.add(deadlineNameLabel);
 		add(deadlineColorBox);
 
-		setPreferredSize(new Dimension(120, 20));
+		setPreferredSize(120, 20);
 	}
 
 	public DeadlineFigure() {
@@ -66,7 +66,7 @@ public class DeadlineFigure extends Figure {
 	public void setColorForDeadlineType(final DeadlineTime deadlineTime) {
 		if (deadlineTime != null) {
 			switch (deadlineTime.getDeadlineType()) {
-			case SOFT_DEADLINE -> this.deadlineColorBox.setBackgroundColor(ColorConstants.blue);
+			case SOFT_DEADLINE -> this.deadlineColorBox.setBackgroundColor(ColorConstants.green);
 			case HARD_DEADLINE -> this.deadlineColorBox.setBackgroundColor(ColorConstants.orange);
 			case FIRM_DEADLINE -> this.deadlineColorBox.setBackgroundColor(ColorConstants.yellow);
 			default ->
@@ -93,4 +93,5 @@ public class DeadlineFigure extends Figure {
 			this.deadlineNameLabel.setText(" "); //$NON-NLS-1$
 		}
 	}
+
 }

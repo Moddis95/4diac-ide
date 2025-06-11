@@ -1917,7 +1917,8 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="interface" eType="#//ServiceInterface"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="deadlineTime" eType="#//DeadlineTime"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="deadlineTime" eType="#//DeadlineTime"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Resource" eSuperTypes="#//TypedConfigureableObject #//IVarElement #//MappingTarget">
     <eOperations name="getAutomationSystem" lowerBound="1" eType="#//AutomationSystem">
@@ -2075,7 +2076,8 @@
         <details key="namespace" value="##targetNamespace"/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="deadlineTime" eType="#//DeadlineTime"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="deadlineTime" eType="#//DeadlineTime"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ServiceInterface" eSuperTypes="#//INamedElement">
     <eOperations name="getService" lowerBound="1" eType="#//Service">
@@ -2560,7 +2562,8 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DeadlineTime" eSuperTypes="#//VarDeclaration">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="deadlineType" eType="#//DeadlineType"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="deadlineJitter" eType="#//DeadlineJitter"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="deadlineJitter" eType="#//DeadlineJitter"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DeadlineJitter" eSuperTypes="#//VarDeclaration"/>
 </ecore:EPackage>

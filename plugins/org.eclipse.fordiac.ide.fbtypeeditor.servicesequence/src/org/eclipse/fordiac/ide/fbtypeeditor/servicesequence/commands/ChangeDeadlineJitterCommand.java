@@ -1,6 +1,7 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands;
 
 import org.eclipse.fordiac.ide.model.libraryElement.DeadlineJitter;
+import org.eclipse.fordiac.ide.model.libraryElement.Primitive;
 import org.eclipse.gef.commands.Command;
 
 public class ChangeDeadlineJitterCommand extends Command {
@@ -11,6 +12,11 @@ public class ChangeDeadlineJitterCommand extends Command {
 
 	public ChangeDeadlineJitterCommand(final DeadlineJitter deadlineJitter, final String newValue) {
 		this.deadlineJitter = deadlineJitter;
+		this.newValue = newValue;
+	}
+
+	public ChangeDeadlineJitterCommand(final Primitive primitive, final String newValue) {
+		this.deadlineJitter = primitive.getDeadlineTime().getDeadlineJitter();
 		this.newValue = newValue;
 	}
 

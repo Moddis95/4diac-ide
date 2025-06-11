@@ -69,8 +69,12 @@ public abstract class AbstractPrimitiveEditPart extends AbstractDirectEditableEd
 
 			final DeadlineTime dt = getModel().getDeadlineTime();
 			if (dt != null) {
-				dt.eAdapters().add(adapter);
-				if (dt.getValue() != null) {
+				if (!dt.eAdapters().contains(adapter)) {
+					dt.eAdapters().add(adapter);
+
+					dt.eAdapters().add(adapter);
+				}
+				if ((dt.getValue() != null) && !dt.getValue().eAdapters().contains(adapter)) {
 					dt.getValue().eAdapters().add(adapter);
 				}
 			}
@@ -184,8 +188,8 @@ public abstract class AbstractPrimitiveEditPart extends AbstractDirectEditableEd
 
 	@Override
 	protected IFigure createFigure() {
-		final DeadlineTime deadlineTime = getModel().getDeadlineTime();
-		return new PrimitiveFigure(isLeftInterface(), getModel().getEvent(), getModel().getParameters(), deadlineTime);
+		return new PrimitiveFigure(isLeftInterface(), getModel().getEvent(), getModel().getParameters(),
+				getModel().getDeadlineTime());
 	}
 
 	@Override

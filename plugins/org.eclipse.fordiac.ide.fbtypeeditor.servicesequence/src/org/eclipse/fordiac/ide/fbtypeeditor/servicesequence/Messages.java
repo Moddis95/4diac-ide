@@ -22,8 +22,6 @@ import org.eclipse.osgi.util.NLS;
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.messages"; //$NON-NLS-1$
 
-	public static String ServiceSequenceSection_DeadlineType;
-	public static String ServiceSequenceSection_DeadlineTime;
 	public static String CreateOutputPrimitiveCommand_NotAvailable;
 	public static String InterfaceSelectorButton_Interface;
 	public static String PrimitiveSection_CreateControls_PrimitiveSpecification;
@@ -49,6 +47,9 @@ public final class Messages extends NLS {
 	public static String ServiceSequenceSection_Index;
 	public static String ServiceSequenceSection_InputPrimitive;
 	public static String ServiceSequenceSection_OutputPrimitives;
+	public static String ServiceSequenceSection_DeadlineJitter;
+	public static String ServiceSequenceSection_DeadlineType;
+	public static String ServiceSequenceSection_DeadlineTime;
 	public static String ServiceSequenceSection_ServiceSequence;
 	public static String ServiceSequenceSection_Transaction;
 	public static String TransactionSection_CollectOutputPrimitiveGroupName_PrimitivesRightInterface;

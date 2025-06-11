@@ -76,7 +76,7 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 	protected EList<OutputPrimitive> outputPrimitive;
 
 	/**
-	 * The cached value of the '{@link #getDeadlineTime() <em>Deadline Time</em>}' reference.
+	 * The cached value of the '{@link #getDeadlineTime() <em>Deadline Time</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getDeadlineTime()
@@ -173,6 +173,12 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 			InternalEObject oldDeadlineTime = (InternalEObject)deadlineTime;
 			deadlineTime = (DeadlineTime)eResolveProxy(oldDeadlineTime);
 			if (deadlineTime != oldDeadlineTime) {
+				InternalEObject newDeadlineTime = (InternalEObject)deadlineTime;
+				NotificationChain msgs = oldDeadlineTime.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SERVICE_TRANSACTION__DEADLINE_TIME, null, null);
+				if (newDeadlineTime.eInternalContainer() == null) {
+					msgs = newDeadlineTime.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SERVICE_TRANSACTION__DEADLINE_TIME, null, msgs);
+				}
+				if (msgs != null) msgs.dispatch();
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.SERVICE_TRANSACTION__DEADLINE_TIME, oldDeadlineTime, deadlineTime));
 			}
@@ -194,12 +200,34 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public void setDeadlineTime(DeadlineTime newDeadlineTime) {
+	public NotificationChain basicSetDeadlineTime(DeadlineTime newDeadlineTime, NotificationChain msgs) {
 		DeadlineTime oldDeadlineTime = deadlineTime;
 		deadlineTime = newDeadlineTime;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.SERVICE_TRANSACTION__DEADLINE_TIME, oldDeadlineTime, deadlineTime));
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryElementPackage.SERVICE_TRANSACTION__DEADLINE_TIME, oldDeadlineTime, newDeadlineTime);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setDeadlineTime(DeadlineTime newDeadlineTime) {
+		if (newDeadlineTime != deadlineTime) {
+			NotificationChain msgs = null;
+			if (deadlineTime != null)
+				msgs = ((InternalEObject)deadlineTime).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SERVICE_TRANSACTION__DEADLINE_TIME, null, msgs);
+			if (newDeadlineTime != null)
+				msgs = ((InternalEObject)newDeadlineTime).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SERVICE_TRANSACTION__DEADLINE_TIME, null, msgs);
+			msgs = basicSetDeadlineTime(newDeadlineTime, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.SERVICE_TRANSACTION__DEADLINE_TIME, newDeadlineTime, newDeadlineTime));
 	}
 
 	/**
@@ -224,6 +252,8 @@ public class ServiceTransactionImpl extends EObjectImpl implements ServiceTransa
 				return basicSetInputPrimitive(null, msgs);
 			case LibraryElementPackage.SERVICE_TRANSACTION__OUTPUT_PRIMITIVE:
 				return ((InternalEList<?>)getOutputPrimitive()).basicRemove(otherEnd, msgs);
+			case LibraryElementPackage.SERVICE_TRANSACTION__DEADLINE_TIME:
+				return basicSetDeadlineTime(null, msgs);
 			default:
 				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}

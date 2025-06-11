@@ -15,7 +15,7 @@ package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands;
 
 import org.eclipse.fordiac.ide.model.libraryElement.DeadlineTime;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
+import org.eclipse.fordiac.ide.model.libraryElement.Primitive;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.gef.commands.Command;
@@ -23,7 +23,7 @@ import org.eclipse.gef.commands.Command;
 public class CreateDeadlineDurationCommand extends Command {
 
 	private final ServiceTransaction transaction;
-	private final OutputPrimitive outputPrimitive;
+	private final Primitive outputPrimitive;
 	private final String value;
 	private DeadlineTime oldDeadline;
 
@@ -33,7 +33,7 @@ public class CreateDeadlineDurationCommand extends Command {
 		this.value = value;
 	}
 
-	public CreateDeadlineDurationCommand(final OutputPrimitive primitive, final String value) {
+	public CreateDeadlineDurationCommand(final Primitive primitive, final String value) {
 		this.transaction = null;
 		this.outputPrimitive = primitive;
 		this.value = value;

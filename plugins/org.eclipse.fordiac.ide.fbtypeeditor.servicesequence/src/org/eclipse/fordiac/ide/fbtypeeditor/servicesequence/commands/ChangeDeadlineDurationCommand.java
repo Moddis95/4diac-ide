@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands;
 
 import org.eclipse.fordiac.ide.model.libraryElement.DeadlineTime;
+import org.eclipse.fordiac.ide.model.libraryElement.Primitive;
 import org.eclipse.gef.commands.Command;
 
 public class ChangeDeadlineDurationCommand extends Command {
@@ -23,6 +24,11 @@ public class ChangeDeadlineDurationCommand extends Command {
 
 	public ChangeDeadlineDurationCommand(final DeadlineTime deadlineTime, final String newValue) {
 		this.deadlineTime = deadlineTime;
+		this.newValue = newValue;
+	}
+
+	public ChangeDeadlineDurationCommand(final Primitive primitive, final String newValue) {
+		this.deadlineTime = primitive.getDeadlineTime();
 		this.newValue = newValue;
 	}
 

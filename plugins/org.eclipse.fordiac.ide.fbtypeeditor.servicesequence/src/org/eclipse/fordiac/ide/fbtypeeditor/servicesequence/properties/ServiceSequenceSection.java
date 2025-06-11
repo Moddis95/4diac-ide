@@ -236,7 +236,7 @@ public class ServiceSequenceSection extends AbstractSection {
 		final TableColumn deadlineTypeColumn = new TableColumn(table, SWT.LEFT);
 		deadlineTypeColumn.setText(Messages.ServiceSequenceSection_DeadlineType);
 		final TableColumn deadlineJitterColumn = new TableColumn(table, SWT.LEFT);
-		deadlineJitterColumn.setText(Messages.ServiceSequenceSection_DeadlineTime);
+		deadlineJitterColumn.setText(Messages.ServiceSequenceSection_DeadlineJitter);
 		final TableLayout layout = new TableLayout();
 		layout.addColumnData(new ColumnPixelData(80));
 		layout.addColumnData(new ColumnPixelData(145));
@@ -271,6 +271,7 @@ public class ServiceSequenceSection extends AbstractSection {
 		nameText.setEnabled(false);
 		commentText.setEnabled(false);
 		transactionsViewer.setInput(null);
+
 	}
 
 	@Override
@@ -395,60 +396,50 @@ public class ServiceSequenceSection extends AbstractSection {
 				final String stringValue = (String) value;
 				String result = ""; //$NON-NLS-1$
 				String jitter = ""; //$NON-NLS-1$
-				if (stringValue != null) {
-					result = stringValue.replaceAll("[^0-9,]", ""); //$NON-NLS-1$ //$NON-NLS-2$
 
-					if (result.contains("[") && result.contains("]")) {
-						result = result.replaceAll("[\\[\\]]", "");
-						final String[] values = result.split(",");
-						if (values.length == 2) {
-							final double firstValue = Double.parseDouble(values[0].trim());
-							final double secondValue = Double.parseDouble(values[1].trim());
-							final double calculatedJitter = secondValue - firstValue;
-							jitter = String.valueOf(calculatedJitter);
-							result = values[0];
-						}
-					} else if (result.contains("-")) {
-						final String[] values = result.split("-");
-						if (values.length == 2) {
-							final double firstValue = Double.parseDouble(values[0].trim());
-							final double secondValue = Double.parseDouble(values[1].trim());
-							final double calculatedJitter = secondValue - firstValue;
-							jitter = String.valueOf(calculatedJitter);
-							result = values[0];
-						}
-					} else if (result.contains(",")) {
-						final String[] values = result.split(",");
-						if (values.length == 2) {
-							final double firstValue = Double.parseDouble(values[0].trim());
-							final double secondValue = Double.parseDouble(values[1].trim());
-							final double calculatedJitter = secondValue - firstValue;
-							jitter = String.valueOf(calculatedJitter);
-							result = values[0];
-						}
+				if (stringValue != null) {
+					result = stringValue.replaceAll("[^0-9,.\\[\\]-]", ""); //$NON-NLS-1$ //$NON-NLS-2$
+
+					String[] values = null;
+					if (result.contains("[") && result.contains("]")) { //$NON-NLS-1$ //$NON-NLS-2$
+						result = result.replaceAll("[\\[\\]]", ""); //$NON-NLS-1$ //$NON-NLS-2$
+						values = result.split(","); //$NON-NLS-1$
+					} else if (result.contains("-")) { //$NON-NLS-1$
+						values = result.split("-"); //$NON-NLS-1$
+					} else if (result.contains(",")) { //$NON-NLS-1$
+						values = result.split(","); //$NON-NLS-1$
+					}
+
+					if (values != null && values.length == 2) {
+						final double firstValue = Double.parseDouble(values[0].trim().replace(",", ".")); //$NON-NLS-1$ //$NON-NLS-2$
+						final double secondValue = Double.parseDouble(values[1].trim().replace(",", ".")); //$NON-NLS-1$ //$NON-NLS-2$
+						final double calculatedJitter = secondValue - firstValue;
+						jitter = String.valueOf(calculatedJitter);
+						result = values[0];
 					}
 				}
-				if (stringValue == null || result.trim().isEmpty() || stringValue.equals("0")) { //$NON-NLS-1$
+
+				if (stringValue == null || stringValue.equals("0")) { //$NON-NLS-1$
 					cmd = new DeleteDeadlineDurationCommand(transaction);
 				} else if (transaction.getDeadlineTime() == null) {
-					if (jitter == "") {
-						createDeadlineTimeForTransaction(transaction, result);
-						cmd = new CreateDeadlineDurationCommand(transaction, result);
-					} else {
-						final CompoundCommand compound2 = new CompoundCommand();
-						createDeadlineTimeForTransaction(transaction, result);
-						compound2.add(new CreateDeadlineDurationCommand(transaction, result));
+					createDeadlineTimeForTransaction(transaction, result);
+					final CompoundCommand compound2 = new CompoundCommand();
+					compound2.add(new CreateDeadlineDurationCommand(transaction, result));
+					if (!jitter.isEmpty()) {
 						compound2.add(new CreateDeadlineJitterCommand(transaction, jitter));
-						cmd = compound2;
 					}
-				} else if (jitter == "" || !transaction.getDeadlineTime().getDeadlineType().equals(2)) {
-					cmd = new ChangeDeadlineDurationCommand(transaction.getDeadlineTime(), result);
+					cmd = compound2;
 				} else {
 					final CompoundCommand compound3 = new CompoundCommand();
-					compound3.add(cmd = new ChangeDeadlineDurationCommand(transaction.getDeadlineTime(), result));
-					compound3.add(cmd = new ChangeDeadlineJitterCommand(
-							transaction.getDeadlineTime().getDeadlineJitter(), jitter));
+					compound3.add(new ChangeDeadlineDurationCommand(transaction.getDeadlineTime(), result));
+
+					if (!jitter.isEmpty()) {
+						compound3.add(new ChangeDeadlineJitterCommand(transaction.getDeadlineTime().getDeadlineJitter(),
+								jitter));
+					}
+					cmd = compound3;
 				}
+
 				break;
 			case DEADLINE_TYPE:
 				final CompoundCommand compound1 = new CompoundCommand();

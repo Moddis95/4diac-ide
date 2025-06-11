@@ -18,6 +18,7 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
@@ -99,7 +100,7 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 	protected ServiceInterface interface_;
 
 	/**
-	 * The cached value of the '{@link #getDeadlineTime() <em>Deadline Time</em>}' reference.
+	 * The cached value of the '{@link #getDeadlineTime() <em>Deadline Time</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getDeadlineTime()
@@ -224,6 +225,12 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 			InternalEObject oldDeadlineTime = (InternalEObject)deadlineTime;
 			deadlineTime = (DeadlineTime)eResolveProxy(oldDeadlineTime);
 			if (deadlineTime != oldDeadlineTime) {
+				InternalEObject newDeadlineTime = (InternalEObject)deadlineTime;
+				NotificationChain msgs = oldDeadlineTime.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.PRIMITIVE__DEADLINE_TIME, null, null);
+				if (newDeadlineTime.eInternalContainer() == null) {
+					msgs = newDeadlineTime.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.PRIMITIVE__DEADLINE_TIME, null, msgs);
+				}
+				if (msgs != null) msgs.dispatch();
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.PRIMITIVE__DEADLINE_TIME, oldDeadlineTime, deadlineTime));
 			}
@@ -245,12 +252,34 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public void setDeadlineTime(DeadlineTime newDeadlineTime) {
+	public NotificationChain basicSetDeadlineTime(DeadlineTime newDeadlineTime, NotificationChain msgs) {
 		DeadlineTime oldDeadlineTime = deadlineTime;
 		deadlineTime = newDeadlineTime;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.PRIMITIVE__DEADLINE_TIME, oldDeadlineTime, deadlineTime));
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryElementPackage.PRIMITIVE__DEADLINE_TIME, oldDeadlineTime, newDeadlineTime);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setDeadlineTime(DeadlineTime newDeadlineTime) {
+		if (newDeadlineTime != deadlineTime) {
+			NotificationChain msgs = null;
+			if (deadlineTime != null)
+				msgs = ((InternalEObject)deadlineTime).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.PRIMITIVE__DEADLINE_TIME, null, msgs);
+			if (newDeadlineTime != null)
+				msgs = ((InternalEObject)newDeadlineTime).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.PRIMITIVE__DEADLINE_TIME, null, msgs);
+			msgs = basicSetDeadlineTime(newDeadlineTime, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.PRIMITIVE__DEADLINE_TIME, newDeadlineTime, newDeadlineTime));
 	}
 
 	/**
@@ -271,6 +300,21 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 	@Override
 	public Service getService() {
 		return getServiceTransaction().getServiceSequence().getService();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case LibraryElementPackage.PRIMITIVE__DEADLINE_TIME:
+				return basicSetDeadlineTime(null, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
+		}
 	}
 
 	/**

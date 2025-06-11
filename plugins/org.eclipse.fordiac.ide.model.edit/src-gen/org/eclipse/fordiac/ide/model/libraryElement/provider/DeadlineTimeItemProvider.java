@@ -148,6 +148,7 @@ public class DeadlineTimeItemProvider extends VarDeclarationItemProvider {
 
 		switch (notification.getFeatureID(DeadlineTime.class)) {
 			case LibraryElementPackage.DEADLINE_TIME__DEADLINE_TYPE:
+			case LibraryElementPackage.DEADLINE_TIME__DEADLINE_JITTER:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			default:

@@ -2,14 +2,14 @@ package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands;
 
 import org.eclipse.fordiac.ide.model.libraryElement.DeadlineJitter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
+import org.eclipse.fordiac.ide.model.libraryElement.Primitive;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.gef.commands.Command;
 
 public class CreateDeadlineJitterCommand extends Command {
 	private final ServiceTransaction transaction;
-	private final OutputPrimitive outputPrimitive;
+	private final Primitive outputPrimitive;
 	private final String value;
 	private DeadlineJitter oldJitter;
 
@@ -19,7 +19,7 @@ public class CreateDeadlineJitterCommand extends Command {
 		this.value = value;
 	}
 
-	public CreateDeadlineJitterCommand(final OutputPrimitive primitive, final String value) {
+	public CreateDeadlineJitterCommand(final Primitive primitive, final String value) {
 		this.transaction = null;
 		this.outputPrimitive = primitive;
 		this.value = value;

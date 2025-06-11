@@ -19,19 +19,31 @@ import java.util.Arrays;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.Messages;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangeDeadlineDurationCommand;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangeDeadlineJitterCommand;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangeDeadlineTypeCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangePrimitiveEventCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangePrimitiveParameterCommand;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.CreateDeadlineDurationCommand;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.CreateDeadlineJitterCommand;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.DeleteDeadlineDurationCommand;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.DeleteDeadlineJitterCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.AbstractPrimitiveEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.InputPrimitiveEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.OutputPrimitiveEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.widgets.InterfaceSelectorButton;
 import org.eclipse.fordiac.ide.gef.properties.AbstractDoubleColumnSection;
+import org.eclipse.fordiac.ide.model.libraryElement.DeadlineJitter;
+import org.eclipse.fordiac.ide.model.libraryElement.DeadlineTime;
+import org.eclipse.fordiac.ide.model.libraryElement.DeadlineType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.Primitive;
+import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
@@ -54,6 +66,9 @@ public abstract class AbstractPrimitiveSection extends AbstractDoubleColumnSecti
 	private Text customEventText;
 	private InterfaceSelectorButton interfaceSelector;
 	private static final int ASCII_UNDERSCORE = 95;
+	private Text deadlineTimeText;
+	private CCombo deadlineTypeCombo;
+	private Text deadlineJitterText;
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
@@ -155,13 +170,15 @@ public abstract class AbstractPrimitiveSection extends AbstractDoubleColumnSecti
 		final Composite composite = getWidgetFactory().createComposite(parent);
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
-		getWidgetFactory().createCLabel(composite, Messages.PrimitiveSection_CreatePrimitiveSection_Interface);
 
+		// Interface selector
+		getWidgetFactory().createCLabel(composite, Messages.PrimitiveSection_CreatePrimitiveSection_Interface);
 		interfaceSelector = new InterfaceSelectorButton(composite, cmd -> {
 			executeCommand(cmd);
 			refresh();
 		});
 
+		// Parameters
 		getWidgetFactory().createCLabel(composite, Messages.TransactionSection_Parameter);
 		parametersText = createGroupText(composite, true, SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);
 		parametersText.addModifyListener(e -> {
@@ -169,6 +186,96 @@ public abstract class AbstractPrimitiveSection extends AbstractDoubleColumnSecti
 			executeCommand(new ChangePrimitiveParameterCommand(getType(), parametersText.getText()));
 			addContentAdapter();
 		});
+
+		// DeadlineTime
+		getWidgetFactory().createCLabel(composite, Messages.TransactionSection_DeadlineTime);
+		deadlineTimeText = createGroupText(composite, true);
+		deadlineTimeText.addModifyListener(e -> {
+			removeContentAdapter();
+
+			final String stringValue = deadlineTimeText.getText();
+			String result = ""; //$NON-NLS-1$
+
+			if (stringValue != null) {
+				result = stringValue.replaceAll("[^0-9,.\\[\\]-]", ""); //$NON-NLS-1$ //$NON-NLS-2$
+			}
+
+			if (stringValue == null || result.trim().isEmpty() || stringValue.equals("0")) { //$NON-NLS-1$
+				executeCommand(new DeleteDeadlineDurationCommand(getType()));
+			} else if (getType().getDeadlineTime() == null) {
+				createDeadlineTimeForPrimitive(getType(), result);
+				executeCommand(new CreateDeadlineDurationCommand(getType(), result));
+			} else {
+				executeCommand(new ChangeDeadlineDurationCommand(getType().getDeadlineTime(), result));
+			}
+
+			final boolean hasDeadlineTime = getType().getDeadlineTime() != null;
+			deadlineTypeCombo.setEnabled(hasDeadlineTime);
+			deadlineJitterText.setEnabled(hasDeadlineTime);
+
+			addContentAdapter();
+		});
+
+		// DeadlineType
+		getWidgetFactory().createCLabel(composite, Messages.TransactionSection_DeadlineType);
+		deadlineTypeCombo = ComboBoxWidgetFactory.createCombo(getWidgetFactory(), composite);
+		deadlineTypeCombo.setItems(getDeadlineTypeValues());
+		deadlineTypeCombo.addListener(SWT.Selection, event -> {
+			removeContentAdapter();
+			final String selectedType = deadlineTypeCombo.getText();
+			final DeadlineType newType = DeadlineType.getByName(selectedType);
+			executeCommand(new ChangeDeadlineTypeCommand(getType(), newType));
+			if (newType.getValue() == 2) {
+				executeCommand(new DeleteDeadlineJitterCommand(getType()));
+			}
+
+			refresh();
+			addContentAdapter();
+		});
+
+		// DeadlineJitter
+		getWidgetFactory().createCLabel(composite, Messages.TransactionSection_DeadlineJitter);
+		deadlineJitterText = createGroupText(composite, true);
+		deadlineJitterText.addModifyListener(e -> {
+			removeContentAdapter();
+
+			final String stringValue1 = deadlineJitterText.getText();
+			String result1 = ""; //$NON-NLS-1$
+			if (stringValue1 != null) {
+				result1 = stringValue1.replaceAll("[^0-9]", ""); //$NON-NLS-1$ //$NON-NLS-2$
+			}
+
+			if (stringValue1 == null || result1.trim().isEmpty() || stringValue1.equals("0")) { //$NON-NLS-1$
+				executeCommand(new DeleteDeadlineJitterCommand(getType()));
+			} else if (getType().getDeadlineTime().getDeadlineJitter() == null) {
+				createDeadlineJitterForDeadlineTime(getType().getDeadlineTime(), result1);
+				executeCommand(new CreateDeadlineJitterCommand(getType(), result1));
+			} else {
+				executeCommand(new ChangeDeadlineJitterCommand(getType(), result1));
+			}
+			addContentAdapter();
+		});
+	}
+
+	private static void createDeadlineJitterForDeadlineTime(final DeadlineTime deadlineTime,
+			final String initialValue) {
+		final DeadlineJitter jitter = LibraryElementFactory.eINSTANCE.createDeadlineJitter();
+		final Value value = LibraryElementFactory.eINSTANCE.createValue();
+		value.setValue(initialValue);
+		jitter.setValue(value);
+		deadlineTime.setDeadlineJitter(jitter);
+	}
+
+	private static void createDeadlineTimeForPrimitive(final Primitive primitive, final String initialValue) {
+		final DeadlineTime deadline = LibraryElementFactory.eINSTANCE.createDeadlineTime();
+		final Value value = LibraryElementFactory.eINSTANCE.createValue();
+		value.setValue(initialValue);
+		deadline.setValue(value);
+		primitive.setDeadlineTime(deadline);
+	}
+
+	public static String[] getDeadlineTypeValues() {
+		return Arrays.stream(DeadlineType.values()).map(DeadlineType::getName).toArray(String[]::new);
 	}
 
 	@Override
@@ -200,6 +307,34 @@ public abstract class AbstractPrimitiveSection extends AbstractDoubleColumnSecti
 		dataQualifyingCombo.setEnabled(qiData != null && !checkBox.getSelection());
 		customEventText.setEnabled(checkBox.getSelection());
 		eventCombo.setEnabled(!checkBox.getSelection());
+
+		// DeadlineTime
+		if (getType().getDeadlineTime() != null && getType().getDeadlineTime().getValue() != null) {
+			deadlineTimeText.setText(getType().getDeadlineTime().getValue().getValue() != null
+					? getType().getDeadlineTime().getValue().getValue()
+					: ""); //$NON-NLS-1$
+		} else {
+			deadlineTimeText.setText(""); //$NON-NLS-1$
+		}
+
+		// DeadlineType
+		if (getType().getDeadlineTime() != null && getType().getDeadlineTime().getDeadlineType() != null) {
+			final String currentType = getType().getDeadlineTime().getDeadlineType().getName();
+			final int index = Arrays.asList(deadlineTypeCombo.getItems()).indexOf(currentType);
+			deadlineTypeCombo.select(index >= 0 ? index : 0);
+		} else {
+			deadlineTypeCombo.select(0);
+		}
+
+		// DeadlineJitter
+		if (getType().getDeadlineTime() != null && getType().getDeadlineTime().getDeadlineJitter() != null
+				&& getType().getDeadlineTime().getDeadlineJitter().getValue() != null) {
+			deadlineJitterText.setText(getType().getDeadlineTime().getDeadlineJitter().getValue().getValue() != null
+					? getType().getDeadlineTime().getDeadlineJitter().getValue().getValue()
+					: ""); //$NON-NLS-1$
+		} else {
+			deadlineJitterText.setText(""); //$NON-NLS-1$
+		}
 	}
 
 	protected abstract EList<Event> getRelevantEvents(final FBType fb);

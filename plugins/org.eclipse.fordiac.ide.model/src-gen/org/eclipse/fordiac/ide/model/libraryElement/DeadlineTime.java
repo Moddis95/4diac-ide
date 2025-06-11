@@ -62,22 +62,22 @@ public interface DeadlineTime extends VarDeclaration {
 	void setDeadlineType(DeadlineType value);
 
 	/**
-	 * Returns the value of the '<em><b>Deadline Jitter</b></em>' reference.
+	 * Returns the value of the '<em><b>Deadline Jitter</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Deadline Jitter</em>' reference.
+	 * @return the value of the '<em>Deadline Jitter</em>' containment reference.
 	 * @see #setDeadlineJitter(DeadlineJitter)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getDeadlineTime_DeadlineJitter()
-	 * @model
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	DeadlineJitter getDeadlineJitter();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.DeadlineTime#getDeadlineJitter <em>Deadline Jitter</em>}' reference.
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.DeadlineTime#getDeadlineJitter <em>Deadline Jitter</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Deadline Jitter</em>' reference.
+	 * @param value the new value of the '<em>Deadline Jitter</em>' containment reference.
 	 * @see #getDeadlineJitter()
 	 * @generated
 	 */

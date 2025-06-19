@@ -490,23 +490,28 @@ public class TransactionSection extends AbstractSection {
 				String jitter = ""; //$NON-NLS-1$
 
 				if (stringValue != null) {
-					result = stringValue.replaceAll("[^0-9,.\\[\\]-]", ""); //$NON-NLS-1$ //$NON-NLS-2$
+					result = stringValue.replaceAll("[^0-9,;.\\[\\]-]", ""); //$NON-NLS-1$ //$NON-NLS-2$
+					result = result.replace(",", "."); //$NON-NLS-1$ //$NON-NLS-2$
 
 					String[] values = null;
 					if (result.contains("[") && result.contains("]")) { //$NON-NLS-1$ //$NON-NLS-2$
 						result = result.replaceAll("[\\[\\]]", ""); //$NON-NLS-1$ //$NON-NLS-2$
-						values = result.split(","); //$NON-NLS-1$
+						values = result.split(";"); //$NON-NLS-1$
 					} else if (result.contains("-")) { //$NON-NLS-1$
 						values = result.split("-"); //$NON-NLS-1$
-					} else if (result.contains(",")) { //$NON-NLS-1$
-						values = result.split(","); //$NON-NLS-1$
+					} else if (result.contains(";")) { //$NON-NLS-1$
+						values = result.split(";"); //$NON-NLS-1$
 					}
 
 					if (values != null && values.length == 2) {
 						final double firstValue = Double.parseDouble(values[0].trim().replace(",", ".")); //$NON-NLS-1$ //$NON-NLS-2$
-						final double secondValue = Double.parseDouble(values[1].trim().replace(",", ".")); //$NON-NLS-1$ //$NON-NLS-2$
+						final double secondValue = Double.parseDouble(values[1].trim().replace(",", ".")); //$NON-NLS-1$//$NON-NLS-2$
 						final double calculatedJitter = secondValue - firstValue;
-						jitter = String.valueOf(calculatedJitter);
+						if (calculatedJitter == Math.floor(calculatedJitter)) {
+							jitter = String.valueOf((int) calculatedJitter);
+						} else {
+							jitter = String.valueOf(calculatedJitter);
+						}
 						result = values[0];
 					}
 				}
@@ -518,7 +523,12 @@ public class TransactionSection extends AbstractSection {
 					final CompoundCommand compound2 = new CompoundCommand();
 					compound2.add(new CreateDeadlineDurationCommand(primitive, result));
 					if (!jitter.isEmpty()) {
-						compound2.add(new CreateDeadlineJitterCommand(primitive, jitter));
+						if (primitive.getDeadlineTime().getDeadlineJitter() == null) {
+							compound2.add(new CreateDeadlineJitterCommand(primitive, jitter));
+						} else {
+							compound2.add(new ChangeDeadlineJitterCommand(
+									primitive.getDeadlineTime().getDeadlineJitter(), jitter));
+						}
 					}
 					cmd = compound2;
 				} else {
@@ -526,8 +536,12 @@ public class TransactionSection extends AbstractSection {
 					compound3.add(new ChangeDeadlineDurationCommand(primitive.getDeadlineTime(), result));
 
 					if (!jitter.isEmpty()) {
-						compound3.add(new ChangeDeadlineJitterCommand(primitive.getDeadlineTime().getDeadlineJitter(),
-								jitter));
+						if (primitive.getDeadlineTime().getDeadlineJitter() == null) {
+							compound3.add(new CreateDeadlineJitterCommand(primitive, jitter));
+						} else {
+							compound3.add(new ChangeDeadlineJitterCommand(
+									primitive.getDeadlineTime().getDeadlineJitter(), jitter));
+						}
 					}
 					cmd = compound3;
 				}
@@ -551,14 +565,14 @@ public class TransactionSection extends AbstractSection {
 				final String stringValue1 = (String) value;
 				String result1 = ""; //$NON-NLS-1$
 				if (stringValue1 != null) {
-					result1 = stringValue1.replaceAll("[^0-9]", ""); //$NON-NLS-1$ //$NON-NLS-2$
+					result1 = stringValue1.replaceAll("[^0-9,;.]", ""); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 				if (stringValue1 == null || result1.trim().isEmpty() || stringValue1.equals("0")) { //$NON-NLS-1$
 					cmd = new DeleteDeadlineJitterCommand(primitive);
 				} else if (primitive.getDeadlineTime().getDeadlineJitter() == null) {
 					createDeadlineJitterForDeadlineTime(primitive.getDeadlineTime(), result1);
 					cmd = new CreateDeadlineJitterCommand(primitive, result1);
-				} else {
+				} else if (primitive.getDeadlineTime().getDeadlineJitter() != null) {
 					cmd = new ChangeDeadlineJitterCommand(primitive.getDeadlineTime().getDeadlineJitter(), result1);
 				}
 				break;

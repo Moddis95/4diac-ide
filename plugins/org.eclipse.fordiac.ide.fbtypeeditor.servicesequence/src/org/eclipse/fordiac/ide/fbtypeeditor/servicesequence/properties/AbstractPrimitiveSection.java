@@ -197,7 +197,8 @@ public abstract class AbstractPrimitiveSection extends AbstractDoubleColumnSecti
 			String result = ""; //$NON-NLS-1$
 
 			if (stringValue != null) {
-				result = stringValue.replaceAll("[^0-9,.\\[\\]-]", ""); //$NON-NLS-1$ //$NON-NLS-2$
+				result = stringValue.replaceAll("[^0-9,.]", ""); //$NON-NLS-1$ //$NON-NLS-2$
+				result = result.replace(",", "."); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 
 			if (stringValue == null || result.trim().isEmpty() || stringValue.equals("0")) { //$NON-NLS-1$
@@ -242,7 +243,7 @@ public abstract class AbstractPrimitiveSection extends AbstractDoubleColumnSecti
 			final String stringValue1 = deadlineJitterText.getText();
 			String result1 = ""; //$NON-NLS-1$
 			if (stringValue1 != null) {
-				result1 = stringValue1.replaceAll("[^0-9]", ""); //$NON-NLS-1$ //$NON-NLS-2$
+				result1 = stringValue1.replaceAll("[^0-9,.]", ""); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 
 			if (stringValue1 == null || result1.trim().isEmpty() || stringValue1.equals("0")) { //$NON-NLS-1$
@@ -250,7 +251,7 @@ public abstract class AbstractPrimitiveSection extends AbstractDoubleColumnSecti
 			} else if (getType().getDeadlineTime().getDeadlineJitter() == null) {
 				createDeadlineJitterForDeadlineTime(getType().getDeadlineTime(), result1);
 				executeCommand(new CreateDeadlineJitterCommand(getType(), result1));
-			} else {
+			} else if (getType().getDeadlineTime().getDeadlineJitter() != null) {
 				executeCommand(new ChangeDeadlineJitterCommand(getType(), result1));
 			}
 			addContentAdapter();

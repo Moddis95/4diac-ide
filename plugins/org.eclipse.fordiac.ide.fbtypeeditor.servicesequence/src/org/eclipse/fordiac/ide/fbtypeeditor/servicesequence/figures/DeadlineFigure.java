@@ -5,7 +5,6 @@ import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.FlowLayout;
 import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.Label;
-import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.fordiac.ide.model.libraryElement.DeadlineTime;
 
 public class DeadlineFigure extends Figure {
@@ -60,7 +59,7 @@ public class DeadlineFigure extends Figure {
 		this.deadlineColorBox.add(deadlineNameLabel);
 		add(deadlineColorBox);
 
-		setPreferredSize(new Dimension(120, 20));
+		setPreferredSize(120, 20);
 	}
 
 	public void setColorForDeadlineType(final DeadlineTime deadlineTime) {

@@ -136,6 +136,8 @@ public abstract class AbstractPrimitiveEditPart extends AbstractDirectEditableEd
 			figure.setParameterLabelText(getModel().getParameters());
 			figure.setDeadlineTime(getModel().getDeadlineTime());
 			connection.setInputDirection(isLeftInterface());
+			figure.revalidate();
+			figure.revalidate();
 		}
 	}
 

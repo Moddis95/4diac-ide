@@ -82,6 +82,7 @@ public abstract class AbstractPrimitiveSection extends AbstractDoubleColumnSecti
 		createPrimitiveSection(primitiveSpecification);
 		fillDataQualifyingDropdown();
 		dataQualifyingCombo.setToolTipText(Messages.PrimitiveSection_DataQualifyingToolTip);
+		updateEnablement();
 	}
 
 	protected void createEventSection(final Group parent) {
@@ -279,6 +280,15 @@ public abstract class AbstractPrimitiveSection extends AbstractDoubleColumnSecti
 		return Arrays.stream(DeadlineType.values()).map(DeadlineType::getName).toArray(String[]::new);
 	}
 
+	private void updateEnablement() {
+		final boolean isInputPrimitive = getType() instanceof InputPrimitive;
+		if (isInputPrimitive) {
+			deadlineTimeText.setEnabled(false);
+		}
+		deadlineTypeCombo.setEnabled(false);
+		deadlineJitterText.setEnabled(false);
+	}
+
 	@Override
 	protected Primitive getInputType(final Object input) {
 		if ((input instanceof InputPrimitiveEditPart) || (input instanceof OutputPrimitiveEditPart)) {
@@ -336,6 +346,8 @@ public abstract class AbstractPrimitiveSection extends AbstractDoubleColumnSecti
 		} else {
 			deadlineJitterText.setText(""); //$NON-NLS-1$
 		}
+
+		updateEnablement();
 	}
 
 	protected abstract EList<Event> getRelevantEvents(final FBType fb);

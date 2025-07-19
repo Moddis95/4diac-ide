@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2021 Johannes Kepler University
+ * Copyright (c) 2021, 2025 Johannes Kepler University,
+ * 					  		Carl von Ossietzky Universität Oldenburg
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,7 @@
  * Contributors:
  *   Melanie Winter
  *     - initial API and implementation and/or initial documentation
+ *   Mattis Harzmann - added DEADLINE_WIDTH
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence;

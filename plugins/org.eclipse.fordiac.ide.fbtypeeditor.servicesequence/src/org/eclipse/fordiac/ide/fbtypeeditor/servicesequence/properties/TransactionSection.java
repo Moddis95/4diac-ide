@@ -13,7 +13,7 @@
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - cleaned command stack handling for property sections
  *   Melanie Winter, Bianca Wiesmayr - modernize and cleanup section
- *   Mattis Harzmann - added Deadline-Parameters
+ *   Mattis Harzmann - added DeadlineTime, -Type and -Jitter
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.properties;
 

@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2024 fortiss GmbH, Johannes Kepler University Linz
+  * Copyright (c) 2014, 2025 fortiss GmbH, Johannes Kepler University Linz,
+ * 							Carl von Ossietzky Universität Oldenburg
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,6 +13,7 @@
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - cleaned command stack handling for property sections
  *   Melanie Winter - updated section, use comboboxes, made abstract
+ *   Mattis Harzmann - added deadlineTime, -Type and -Jitter
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.properties;
 

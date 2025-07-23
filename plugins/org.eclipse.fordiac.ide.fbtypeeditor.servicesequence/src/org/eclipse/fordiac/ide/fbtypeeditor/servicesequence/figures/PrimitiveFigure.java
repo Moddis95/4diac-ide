@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2014 fortiss GmbH
- *               2021 Johannes Kepler University
+ * Copyright (c) 2014, 2025 fortiss GmbH, Johannes Kepler University Linz,
+ * 							Carl von Ossietzky Universität Oldenburg
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,6 +12,7 @@
  *   Monika Wenger
  *     - initial API and implementation and/or initial documentation
  *   Melanie Winter - added parameterLabel
+ *   Mattis Harzmann - added DeadlineFigure
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.figures;

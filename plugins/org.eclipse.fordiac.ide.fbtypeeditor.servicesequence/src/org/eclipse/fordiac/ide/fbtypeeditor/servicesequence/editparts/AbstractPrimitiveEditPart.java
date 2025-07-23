@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2014 - 2015 fortiss GmbH
- *               2021 Johannes Kepler University Linz
+ * Copyright (c) 2014, 2025 fortiss GmbH, Johannes Kepler University Linz,
+ * 							Carl von Ossietzky Universität Oldenburg
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,6 +13,7 @@
  *     - initial API and implementation and/or initial documentation
  *   Bianca Wiesmayr, Melanie Winter - implemented anchor refresh
  *   Melanie Winter - use ServicePrimitiveCellEditor
+ *   Mattis Harzmann - added DeadlineTime
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts;
 

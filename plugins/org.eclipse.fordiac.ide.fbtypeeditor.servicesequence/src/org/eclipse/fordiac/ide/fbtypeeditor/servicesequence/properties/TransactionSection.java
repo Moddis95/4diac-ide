@@ -555,7 +555,7 @@ public class TransactionSection extends AbstractSection {
 				final DeadlineType newType = DeadlineType.getByName(selectedValue);
 
 				compound1.add(new ChangeDeadlineTypeCommand(primitive.getDeadlineTime(), newType));
-				if (newType.getValue() == 2) {
+				if (newType.getValue() == 2 && primitive.getDeadlineTime().getDeadlineJitter() != null) {
 					compound1.add(new DeleteDeadlineJitterCommand(primitive));
 				}
 				cmd = compound1;

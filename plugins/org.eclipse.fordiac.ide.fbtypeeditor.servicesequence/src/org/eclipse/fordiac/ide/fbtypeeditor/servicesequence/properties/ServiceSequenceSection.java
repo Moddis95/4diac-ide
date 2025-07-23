@@ -461,7 +461,7 @@ public class ServiceSequenceSection extends AbstractSection {
 				final String selectedValue = getDeadlineTypeValues()[index];
 				final DeadlineType newType = DeadlineType.getByName(selectedValue);
 				compound1.add(new ChangeDeadlineTypeCommand(transaction.getDeadlineTime(), newType));
-				if (newType.getValue() == 2) {
+				if (newType.getValue() == 2 && transaction.getDeadlineTime().getDeadlineJitter() != null) {
 					compound1.add(new DeleteDeadlineJitterCommand(transaction));
 				}
 				cmd = compound1;

@@ -1,3 +1,16 @@
+/*******************************************************************************
+ * Copyright (c)  2025		Carl von Ossietzky Universität Oldenburg
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ * 	 Mattis Harzmann
+ * 		- initial API and initial implementation and/or documentation
+ *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.figures;
 
 import org.eclipse.draw2d.ColorConstants;
@@ -81,12 +94,12 @@ public class DeadlineFigure extends Figure {
 			if (deadlineTime.getDeadlineJitter() != null) {
 				final String labelText = deadlineTime.getValue().getValue() + "(+"
 						+ deadlineTime.getDeadlineJitter().getValue().getValue() + ")";
-				this.deadlineNameLabel.setText(labelText + "micro s"); //$NON-NLS-1$
-				this.deadlineNameLabel.setToolTip(new Label(labelText + "micro s")); //$NON-NLS-1$
+				this.deadlineNameLabel.setText(labelText + " micro s"); //$NON-NLS-1$
+				this.deadlineNameLabel.setToolTip(new Label(labelText + " micro s")); //$NON-NLS-1$
 			} else {
 				final String labelText = deadlineTime.getValue().getValue();
-				this.deadlineNameLabel.setText(labelText + "micro s"); //$NON-NLS-1$
-				this.deadlineNameLabel.setToolTip(new Label(labelText + "micro s")); //$NON-NLS-1$
+				this.deadlineNameLabel.setText(labelText + " micro s"); //$NON-NLS-1$
+				this.deadlineNameLabel.setToolTip(new Label(labelText + " micro s")); //$NON-NLS-1$
 			}
 		} else {
 			this.deadlineNameLabel.setText(" "); //$NON-NLS-1$
